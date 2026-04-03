@@ -10,6 +10,7 @@ export default function KisaanAIAssistant() {
   const [loading, setLoading] = useState(false);
   const [conversation, setConversation] = useState([]);
   const [inputText, setInputText] = useState('');
+  const [prefLang, setPrefLang] = useState('Hindi'); // default to Hindi as per user request
   const { locationText } = useLocation();
   const chatEndRef = useRef(null);
   const recognitionRef = useRef(null);
@@ -50,10 +51,8 @@ export default function KisaanAIAssistant() {
     setLoading(true);
 
     try {
-      // Adding location context to the query if available
-      const contextQuery = locationText 
-        ? `[Location: ${locationText}] ${query}` 
-        : query;
+      // Adding location and language context to the query if available
+      const contextQuery = `[Reply in: ${prefLang}] ${locationText ? `[Location: ${locationText}] ` : ''}${query}`;
 
       const res = await api.post('/ai/voice', { transcript: contextQuery });
       // interceptor strips response.data → res = { success, data, message }
@@ -135,9 +134,20 @@ export default function KisaanAIAssistant() {
               </div>
               <div>
                 <h3 className="text-white font-extrabold text-sm">Kisaan AI Assistant</h3>
-                <p className="text-primary-200 text-[10px] flex items-center gap-1">
-                  <MapPin className="w-3 h-3" /> {locationText ? locationText.split(',')[0] : 'Online'}
-                </p>
+                <div className="flex items-center gap-2 mt-0.5">
+                  <p className="text-primary-200 text-[10px] flex items-center gap-1">
+                    <MapPin className="w-3 h-3" /> {locationText ? locationText.split(',')[0] : 'Online'}
+                  </p>
+                  <select 
+                    value={prefLang} 
+                    onChange={(e) => setPrefLang(e.target.value)}
+                    className="bg-white/20 text-white text-[10px] rounded px-1 py-0.5 outline-none font-bold border border-white/20"
+                  >
+                    <option value="Hindi" className="text-gray-900">हिंदी</option>
+                    <option value="English" className="text-gray-900">English</option>
+                    <option value="Gujarati" className="text-gray-900">ગુજરાતી</option>
+                  </select>
+                </div>
               </div>
             </div>
             <button onClick={() => { setIsOpen(false); stopSpeaking(); }} className="w-8 h-8 rounded-full hover:bg-white/10 flex items-center justify-center text-primary-100 hover:text-white transition-colors">
