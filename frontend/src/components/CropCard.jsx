@@ -1,5 +1,5 @@
-import { TrendingUp, Award, Droplets } from 'lucide-react';
-
+import { TrendingUp, Award, Droplets, Sprout } from 'lucide-react';
+import { Link } from 'react-router-dom';
 const CROP_IMAGES = {
   wheat: 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?auto=format&fit=crop&w=800&q=80',
   rice: 'https://images.unsplash.com/photo-1550989460-0adf9ea622e2?auto=format&fit=crop&w=800&q=80',
@@ -100,10 +100,18 @@ export default function CropCard({ rank, name, score, reason }) {
         )}
 
         {reason && (
-          <p className="text-sm text-gray-600 leading-relaxed font-medium mt-auto">
+          <p className="text-sm text-gray-600 leading-relaxed font-medium mt-auto mb-5">
             <span className="text-green-600 font-black mr-2">Why?</span>{reason}
           </p>
         )}
+
+        {/* Link to Fertilizer Planner */}
+        <Link 
+          to="/fertilizer" 
+          className="mt-auto flex items-center justify-center gap-2 w-full py-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-xl text-sm font-black transition-all shadow-md group-hover:shadow-lg"
+        >
+          <Sprout className="w-4 h-4" /> Plan Fertilizer
+        </Link>
       </div>
     </div>
   );

@@ -73,31 +73,91 @@ Keep under 300 words.`;
 }
 
 export async function recoveryAdvisor(problem, soilData) {
-  const prompt = `You are a crop recovery expert for Indian farmers. Respond in English.
+  const prompt = `You are a specialized crop recovery and disaster management expert for Indian farmers. Respond in English.
 
-PROBLEM: ${problem}
-${soilData ? `SOIL: N=${soilData.nitrogen}, P=${soilData.phosphorus}, K=${soilData.potassium}, pH=${soilData.ph}` : ''}
+PROBLEM ENCOUNTERED: ${problem}
+${soilData ? `SOIL DATA: N=${soilData.nitrogen}, P=${soilData.phosphorus}, K=${soilData.potassium}, pH=${soilData.ph}` : ''}
 
-TASK:
-1. Assess damage type
-2. Suggest recovery crops (low cost, short duration)
-3. Give immediate action plan
-4. Mention any insurance/govt support
+TASK: Provide a comprehensive 3-part recovery strategy.
+1. Government & Insurance: Steps to claim PMFBY insurance or NDRF compensation.
+2. Immediate Action: Crucial steps to take in the next 48 hours to save the land/remaining crop.
+3. Recovery Crops: Suggest 2-3 specific short-duration, high-yield cash crops suitable for this situation to recover financial loss.
 
-Keep under 200 words. Be encouraging.`;
+IMPORTANT: You MUST respond ONLY with a valid JSON object in the exact format below, with NO markdown formatting, NO backticks, NO "json" label.
+{
+  "compensation": {
+    "title": "Government Support & Insurance",
+    "steps": ["step 1", "step 2", "step 3"]
+  },
+  "immediateAction": {
+    "title": "Immediate Actions (48 Hours)",
+    "steps": ["action 1", "action 2"]
+  },
+  "recoveryCrops": {
+    "title": "Fast Recovery Cash Crops",
+    "crops": [
+      { "name": "Crop Name", "duration": "xx days", "reason": "Why it works here" }
+    ]
+  }
+}`;
 
   try {
-    logger.ai('Calling Gemini for recovery advice...');
+    logger.ai('Calling Gemini for advanced structured recovery advice...');
     const response = await ai.models.generateContent({
       model: 'gemini-2.0-flash',
-      contents: prompt
+      contents: prompt,
+      generationConfig: {
+        responseMimeType: "application/json",
+      }
     });
-    return { problem, recovery: response.text };
+
+    let rawText = response.text.trim();
+    // In case model ignores mimeType and wraps in markdown (fallback cleanup)
+    if (rawText.startsWith('\`\`\`json')) {
+      rawText = rawText.substring(7, rawText.length - 3).trim();
+    } else if (rawText.startsWith('\`\`\`')) {
+      rawText = rawText.substring(3, rawText.length - 3).trim();
+    }
+    
+    let structuredData;
+    try {
+      structuredData = JSON.parse(rawText);
+    } catch (parseError) {
+      logger.error('Failed to parse Gemini JSON, falling back', parseError);
+      throw new Error("JSON Parse failed");
+    }
+
+    return { problem, recovery: structuredData };
   } catch (error) {
     logger.error(`Gemini recovery error: ${error.message}`);
+    const fallbackStructured = {
+      compensation: {
+        title: "Government Support & Insurance",
+        steps: [
+          "File PMFBY claim within 72 hours via Crop Insurance App",
+          "Inform local agriculture officer about crop loss for NDRF compensation check",
+          "Click photos of the damaged field as proof"
+        ]
+      },
+      immediateAction: {
+        title: "Immediate Actions (48 Hours)",
+        steps: [
+          "Ensure proper drainage if flooded, or retain moisture if drought",
+          "Do not apply fresh chemical fertilizers immediately",
+          "Clear dead plant debris to prevent pests"
+        ]
+      },
+      recoveryCrops: {
+        title: "Fast Recovery Cash Crops",
+        crops: [
+          { name: "Green Gram (Moong)", duration: "60 days", reason: "Fastest cash crop, requires less water" },
+          { name: "Radish / Spinach", duration: "40 days", reason: "Quick harvest to get immediate cash flow" }
+        ]
+      }
+    };
     return {
       problem,
-      recovery: `## Recovery Plan\n\n🌿 Try short duration crops (Green Gram, Black Gram — 60 days)\n💧 Maintain soil moisture\n📋 File a claim in PM Fasal Bima Yojana\n💪 Stay strong — recovery is possible!`
+      recovery: fallbackStructured
     };
   }
 }

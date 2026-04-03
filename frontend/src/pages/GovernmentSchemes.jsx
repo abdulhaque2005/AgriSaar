@@ -37,23 +37,39 @@ export default function GovernmentSchemes() {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const { city, state, locationText, loading: locLoading } = useLocation();
 
+  const [showWizard, setShowWizard] = useState(true);
+  const [farmerProfile, setFarmerProfile] = useState({
+    landSize: 'Less than 2 Hectares (Small)',
+    income: 'Less than 2 Lakhs',
+    category: 'General'
+  });
+
   useEffect(() => {
-    if (!locLoading) loadSchemes();
+    if (!locLoading) loadSchemes(true);
   }, [locLoading]);
 
-  const loadSchemes = async () => {
+  const loadSchemes = async (initialLoad = false) => {
     try {
       setLoading(true);
       setError('');
-      const res = await findSchemes({ location: locationText || 'India', crop: '', farmerType: 'Small Farmer' });
-      // interceptor strips response.data → res = { success, data, message }
+      const farmerDesc = `${farmerProfile.landSize} farmer, ${farmerProfile.category} category, ${farmerProfile.income} annual income`;
+      const res = await findSchemes({ 
+        location: locationText || 'India', 
+        crop: '', 
+        farmerType: initialLoad ? 'Small Farmer' : farmerDesc 
+      });
       const payload = res.data || res;
       setData(payload);
+      if (!initialLoad) setShowWizard(false);
     } catch (err) {
       setError(err.message || 'Schemes fetch failed');
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleProfileChange = (e) => {
+    setFarmerProfile({ ...farmerProfile, [e.target.name]: e.target.value });
   };
 
   if (locLoading || loading) return <Loading text="Finding the best government schemes for you..." />;
@@ -137,6 +153,53 @@ export default function GovernmentSchemes() {
             })}
           </div>
         </div>
+
+        {/* AI Wizard / Profile Builder */}
+        {showWizard ? (
+          <div className="bg-gradient-to-br from-white to-green-50 rounded-[2rem] shadow-xl border border-green-100 p-8 mb-10 transition-all">
+            <h2 className="text-2xl font-extrabold text-green-900 mb-6 flex items-center gap-3">
+              <Sparkles className="w-6 h-6 text-yellow-500" /> AI Scheme Recommender
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Land Size (Jameen)</label>
+                <select name="landSize" value={farmerProfile.landSize} onChange={handleProfileChange} className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm font-medium focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none">
+                  <option>Less than 2 Hectares (Small)</option>
+                  <option>2 to 5 Hectares (Medium)</option>
+                  <option>More than 5 Hectares (Large)</option>
+                  <option>Landless / Tenant</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Annual Income (Aamdani)</label>
+                <select name="income" value={farmerProfile.income} onChange={handleProfileChange} className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm font-medium focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none">
+                  <option>Less than 1 Lakh</option>
+                  <option>1 to 2 Lakhs</option>
+                  <option>2 to 5 Lakhs</option>
+                  <option>More than 5 Lakhs</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Social Category</label>
+                <select name="category" value={farmerProfile.category} onChange={handleProfileChange} className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm font-medium focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none">
+                  <option>General</option>
+                  <option>SC / ST</option>
+                  <option>OBC</option>
+                  <option>Women Farmer</option>
+                </select>
+              </div>
+            </div>
+            <button onClick={() => loadSchemes(false)} className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-green-600 to-emerald-700 text-white font-black rounded-xl hover:shadow-lg hover:-translate-y-1 transition-all flex items-center justify-center gap-2">
+              <Search className="w-5 h-5" /> Find My Exact Eligibility
+            </button>
+          </div>
+        ) : (
+          <div className="text-right mb-6">
+             <button onClick={() => setShowWizard(true)} className="text-sm font-bold text-green-600 hover:text-green-800 underline">
+               Edit Profile for Better Matches
+             </button>
+          </div>
+        )}
 
         {/* AI Recommendation */}
         {data.recommendation && (
