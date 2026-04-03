@@ -1,15 +1,14 @@
 import { Link } from 'react-router-dom';
 import {
   Sprout, FlaskConical, Wheat, CloudSun, BarChart3, Landmark,
-  CalendarDays, ArrowRight, Sparkles, Tractor, MapPin, Gauge,
-  Star, TrendingUp, ShieldCheck, Leaf, Droplets, Thermometer, Wind, Zap
+  CalendarDays, ArrowRight, Sparkles, Tractor, MapPin, Zap,
+  Star, TrendingUp, ShieldCheck, Leaf
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import useLocation from '../hooks/useLocation';
 import HeroCarousel from '../components/HeroCarousel';
 import MarketTicker from '../components/MarketTicker';
 
-/* ─── Features ──────────────────────────────────────────────── */
 const features = [
   { icon: <FlaskConical className="w-7 h-7" />, title: 'Soil Analysis', desc: 'Mitti ki poori report — N, P, K, pH score', path: '/soil-input', color: 'from-amber-500 to-orange-600', bg: 'from-amber-50 to-orange-50' },
   { icon: <Wheat className="w-7 h-7" />, title: 'Crop Recommendation', desc: 'Best fasal suggest karega AI', path: '/crops', color: 'from-green-500 to-emerald-600', bg: 'from-green-50 to-emerald-50' },
@@ -20,7 +19,6 @@ const features = [
   { icon: <CalendarDays className="w-7 h-7" />, title: 'Farming Calendar', desc: 'Poora schedule — buwai se katai tak', path: '/calendar', color: 'from-teal-500 to-cyan-600', bg: 'from-teal-50 to-cyan-50' },
 ];
 
-/* ─── Stats ─────────────────────────────────────────────────── */
 const stats = [
   { value: '11+', label: 'AI Modules', icon: <Sparkles className="w-5 h-5" /> },
   { value: '50+', label: 'Crops Supported', icon: <Leaf className="w-5 h-5" /> },
@@ -28,26 +26,23 @@ const stats = [
   { value: '24/7', label: 'AI Available', icon: <TrendingUp className="w-5 h-5" /> },
 ];
 
-/* ─── All Crop Cards ─────────────────────────────────────────── */
 const allCrops = [
-  { name: 'Wheat (Gehu)', season: 'Rabi', profit: '₹2,275/q', img: 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=600&q=80', badge: '🌾 Most Popular', score: 92, tip: 'Best in loamy mitti, pH 6–7.5', accent: '#16a34a' },
-  { name: 'Rice (Dhan)',   season: 'Kharif', profit: '₹3,100/q', img: 'https://images.unsplash.com/photo-1550989460-0adf9ea622e2?w=600&q=80', badge: '🌿 High Demand', score: 88, tip: 'Requires good irrigation & warm climate', accent: '#0d9488' },
-  { name: 'Mustard (Sarson)', season: 'Rabi', profit: '₹5,650/q', img: 'https://images.unsplash.com/photo-1595351298020-038700609878?w=600&q=80', badge: '🟡 High Profit', score: 85, tip: 'Low water need, cold climate ideal', accent: '#ca8a04' },
-  { name: 'Tomato',        season: 'Zaid', profit: '₹3,900/q', img: 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=600&q=80', badge: '🍅 Fast Return', score: 80, tip: 'Short cycle, high mandi demand', accent: '#dc2626' },
-  { name: 'Cotton (Kapas)', season: 'Kharif', profit: '₹6,200/q', img: 'https://images.unsplash.com/photo-1590483864197-0ec997a39833?w=600&q=80', badge: '🌱 Export Ready', score: 78, tip: 'Black mitti best, dry weather ideal', accent: '#7c3aed' },
-  { name: 'Potato (Aloo)', season: 'Rabi', profit: '₹1,450/q', img: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=600&q=80', badge: '🥔 Safe Crop', score: 76, tip: 'Cold weather, sandy loam mitti best', accent: '#92400e' },
-  { name: 'Maize (Makka)', season: 'Kharif', profit: '₹1,985/q', img: 'https://images.unsplash.com/photo-1601472544904-25c87f2a2a73?w=600&q=80', badge: '🌽 Versatile', score: 74, tip: 'Poultry feed demand rising fast', accent: '#d97706' },
-  { name: 'Soybean',       season: 'Kharif', profit: '₹4,200/q', img: 'https://images.unsplash.com/photo-1598284699564-9eb51e8adbc5?w=600&q=80', badge: '🫘 Oil Crop', score: 72, tip: 'Improves mitti nitrogen naturally', accent: '#65a30d' },
-  { name: 'Sugarcane (Ganna)', season: 'Year-round', profit: '₹3,500/q', img: 'https://images.unsplash.com/photo-1596752718105-d326ccbc126f?w=600&q=80', badge: '🍬 Long Term', score: 71, tip: 'Needs heavy irrigation, loamy soil', accent: '#0891b2' },
-  { name: 'Gram (Chana)', season: 'Rabi', profit: '₹5,100/q', img: 'https://images.unsplash.com/photo-1599557451369-0260afad9d19?w=600&q=80', badge: '🫛 Protein Rich', score: 70, tip: 'Drought tolerant, good for dry areas', accent: '#b45309' },
-  { name: 'Onion (Pyaaz)', season: 'Rabi', profit: '₹2,800/q', img: 'https://images.unsplash.com/photo-1518977822534-7049a61ee0c2?w=600&q=80', badge: '🧅 Steady Price', score: 69, tip: 'Well-drained sandy soil best', accent: '#be185d' },
-  { name: 'Groundnut (Moongphali)', season: 'Kharif', profit: '₹5,850/q', img: 'https://images.unsplash.com/photo-1694070573892-1b5fc7d48e52?w=600&q=80', badge: '🥜 Export Value', score: 67, tip: 'Sandy loam, well-drained soil is key', accent: '#c2410c' },
+  { name: 'Wheat (Gehu)', season: 'Rabi', profit: '2,275', img: 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=600&q=80', badge: '🌾 Most Popular', score: 92, tip: 'Best in loamy mitti, pH 6–7.5', accent: '#16a34a' },
+  { name: 'Rice (Dhan)', season: 'Kharif', profit: '3,100', img: 'https://images.unsplash.com/photo-1550989460-0adf9ea622e2?w=600&q=80', badge: '🌿 High Demand', score: 88, tip: 'Requires good irrigation & warm climate', accent: '#0d9488' },
+  { name: 'Mustard (Sarson)', season: 'Rabi', profit: '5,650', img: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80', badge: '🟡 High Profit', score: 85, tip: 'Low water need, cold climate ideal', accent: '#ca8a04' },
+  { name: 'Tomato', season: 'Zaid', profit: '3,900', img: 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=600&q=80', badge: '🍅 Fast Return', score: 80, tip: 'Short cycle, high mandi demand', accent: '#dc2626' },
+  { name: 'Cotton (Kapas)', season: 'Kharif', profit: '6,200', img: 'https://images.unsplash.com/photo-1612528443702-f6741f70a049?w=600&q=80', badge: '🌱 Export Ready', score: 78, tip: 'Black mitti best, dry weather ideal', accent: '#7c3aed' },
+  { name: 'Potato (Aloo)', season: 'Rabi', profit: '1,450', img: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=600&q=80', badge: '🥔 Safe Crop', score: 76, tip: 'Cold weather, sandy loam mitti best', accent: '#92400e' },
+  { name: 'Maize (Makka)', season: 'Kharif', profit: '1,985', img: 'https://images.unsplash.com/photo-1559589688-6ba6beafe1e3?w=600&q=80', badge: '🌽 Versatile', score: 74, tip: 'Poultry feed demand rising fast', accent: '#d97706' },
+  { name: 'Soybean', season: 'Kharif', profit: '4,200', img: 'https://images.unsplash.com/photo-1527383418406-f85a3b146f64?w=600&q=80', badge: '🫘 Oil Crop', score: 72, tip: 'Improves mitti nitrogen naturally', accent: '#65a30d' },
+  { name: 'Sugarcane (Ganna)', season: 'Year-round', profit: '3,500', img: 'https://images.unsplash.com/photo-1596591868231-05e808fd7794?w=600&q=80', badge: '🍬 Long Term', score: 71, tip: 'Needs heavy irrigation, loamy soil', accent: '#0891b2' },
+  { name: 'Gram (Chana)', season: 'Rabi', profit: '5,100', img: 'https://images.unsplash.com/photo-1585325701956-60dd9c8399f3?w=600&q=80', badge: '🫛 Protein Rich', score: 70, tip: 'Drought tolerant, good for dry areas', accent: '#b45309' },
+  { name: 'Onion (Pyaaz)', season: 'Rabi', profit: '2,800', img: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=600&q=80', badge: '🧅 Steady Price', score: 69, tip: 'Well-drained sandy soil best', accent: '#be185d' },
+  { name: 'Groundnut (Moongphali)', season: 'Kharif', profit: '5,850', img: 'https://images.unsplash.com/photo-1567892737950-30c4db39a622?w=600&q=80', badge: '🥜 Export Value', score: 67, tip: 'Sandy loam, well-drained soil is key', accent: '#c2410c' },
 ];
 
-/* ─── Crop Type Tabs ─────────────────────────────────────────── */
 const cropTabs = ['All', 'Rabi', 'Kharif', 'Zaid'];
 
-/* ─── Farming Styles ─────────────────────────────────────────── */
 const farmingStyles = [
   { title: 'Organic Farming', img: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=600&q=80', desc: 'Prakriti ke saath kheti, bina chemical ke', tag: '🌿 Natural', link: '/soil-input' },
   { title: 'Precision Agriculture', img: 'https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=600&q=80', desc: 'Drone aur AI se smart land management', tag: '🤖 Tech-Driven', link: '/crops' },
@@ -55,14 +50,12 @@ const farmingStyles = [
   { title: 'Greenhouse Farming', img: 'https://images.unsplash.com/photo-1585336261022-680e295ce3fe?w=600&q=80', desc: 'Controlled environment mein high-value crops', tag: '🏡 Protected', link: '/crops' },
 ];
 
-/* ─── Seasons ────────────────────────────────────────────────── */
 const seasons = [
   { name: 'Rabi', months: 'Oct – Mar', icon: '❄️', color: 'from-blue-500 to-sky-600', crops: ['Wheat', 'Mustard', 'Gram', 'Potato', 'Onion'], tip: 'Sawai mein buwai karein' },
   { name: 'Kharif', months: 'Jun – Oct', icon: '☀️', color: 'from-amber-500 to-orange-500', crops: ['Rice', 'Maize', 'Cotton', 'Soybean', 'Groundnut'], tip: 'Baarish ke saath shuruaat' },
   { name: 'Zaid', months: 'Mar – Jun', icon: '🌸', color: 'from-pink-500 to-rose-500', crops: ['Tomato', 'Cucumber', 'Watermelon', 'Muskmelon'], tip: 'Short cycle, high return' },
 ];
 
-/* ─── Smart Tips ────────────────────────────────────────────── */
 const smartTips = [
   { icon: '💧', title: 'Drip Irrigation', desc: 'Drip system lagao aur 40% pani ki bachat karo. Paidavaar bhi badhegi.', color: 'from-blue-50 to-sky-100', border: 'border-blue-200' },
   { icon: '🌿', title: 'Organic Matter', desc: 'Compost aur jeevamrit se mitti ki fertilility naturally badhao.', color: 'from-green-50 to-emerald-100', border: 'border-green-200' },
@@ -72,14 +65,12 @@ const smartTips = [
   { icon: '📊', title: 'Mandi Timing', desc: 'Zyada demand ke waqt fasal becho — AI price prediction se.', color: 'from-teal-50 to-cyan-100', border: 'border-teal-200' },
 ];
 
-/* ─── Testimonials ──────────────────────────────────────────── */
 const testimonials = [
   { name: 'Ramesh Patel', loc: 'Madhya Pradesh', text: 'AgriSaar ne meri soybean fasal mein 35% zyada yield dilwaya. AI tips bilkul sahi nikli!', crop: '🫘 Soybean Farmer' },
-  { name: 'Sunita Devi',  loc: 'Punjab',          text: 'Gehu ke liye kaunsa fertilizer daalun, hamesha confuse rehti thi. App ne sab simple kar diya.', crop: '🌾 Wheat Farmer' },
-  { name: 'Ajay Kumar',   loc: 'Maharashtra',     text: 'PM Kisan ka paisa ruka tha. App ki help se sahi scheme find ki — 2 hafte mein paisa aa gaya!', crop: '🌱 Multi-Crop Farmer' },
+  { name: 'Sunita Devi', loc: 'Punjab', text: 'Gehu ke liye kaunsa fertilizer daalun, hamesha confuse rehti thi. App ne sab simple kar diya.', crop: '🌾 Wheat Farmer' },
+  { name: 'Ajay Kumar', loc: 'Maharashtra', text: 'PM Kisan ka paisa ruka tha. App ki help se sahi scheme find ki — 2 hafte mein paisa aa gaya!', crop: '🌱 Multi-Crop Farmer' },
 ];
 
-/* ─── Rotating Tips ─────────────────────────────────────────── */
 const rotatingTips = [
   { icon: '💧', tip: 'Drip irrigation se 40% pani bachao' },
   { icon: '🌿', tip: 'Organic khad se mitti ki quality badhao' },
@@ -88,7 +79,15 @@ const rotatingTips = [
   { icon: '💰', tip: 'PM Kisan yojna ke liye aaj hi apply karo' },
 ];
 
-/* ═══════════════════ COMPONENT ════════════════════════════════ */
+const mandiRates = [
+  { crop: '🌾 Wheat', rate: '₹2,275', change: '+2.1%', up: true },
+  { crop: '🌿 Rice', rate: '₹3,100', change: '+1.4%', up: true },
+  { crop: '🟡 Mustard', rate: '₹5,650', change: '-0.8%', up: false },
+  { crop: '🫘 Soybean', rate: '₹4,200', change: '+3.2%', up: true },
+  { crop: '🌽 Maize', rate: '₹1,985', change: '+0.5%', up: true },
+  { crop: '🧅 Onion', rate: '₹2,800', change: '-1.2%', up: false },
+];
+
 export default function Home() {
   const { city, state, loading: locLoading } = useLocation();
   const [activeTip, setActiveTip] = useState(0);
@@ -101,19 +100,16 @@ export default function Home() {
   }, []);
 
   const filteredCrops = allCrops.filter(c => activeTab === 'All' || c.season === activeTab);
-  const visibleCrops = showAll ? filteredCrops : filteredCrops.slice(0, 8);
+  const visibleCrops = showAll ? filteredCrops : filteredCrops.slice(0, 6);
 
   return (
     <div className="overflow-hidden bg-[#f4f7f4]">
-
-      {/* ── Market Ticker ── */}
       <MarketTicker />
 
-      {/* ── Hero Carousel ── */}
+      {/* Hero */}
       <HeroCarousel>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 relative z-10 w-full">
           <div className="max-w-4xl">
-            {/* Location Badge */}
             <div className={`inline-flex items-center gap-3 bg-black/30 backdrop-blur-xl px-5 py-2.5 rounded-full text-white text-sm font-bold mb-8 border shadow-xl transition-all duration-700 ${locLoading ? 'border-green-400/50 animate-pulse' : 'border-white/30'}`}>
               <span className="relative flex h-3 w-3">
                 {locLoading && <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />}
@@ -124,19 +120,15 @@ export default function Home() {
                 ? <span className="tracking-wide text-green-100">Live Location detect ho rahi hai...</span>
                 : <span className="tracking-wide">Smart Farming in <span className="text-green-300 font-black">{city}, {state}</span></span>}
             </div>
-
-            {/* Headline */}
             <h1 className="text-5xl sm:text-6xl lg:text-[5.5rem] font-black text-white leading-[1.05] mb-6 tracking-tight drop-shadow-2xl">
               AI se Karo
               <span className="block mt-2 bg-gradient-to-r from-green-300 via-emerald-300 to-lime-300 text-transparent bg-clip-text pb-2">
                 Smart Farming
               </span>
             </h1>
-
             <p className="text-lg md:text-xl text-white/80 mb-10 max-w-2xl leading-relaxed font-medium border-l-4 border-green-500 pl-6 py-2 bg-black/30 backdrop-blur-sm rounded-r-2xl">
               {city} ki mitti aur mausam ke hisaab se — best crop, fertilizer plan, aur sarkari yojana sab ek jagah.
             </p>
-
             <div className="flex flex-wrap gap-4">
               <Link to="/soil-input" className="group bg-gradient-to-r from-green-500 to-emerald-600 text-white px-8 py-4 rounded-2xl font-black text-lg hover:shadow-[0_0_40px_rgba(34,197,94,0.5)] transition-all duration-300 hover:-translate-y-1 flex items-center gap-3 border border-green-400/50">
                 <FlaskConical className="w-6 h-6 group-hover:scale-110 transition-transform" />
@@ -147,8 +139,6 @@ export default function Home() {
                 <Wheat className="w-6 h-6" /> Fasal Dekho
               </Link>
             </div>
-
-            {/* Rotating Tip */}
             <div className="mt-8 flex items-center gap-3 bg-black/30 backdrop-blur-md border border-white/10 rounded-2xl px-5 py-3 max-w-lg">
               <span className="text-2xl">{rotatingTips[activeTip].icon}</span>
               <p className="text-sm text-white/90 font-medium">{rotatingTips[activeTip].tip}</p>
@@ -157,7 +147,7 @@ export default function Home() {
         </div>
       </HeroCarousel>
 
-      {/* ── Stats Float ── */}
+      {/* Stats Float */}
       <section className="py-4 bg-[#f4f7f4]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-5 -mt-20 relative z-20">
@@ -172,60 +162,75 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Crop Showcase with Tabs ── */}
-      <section className="py-20 bg-[#f4f7f4]">
+      {/* Quick Actions */}
+      <section className="py-10 bg-[#f4f7f4]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-center text-xl font-extrabold text-gray-700 mb-6">⚡ Quick Actions — Seedha Shuru Karo</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            {[
+              { icon: '🧪', label: 'Soil Test', sub: 'Mitti analyze karo', path: '/soil-input', color: 'from-amber-400 to-orange-500' },
+              { icon: '🌾', label: 'Best Fasal', sub: 'AI se crop choose karo', path: '/crops', color: 'from-green-400 to-emerald-500' },
+              { icon: '🌦️', label: 'Mausam', sub: 'Weather advisory lo', path: '/weather', color: 'from-sky-400 to-blue-500' },
+              { icon: '💰', label: 'Mandi Rate', sub: 'Price check karo', path: '/market', color: 'from-violet-400 to-purple-500' },
+            ].map((a, i) => (
+              <Link key={i} to={a.path} className="group flex flex-col items-center text-center gap-3 bg-white rounded-3xl p-6 border border-gray-100 hover:shadow-xl hover:border-green-200 transition-all hover:-translate-y-1">
+                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${a.color} flex items-center justify-center text-3xl shadow-lg group-hover:scale-110 transition-transform`}>
+                  {a.icon}
+                </div>
+                <div>
+                  <p className="font-extrabold text-gray-900 text-sm">{a.label}</p>
+                  <p className="text-xs text-gray-500 font-medium">{a.sub}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Crop Showcase with Tabs */}
+      <section className="py-16 bg-[#f4f7f4]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
             <span className="inline-block bg-green-100 text-green-700 text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-widest mb-4">AI Recommended</span>
             <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-3">🌾 Is Season Ki Best Fasalein</h2>
             <p className="text-gray-500 max-w-xl mx-auto font-medium mb-8">Real-time mandi data aur soil analysis ke based par top profitable crops</p>
-            {/* Season Filter Tabs */}
             <div className="inline-flex bg-white border border-gray-200 rounded-2xl p-1 gap-1 shadow-sm">
               {cropTabs.map(tab => (
-                <button
-                  key={tab}
-                  onClick={() => { setActiveTab(tab); setShowAll(false); }}
-                  className={`px-5 py-2 rounded-xl text-sm font-black transition-all duration-200 ${activeTab === tab ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-md' : 'text-gray-500 hover:text-green-700 hover:bg-green-50'}`}
-                >
+                <button key={tab} onClick={() => { setActiveTab(tab); setShowAll(false); }}
+                  className={`px-5 py-2 rounded-xl text-sm font-black transition-all duration-200 ${activeTab === tab ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-md' : 'text-gray-500 hover:text-green-700 hover:bg-green-50'}`}>
                   {tab}
                 </button>
               ))}
             </div>
           </div>
-
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {visibleCrops.map((crop, i) => (
-              <Link to="/crops" key={i} className="group bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-2xl hover:border-green-200 transition-all duration-400 hover:-translate-y-2 flex flex-col">
+              <Link to="/crops" key={i} className="group bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-2xl hover:border-green-200 transition-all duration-300 hover:-translate-y-2 flex flex-col">
                 <div className="relative h-64 overflow-hidden">
                   <img src={crop.img} alt={crop.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-                  {/* Season Tag */}
-                  <span className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm text-gray-700 text-[10px] font-black px-2.5 py-1 rounded-full shadow uppercase tracking-wide">
-                    {crop.season}
-                  </span>
-                  <span className="absolute top-3 left-3 text-[11px] font-bold px-2.5 py-1 rounded-full shadow" style={{ background: crop.accent + '22', color: crop.accent, border: `1px solid ${crop.accent}44` }}>
-                    {crop.badge}
-                  </span>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                  <span className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm text-gray-700 text-[10px] font-black px-2.5 py-1 rounded-full shadow uppercase tracking-wide">{crop.season}</span>
+                  <span className="absolute top-3 left-3 text-[11px] font-bold px-2.5 py-1 rounded-full shadow" style={{ background: crop.accent + '33', color: crop.accent, border: `1px solid ${crop.accent}55` }}>{crop.badge}</span>
                   <div className="absolute bottom-3 left-3 right-3">
                     <h3 className="text-white font-black text-lg drop-shadow leading-tight">{crop.name}</h3>
                     <div className="flex items-center justify-between mt-1.5">
                       <span className="text-white/70 text-xs font-semibold">Mandi Rate</span>
-                      <span className="text-white text-sm font-black bg-green-600/80 px-2.5 py-0.5 rounded-full shadow">{crop.profit}</span>
+                      <span className="text-white text-sm font-black bg-green-600/80 px-2.5 py-0.5 rounded-full shadow">{'₹' + crop.profit + '/q'}</span>
                     </div>
                   </div>
                 </div>
-                <div className="p-4 flex-grow flex flex-col">
+                <div className="p-5 flex-grow flex flex-col">
                   <div className="mb-3">
                     <div className="flex justify-between text-xs font-bold mb-1.5 text-gray-500">
                       <span>AI Suitability Score</span>
                       <span style={{ color: crop.accent }}>{crop.score}%</span>
                     </div>
                     <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-                      <div className="h-full rounded-full transition-all duration-700" style={{ width: `${crop.score}%`, background: `linear-gradient(to right, ${crop.accent}aa, ${crop.accent})` }} />
+                      <div className="h-full rounded-full transition-all duration-700" style={{ width: `${crop.score}%`, background: `linear-gradient(to right, ${crop.accent}88, ${crop.accent})` }} />
                     </div>
                   </div>
                   <p className="text-xs text-gray-500 font-medium mt-auto flex items-start gap-1.5 leading-relaxed">
-                    <span className="mt-0.5 text-sm">💡</span>{crop.tip}
+                    <span className="mt-0.5">💡</span>{crop.tip}
                   </p>
                   <div className="mt-3 flex items-center gap-1 text-xs font-extrabold text-green-600 opacity-0 group-hover:opacity-100 translate-x-2 group-hover:translate-x-0 transition-all duration-300">
                     Detail dekho <ArrowRight className="w-3 h-3" />
@@ -234,22 +239,46 @@ export default function Home() {
               </Link>
             ))}
           </div>
-
-          {filteredCrops.length > 8 && (
+          {filteredCrops.length > 6 && (
             <div className="text-center mt-10">
-              <button
-                onClick={() => setShowAll(p => !p)}
-                className="inline-flex items-center gap-2 bg-white border-2 border-green-300 text-green-700 font-black px-8 py-3 rounded-2xl hover:bg-green-50 transition-all hover:shadow-lg"
-              >
-                {showAll ? 'Kam Dikhaao ▲' : `Aur ${filteredCrops.length - 8} Fasalein Dekho ▼`}
+              <button onClick={() => setShowAll(p => !p)}
+                className="inline-flex items-center gap-2 bg-white border-2 border-green-300 text-green-700 font-black px-8 py-3 rounded-2xl hover:bg-green-50 transition-all hover:shadow-lg">
+                {showAll ? 'Kam Dikhaao ▲' : `Aur ${filteredCrops.length - 6} Fasalein Dekho ▼`}
               </button>
             </div>
           )}
         </div>
       </section>
 
-      {/* ── Farming Styles ── */}
-      <section className="py-20 bg-white">
+      {/* Mandi Rates Table */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <span className="inline-block bg-violet-100 text-violet-700 text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-widest mb-4">Live Data</span>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-3">📈 Aaj Ki Mandi Rates</h2>
+            <p className="text-gray-500 font-medium">Real-time market prices — AI se analyzed</p>
+          </div>
+          <div className="bg-white rounded-3xl border border-gray-100 shadow-lg overflow-hidden">
+            <div className="grid grid-cols-3 bg-gradient-to-r from-green-800 to-emerald-700 px-6 py-4 text-white text-sm font-black uppercase tracking-widest">
+              <span>Fasal</span><span className="text-center">Rate (per quintal)</span><span className="text-right">Badlaav</span>
+            </div>
+            {mandiRates.map((r, i) => (
+              <div key={i} className={`grid grid-cols-3 px-6 py-4 items-center border-b border-gray-50 hover:bg-green-50/50 transition-colors ${i % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}`}>
+                <span className="font-bold text-gray-900">{r.crop}</span>
+                <span className="text-center font-black text-gray-900 text-lg">{r.rate}</span>
+                <span className={`text-right font-black text-sm ${r.up ? 'text-green-600' : 'text-red-500'}`}>{r.up ? '▲' : '▼'} {r.change}</span>
+              </div>
+            ))}
+            <div className="px-6 py-4 bg-green-50 flex justify-between items-center">
+              <span className="text-xs text-green-700 font-bold">Data updated automatically</span>
+              <Link to="/market" className="text-sm font-extrabold text-green-700 hover:text-green-900 flex items-center gap-1">Poori list dekho <ArrowRight className="w-4 h-4" /></Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Farming Styles */}
+      <section className="py-16 bg-[#f4f7f4]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <span className="inline-block bg-teal-100 text-teal-700 text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-widest mb-4">Farming Types</span>
@@ -265,9 +294,6 @@ export default function Home() {
                   <span className="inline-block bg-white/20 backdrop-blur-sm border border-white/30 text-white text-xs font-bold px-3 py-1 rounded-full mb-2">{fs.tag}</span>
                   <h3 className="text-white font-black text-lg leading-tight mb-1">{fs.title}</h3>
                   <p className="text-white/70 text-xs font-medium">{fs.desc}</p>
-                  <div className="mt-3 flex items-center gap-1 text-xs font-black text-green-300 opacity-0 group-hover:opacity-100 transition-all duration-300">
-                    Explore <ArrowRight className="w-3 h-3" />
-                  </div>
                 </div>
               </Link>
             ))}
@@ -275,8 +301,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Seasonal Calendar ── */}
-      <section className="py-20 bg-[#f4f7f4]">
+      {/* Seasonal Calendar */}
+      <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <span className="inline-block bg-orange-100 text-orange-700 text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-widest mb-4">Seasonal Guide</span>
@@ -299,7 +325,7 @@ export default function Home() {
                       <span key={c} className="bg-gray-100 text-gray-700 text-xs font-bold px-3 py-1 rounded-full hover:bg-green-100 hover:text-green-700 transition-colors">{c}</span>
                     ))}
                   </div>
-                  <p className="text-sm text-gray-600 font-medium mt-2 flex items-center gap-2">
+                  <p className="text-sm text-gray-600 font-medium flex items-center gap-2">
                     <Zap className="w-4 h-4 text-amber-500 flex-shrink-0" />{s.tip}
                   </p>
                   <Link to="/calendar" className="mt-4 inline-flex items-center gap-1.5 text-sm font-extrabold text-green-600 opacity-0 group-hover:opacity-100 transition-all duration-300">
@@ -312,8 +338,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Smart Tips Grid ── */}
-      <section className="py-20 bg-white">
+      {/* Smart Tips */}
+      <section className="py-16 bg-[#f4f7f4]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <span className="inline-block bg-violet-100 text-violet-700 text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-widest mb-4">Pro Tips</span>
@@ -332,8 +358,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Features Grid ── */}
-      <section className="py-20 bg-gradient-to-b from-[#f4f7f4] to-white">
+      {/* Features Grid */}
+      <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
             <span className="inline-block bg-emerald-100 text-emerald-700 text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-widest mb-4">All AI Tools</span>
@@ -359,22 +385,20 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── How It Works ── */}
-      <section className="py-20 bg-white">
+      {/* How It Works */}
+      <section className="py-16 bg-[#f4f7f4]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
             <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-3">⚡ Kaise Kaam Karta Hai?</h2>
             <p className="text-gray-500 font-medium">3 simple steps mein poora farming guide</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
-            {/* connector line desktop */}
-            <div className="hidden md:block absolute top-16 left-1/4 right-1/4 h-0.5 bg-gradient-to-r from-green-200 via-emerald-300 to-green-200 z-0" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               { step: '01', icon: '🧪', title: 'Mitti Data Daalo', desc: 'N, P, K, pH aur apni location enter karo — sirf 2 mins' },
               { step: '02', icon: '🤖', title: 'AI Analysis Karta Hai', desc: 'Gemini AI aapki mitti, mausam aur market analyze karta hai' },
               { step: '03', icon: '📋', title: 'Plan & Report Lo', desc: 'Crop, fertilizer, mausam, aur mandi sab ek report mein' },
             ].map((item, i) => (
-              <div key={i} className="relative text-center p-8 rounded-3xl bg-gradient-to-br from-gray-50 to-green-50/50 border border-gray-100 hover:border-green-200 hover:shadow-xl transition-all group z-10">
+              <div key={i} className="relative text-center p-8 rounded-3xl bg-white border border-gray-100 hover:border-green-200 hover:shadow-xl transition-all group">
                 <div className="text-6xl mb-5">{item.icon}</div>
                 <div className="absolute top-4 right-4 text-5xl font-black text-green-100 group-hover:text-green-200 transition-colors select-none">{item.step}</div>
                 <h3 className="text-xl font-extrabold text-gray-900 mb-3">{item.title}</h3>
@@ -385,8 +409,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Testimonials ── */}
-      <section className="py-20 bg-[#f4f7f4]">
+      {/* Testimonials */}
+      <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-3">❤️ Kisan Kya Kehte Hain</h2>
@@ -394,12 +418,12 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {testimonials.map((t, i) => (
-              <div key={i} className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 hover:shadow-xl hover:border-green-200 transition-all hover:-translate-y-1">
+              <div key={i} className="bg-[#f4f7f4] rounded-3xl p-6 border border-gray-100 hover:shadow-xl hover:border-green-200 transition-all hover:-translate-y-1">
                 <div className="flex gap-0.5 mb-4">
                   {[...Array(5)].map((_, j) => <Star key={j} className="w-4 h-4 fill-yellow-400 text-yellow-400" />)}
                 </div>
                 <p className="text-gray-700 font-medium leading-relaxed mb-5 text-sm">"{t.text}"</p>
-                <div className="flex items-center gap-3 pt-4 border-t border-gray-100">
+                <div className="flex items-center gap-3 pt-4 border-t border-gray-200">
                   <div className="w-10 h-10 bg-gradient-to-br from-green-400 to-emerald-600 rounded-full flex items-center justify-center text-white font-black text-sm shadow">
                     {t.name[0]}
                   </div>
@@ -414,12 +438,12 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── CTA ── */}
-      <section className="py-24 bg-white">
+      {/* CTA */}
+      <section className="py-24 bg-[#f4f7f4]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-gradient-to-br from-green-900 via-emerald-800 to-[#0a2e0d] rounded-[3rem] p-10 md:p-20 text-center shadow-2xl relative overflow-hidden">
             <div className="absolute top-0 right-0 opacity-10 transform translate-x-1/4 -translate-y-1/4">
-              <Gauge className="w-[500px] h-[500px] text-white" />
+              <Tractor className="w-[500px] h-[500px] text-white" />
             </div>
             <div className="relative z-10 max-w-2xl mx-auto">
               <h2 className="text-3xl md:text-5xl font-black text-white mb-6 leading-tight">
@@ -436,7 +460,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Footer ── */}
+      {/* Footer */}
       <footer className="bg-[#0a1a0c] text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-start justify-between gap-8">
