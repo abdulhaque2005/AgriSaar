@@ -34,21 +34,17 @@ function App() {
                 <Route path="/soil-input" element={<SoilInput />} />
                 <Route path="/analysis" element={<AnalysisDashboard />} />
                 <Route path="/crops" element={<CropRecommendations />} />
+                <Route path="/disease" element={<DiseaseScanner />} />
                 <Route path="/fertilizer" element={<FertilizerPlan />} />
                 <Route path="/bio-inputs" element={<BioFertilizer />} />
                 <Route path="/recovery" element={<LossRecovery />} />
                 <Route path="/agroforestry" element={<ProfitTrees />} />
-                <Route path="/b2b" element={<DirectMarket />} />
+                <Route path="/direct-market" element={<DirectMarket />} />
                 <Route path="/weather" element={<WeatherPage />} />
                 <Route path="/market" element={<MarketInsights />} />
                 <Route path="/schemes" element={<GovernmentSchemes />} />
                 <Route path="/calendar" element={<FarmingCalendar />} />
                 <Route path="/subsidy-tracker" element={<SubsidyTracker />} />
-                <Route path="/recovery" element={<LossRecovery />} />
-                <Route path="/bio-inputs" element={<BioFertilizer />} />
-                <Route path="/agroforestry" element={<ProfitTrees />} />
-                <Route path="/direct-market" element={<DirectMarket />} />
-                <Route path="/disease-scanner" element={<DiseaseScanner />} />
               </Routes>
             </main>
             <FarmerVoiceAssistant />

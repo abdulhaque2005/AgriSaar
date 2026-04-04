@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, Sprout, FlaskConical, Wheat, BarChart3, Landmark, Home as HomeIcon, HeartHandshake, Trees, Store, Droplet, Globe, ChevronDown, User, Settings, LogOut, Moon, Sun, Award, ChevronRight, CalendarDays, Bell } from 'lucide-react';
+import { Menu, X, Sprout, FlaskConical, Wheat, BarChart3, Landmark, Home as HomeIcon, HeartHandshake, Trees, Store, Droplet, Globe, ChevronDown, User, Settings, LogOut, Moon, Sun, Award, ChevronRight, CalendarDays, Bell, ScanLine } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import toast from 'react-hot-toast';
@@ -9,6 +9,7 @@ const navLinks = [
   { path: '/', label: 'Home', Icon: HomeIcon },
   { path: '/soil-input', label: 'Soil', Icon: FlaskConical },
   { path: '/crops', label: 'Crops', Icon: Wheat },
+  { path: '/disease', label: 'Disease', Icon: ScanLine },
   { path: '/weather', label: 'Weather', Icon: Sun },
   { path: '/market', label: 'Market', Icon: BarChart3 },
   { path: '/bio-inputs', label: 'Bio-Fertilizer', Icon: Droplet },
