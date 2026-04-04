@@ -11,10 +11,11 @@ import MarketInsights from './pages/MarketInsights';
 import GovernmentSchemes from './pages/GovernmentSchemes';
 import FarmingCalendar from './pages/FarmingCalendar';
 import SubsidyTracker from './pages/SubsidyTracker';
-import LossRecovery from './pages/LossRecovery';
 import BioFertilizer from './pages/BioFertilizer';
+import LossRecovery from './pages/LossRecovery';
 import ProfitTrees from './pages/ProfitTrees';
 import DirectMarket from './pages/DirectMarket';
+<<<<<<< HEAD
 import DiseaseScanner from './pages/DiseaseScanner';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
@@ -55,6 +56,37 @@ function App() {
             </Routes>
           </main>
           <KisaanAIAssistant />
+=======
+
+import { AgriProvider } from './context/AgriContext';
+import FarmerVoiceAssistant from './components/FarmerVoiceAssistant';
+
+function App() {
+  return (
+    <AgriProvider>
+      <Router>
+        <div className="min-h-screen bg-[#f8faf8]">
+          <Navbar />
+          <main>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/soil-input" element={<SoilInput />} />
+              <Route path="/analysis" element={<AnalysisDashboard />} />
+              <Route path="/crops" element={<CropRecommendations />} />
+              <Route path="/fertilizer" element={<FertilizerPlan />} />
+              <Route path="/bio-inputs" element={<BioFertilizer />} />
+              <Route path="/recovery" element={<LossRecovery />} />
+              <Route path="/agroforestry" element={<ProfitTrees />} />
+              <Route path="/b2b" element={<DirectMarket />} />
+              <Route path="/weather" element={<WeatherPage />} />
+              <Route path="/market" element={<MarketInsights />} />
+              <Route path="/schemes" element={<GovernmentSchemes />} />
+              <Route path="/calendar" element={<FarmingCalendar />} />
+              <Route path="/subsidy-tracker" element={<SubsidyTracker />} />
+            </Routes>
+          </main>
+          <FarmerVoiceAssistant />
+>>>>>>> 649c2b1ba4b238307e98856087c7ebe15980581f
           <Toaster
             position="bottom-right"
             toastOptions={{
@@ -63,8 +95,13 @@ function App() {
             }}
           />
         </div>
+<<<<<<< HEAD
       </AuthProvider>
     </Router>
+=======
+      </Router>
+    </AgriProvider>
+>>>>>>> 649c2b1ba4b238307e98856087c7ebe15980581f
   );
 }
 
