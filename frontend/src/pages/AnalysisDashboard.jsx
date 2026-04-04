@@ -3,7 +3,9 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Download, AlertTriangle, Cpu, Wheat, FlaskConical, Sprout } from 'lucide-react';
 import { useAgri } from '../context/AgriContext';
 import SoilHealthCard from '../components/SoilHealthCard';
-// ... existing imports ...
+import CropCard from '../components/CropCard';
+import FertilizerTable from '../components/FertilizerTable';
+import SoilChart from '../components/SoilChart';
 
 export default function AnalysisDashboard() {
   const location = useLocation();

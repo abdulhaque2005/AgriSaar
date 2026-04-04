@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react';
 import { Wheat, CheckCircle2, TrendingUp, DollarSign } from 'lucide-react';
 import { useAgri } from '../context/AgriContext';
 import { getCrops } from '../services/cropApi';
-// ... existing imports ...
+import CropCard from '../components/CropCard';
+import Loading from '../components/Loading';
+import Error from '../components/Error';
 
 export default function CropRecommendations() {
   const { setAnalysis } = useAgri();
