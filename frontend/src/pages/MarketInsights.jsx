@@ -1,11 +1,12 @@
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { useState, useEffect } from 'react';
-import { BarChart3, Store, MapPin, RefreshCw, TrendingUp, TrendingDown, Minus, Search, Loader2, Sparkles, PhoneCall, ShieldCheck } from 'lucide-react';
+import { BarChart3, Store, MapPin, RefreshCw, TrendingUp, TrendingDown, Minus, Search, Loader2, Sparkles, PhoneCall, ShieldCheck, ChevronRight } from 'lucide-react';
 import { getMarketPredictions, getMandiPrices } from '../services/marketApi';
 import { getNearbyInfo } from '../services/schemeApi';
 import useLocation from '../hooks/useLocation';
 import Loading from '../components/Loading';
 import Error from '../components/Error';
+import { Link } from 'react-router-dom';
 
 const CROP_OPTIONS = ['Wheat', 'Rice', 'Cotton', 'Soybean', 'Maize', 'Gram', 'Mustard', 'Bajra', 'Groundnut', 'Sugarcane'];
 
@@ -91,7 +92,7 @@ export default function MarketInsights() {
           <h1 className="text-3xl md:text-4xl font-extrabold text-white mb-3 flex items-center gap-3">
             <BarChart3 className="w-9 h-9" /> Market Insights
           </h1>
-          <p className="text-primary-200 text-lg font-medium">Mandi rates, price prediction aur sell advice — sab ek jagah</p>
+          <p className="text-primary-200 text-lg font-medium">Mandi rates, price predictions, and sell advice — all in one place</p>
         </div>
       </section>
 
@@ -192,12 +193,12 @@ export default function MarketInsights() {
 
             {/* Quick Tips */}
             <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
-              <h3 className="text-base font-extrabold text-gray-900 mb-5">💡 Quick Market Tips</h3>
+              <h3 className="text-base font-extrabold text-gray-900 mb-5 flex items-center gap-2"><Sparkles className="w-4 h-4 text-yellow-500" /> Quick Market Tips</h3>
               <div className="space-y-4">
                 {[
                   { tip: 'Compare prices online on the e-NAM portal', url: 'https://enam.gov.in' },
-                  { tip: 'MSP se neeche mat bechein — sarkar guarantee deti hai', url: null },
-                  { tip: 'Storage available hai toh 2-3 hafte wait karo, price badhega', url: null },
+                  { tip: 'Do not sell below MSP — government guarantees support price', url: null },
+                  { tip: 'If storage is available, wait 2-3 weeks — prices often rise', url: null },
                   { tip: 'Sell in groups for better rates — join an FPO', url: null }
                 ].map((item, i) => (
                   <div key={i} className="flex items-start gap-3 text-sm">
@@ -221,10 +222,27 @@ export default function MarketInsights() {
                 />
               </div>
               <div className="bg-white p-4">
-                <p className="text-sm font-extrabold text-primary-800">🏪 Mandi rates change daily</p>
+                <p className="text-sm font-extrabold text-primary-800 flex items-center gap-2"><Store className="w-4 h-4" /> Mandi rates change daily</p>
                 <p className="text-xs text-gray-500 mt-1 font-medium">Check every morning at 8 AM for best prices</p>
               </div>
             </div>
+
+            {/* Direct Market CTA */}
+            <Link to="/b2b" className="block bg-gradient-to-br from-amber-50 to-orange-50 rounded-3xl p-6 shadow-sm border border-amber-200 hover:shadow-lg hover:-translate-y-1 transition-all group">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center">
+                  <Store className="w-6 h-6 text-amber-700" />
+                </div>
+                <div>
+                  <h3 className="font-extrabold text-gray-900">Sell Direct to Buyers</h3>
+                  <p className="text-xs text-gray-500 font-medium">Skip middlemen, get better prices</p>
+                </div>
+              </div>
+              <p className="text-sm text-gray-600 font-medium leading-relaxed mb-3">Connect directly with buyers, FPOs, and exporters in your area for premium pricing.</p>
+              <span className="text-sm font-bold text-amber-700 flex items-center gap-1 group-hover:gap-2 transition-all">
+                Explore Direct Market <ChevronRight className="w-4 h-4" />
+              </span>
+            </Link>
 
           </div>
         </div>

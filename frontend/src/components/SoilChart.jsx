@@ -68,15 +68,15 @@ export default function SoilChart({ nutrients }) {
 
   // Simple logic for plain-language advice
   const getStatus = (val, min, max) => {
-    if (val < min) return { text: 'Low / Kamti', advice: 'Mitti kamzor hai. Isko badaein.', color: '#ef4444' };
-    if (val > max) return { text: 'High / Zyada', advice: 'Zaroorat se zyada hai. Abhi mat daalein.', color: '#f59e0b' };
-    return { text: 'Perfect / Sahi', advice: 'Bilkul sahi matra hai! Keep it up.', color: '#10b981' };
+    if (val < min) return { text: 'Low', advice: 'Soil is deficient. Consider increasing this nutrient.', color: '#ef4444' };
+    if (val > max) return { text: 'High', advice: 'Excess amount detected. Do not add more right now.', color: '#f59e0b' };
+    return { text: 'Optimal', advice: 'Perfect level! Keep it up.', color: '#10b981' };
   };
 
   const phStatus = 
-    ph < 6 ? { text: 'Acidic', advice: 'Chuna (Lime) daalein taaki pH theek ho.', color: '#f59e0b' } :
-    ph > 7.5 ? { text: 'Alkaline', advice: 'Gypsum ka use karein mitti theek karne.', color: '#ef4444' } :
-    { text: 'Normal', advice: 'Mitti ka pH level behtareen hai.', color: '#10b981' };
+    ph < 6 ? { text: 'Acidic', advice: 'Apply lime (calcium) to correct the pH level.', color: '#f59e0b' } :
+    ph > 7.5 ? { text: 'Alkaline', advice: 'Consider using gypsum to correct soil pH.', color: '#ef4444' } :
+    { text: 'Normal', advice: 'Soil pH level is excellent.', color: '#10b981' };
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full">

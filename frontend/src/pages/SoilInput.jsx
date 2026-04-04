@@ -232,17 +232,17 @@ export default function SoilInput() {
             )}
           </div>
 
-          {/* Where to get report */}
-          <div className="mt-8 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-            <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <Info className="w-5 h-5 text-primary-600" /> Where to Get a Soil Report?
+          {/* AI Soil Testing Guidance */}
+          <div className="mt-8 bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-2xl border border-green-200 shadow-sm">
+            <h3 className="font-bold text-gray-900 mb-2 flex items-center gap-2">
+              <Info className="w-5 h-5 text-primary-600" /> Need Help Getting a Soil Report?
             </h3>
-            <ul className="space-y-3 text-sm text-gray-600 font-medium tracking-wide">
-              <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-primary-500 rounded-full"></div> Free testing at nearest Krishi Vigyan Kendra (KVK)</li>
-              <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-primary-500 rounded-full"></div> Soil Health Card Portal — soilhealth.dac.gov.in</li>
-              <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-primary-500 rounded-full"></div> Submit a soil sample at your local Agriculture Office</li>
-              <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-primary-500 rounded-full"></div> Private labs — full report for ₹200-500</li>
-            </ul>
+            <p className="text-sm text-gray-600 font-medium leading-relaxed mb-4">
+              Ask our <span className="font-bold text-primary-700">KisaanAI Assistant</span> (bottom-right chat icon) for personalized guidance on where to get your soil tested near your location, including free government options and private labs.
+            </p>
+            <p className="text-xs text-green-700 font-bold bg-green-100 inline-block px-3 py-1.5 rounded-lg">
+              Try asking: "Where can I get a free soil test near me?"
+            </p>
           </div>
         </div>
 

@@ -21,7 +21,7 @@ export default function ProfitTrees() {
       const payload = res.data?.data || res.data;
       setData(payload.advice);
     } catch {
-      setData('🌲 Top Tree: Teak (Sagwan)\\n💰 Estimated Return: ₹1.5 Cr after 10 years per acre.\\n💧 Maintenance: Minimal after 2 years.\\n\\n🌲 Top Tree: Bamboo\\n💰 Return: Steady income after 3 years.\\n\\n_AI analysis temporarily unavailable._');
+      setData('Top Tree: Teak (Sagwan)\\nEstimated Return: Rs 1.5 Cr after 10 years per acre.\\nMaintenance: Minimal after 2 years.\\n\\nTop Tree: Bamboo\\nReturn: Steady income after 3 years.\\n\\n_AI analysis temporarily unavailable._');
     } finally {
       setLoading(false);
     }
@@ -43,7 +43,7 @@ export default function ProfitTrees() {
               <MapPin className="w-3 h-3" /> {locationText || 'India'}
             </span>
             <h1 className="text-3xl md:text-5xl font-black mb-3 leading-tight">High-Profit<br/>Agroforestry</h1>
-            <p className="text-green-100/90 text-lg max-w-xl font-medium">Lambe samay ka investment. Pedh lagayein, aur khet ko apna retirement fund banayein.</p>
+            <p className="text-green-100/90 text-lg max-w-xl font-medium">Long-term investment. Plant trees and turn your farm into a retirement fund.</p>
           </div>
         </div>
 
@@ -55,7 +55,7 @@ export default function ProfitTrees() {
                 <span className="flex items-center gap-3">
                   <TrendingUp className="w-6 h-6 text-green-600" /> AI Recommendations
                 </span>
-                {data && <SpeakButton text={data} label="🔊 Listen" />}
+                {data && <SpeakButton text={data} label="Listen" />}
               </h2>
               <div className="prose prose-green max-w-none text-gray-700 font-medium whitespace-pre-wrap leading-relaxed">
                 {data}
@@ -75,7 +75,7 @@ export default function ProfitTrees() {
             </div>
 
             <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm text-center">
-              <div className="text-3xl mb-2">🪵</div>
+              <div className="mb-2"><Trees className="w-8 h-8 text-green-700 mx-auto" /></div>
               <h3 className="font-bold text-gray-900 mb-1">Teak (Sagwan)</h3>
               <p className="text-xs text-gray-500 mb-4">Maturity: 10-15 Years</p>
               <div className="bg-gray-50 px-4 py-3 rounded-xl border border-gray-100">

@@ -1,4 +1,4 @@
-import { TrendingUp, Award, Droplets, Sprout } from 'lucide-react';
+import { TrendingUp, Award, Droplets, Sprout, Thermometer } from 'lucide-react';
 import { Link } from 'react-router-dom';
 const CROP_IMAGES = {
   wheat: 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?auto=format&fit=crop&w=800&q=80',
@@ -80,7 +80,7 @@ export default function CropCard({ rank, name, score, reason }) {
             <Droplets className="w-3 h-3" /> Opt. Water
           </span>
           <span className="bg-orange-50 border border-orange-100 text-orange-700 text-[10px] font-bold px-2 py-1 rounded-md flex items-center gap-1">
-            ☀️ {temp}
+            <Thermometer className="w-3 h-3" /> {temp}
           </span>
         </div>
 

@@ -15,7 +15,7 @@ export default function DirectMarket() {
       <div className="bg-gradient-to-r from-emerald-800 to-green-900 py-16 text-center px-4">
         <Store className="w-16 h-16 text-emerald-400 mx-auto mb-4" />
         <h1 className="text-4xl md:text-5xl font-black text-white mb-4">Direct Sell (B2B)</h1>
-        <p className="text-emerald-100 text-lg max-w-2xl mx-auto font-medium">Bypass middlemen. Apni fasal seedhe badi companies aur mandi mein bechein.</p>
+        <p className="text-emerald-100 text-lg max-w-2xl mx-auto font-medium">Bypass middlemen. Sell your produce directly to large companies and mandis.</p>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -24,7 +24,7 @@ export default function DirectMarket() {
             <TrendingUp className="w-10 h-10 text-emerald-600" />
             <div>
               <p className="font-bold text-emerald-900">15-20% Extra Profit</p>
-              <p className="text-sm text-emerald-700">Commission bachao</p>
+              <p className="text-sm text-emerald-700">Save on commission</p>
             </div>
           </div>
           <div className="bg-blue-50 rounded-3xl p-6 border border-blue-100 flex items-center gap-4">

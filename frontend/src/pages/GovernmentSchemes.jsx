@@ -6,14 +6,14 @@ import Loading from '../components/Loading';
 import Error from '../components/Error';
 
 const CATEGORY_CONFIG = {
-  'Direct Benefit': { color: '#22c55e', bg: 'bg-green-50', border: 'border-green-200', text: 'text-green-700', icon: '💰' },
-  'Insurance': { color: '#3b82f6', bg: 'bg-blue-50', border: 'border-blue-200', text: 'text-blue-700', icon: '🛡️' },
-  'Loan': { color: '#f59e0b', bg: 'bg-amber-50', border: 'border-amber-200', text: 'text-amber-700', icon: '🏦' },
-  'Subsidy': { color: '#8b5cf6', bg: 'bg-purple-50', border: 'border-purple-200', text: 'text-purple-700', icon: '🎯' },
-  'Market': { color: '#ec4899', bg: 'bg-pink-50', border: 'border-pink-200', text: 'text-pink-700', icon: '📊' },
-  'Support': { color: '#06b6d4', bg: 'bg-cyan-50', border: 'border-cyan-200', text: 'text-cyan-700', icon: '🤝' },
-  'Pension': { color: '#f97316', bg: 'bg-orange-50', border: 'border-orange-200', text: 'text-orange-700', icon: '👴' },
-  'Innovation': { color: '#14b8a6', bg: 'bg-teal-50', border: 'border-teal-200', text: 'text-teal-700', icon: '🚀' }
+  'Direct Benefit': { color: '#22c55e', bg: 'bg-green-50', border: 'border-green-200', text: 'text-green-700', icon: '₹' },
+  'Insurance': { color: '#3b82f6', bg: 'bg-blue-50', border: 'border-blue-200', text: 'text-blue-700', icon: '✦' },
+  'Loan': { color: '#f59e0b', bg: 'bg-amber-50', border: 'border-amber-200', text: 'text-amber-700', icon: '⊕' },
+  'Subsidy': { color: '#8b5cf6', bg: 'bg-purple-50', border: 'border-purple-200', text: 'text-purple-700', icon: '◎' },
+  'Market': { color: '#ec4899', bg: 'bg-pink-50', border: 'border-pink-200', text: 'text-pink-700', icon: '↗' },
+  'Support': { color: '#06b6d4', bg: 'bg-cyan-50', border: 'border-cyan-200', text: 'text-cyan-700', icon: '⊞' },
+  'Pension': { color: '#f97316', bg: 'bg-orange-50', border: 'border-orange-200', text: 'text-orange-700', icon: '◈' },
+  'Innovation': { color: '#14b8a6', bg: 'bg-teal-50', border: 'border-teal-200', text: 'text-teal-700', icon: '▴' }
 };
 
 const SCHEME_IMAGES = [
@@ -146,7 +146,7 @@ export default function GovernmentSchemes() {
                       : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
                     }`}
                 >
-                  {config?.icon || '📋'} {cat}
+                  {config?.icon || '•'} {cat}
                 </button>
               );
             })}
@@ -161,7 +161,7 @@ export default function GovernmentSchemes() {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2">Land Size (Jameen)</label>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Land Size</label>
                 <select name="landSize" value={farmerProfile.landSize} onChange={handleProfileChange} className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm font-medium focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none">
                   <option>Less than 2 Hectares (Small)</option>
                   <option>2 to 5 Hectares (Medium)</option>
@@ -170,7 +170,7 @@ export default function GovernmentSchemes() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2">Annual Income (Aamdani)</label>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Annual Income</label>
                 <select name="income" value={farmerProfile.income} onChange={handleProfileChange} className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm font-medium focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none">
                   <option>Less than 1 Lakh</option>
                   <option>1 to 2 Lakhs</option>

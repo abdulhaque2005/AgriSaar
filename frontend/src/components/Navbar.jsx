@@ -1,16 +1,16 @@
 import { useState, useRef, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Sprout, FlaskConical, Wheat, BarChart3, Landmark, Home as HomeIcon, HeartHandshake, Trees, Store, Droplet, Globe, ChevronDown, User, Settings, LogOut, Moon, Sun, Award, ChevronRight } from 'lucide-react';
+import { Menu, X, Sprout, FlaskConical, Wheat, BarChart3, Landmark, Home as HomeIcon, HeartHandshake, Trees, Store, Droplet, Globe, ChevronDown, User, Settings, LogOut, Moon, Sun, Award, ChevronRight, CalendarDays } from 'lucide-react';
 
 const navLinks = [
   { path: '/', label: 'Home', Icon: HomeIcon },
   { path: '/soil-input', label: 'Soil', Icon: FlaskConical },
   { path: '/crops', label: 'Crops', Icon: Wheat },
+  { path: '/weather', label: 'Weather', Icon: Sun },
+  { path: '/market', label: 'Market', Icon: BarChart3 },
   { path: '/recovery', label: 'Loss Recovery', Icon: HeartHandshake },
   { path: '/bio-inputs', label: 'Bio-Fertilizer', Icon: Droplet },
   { path: '/agroforestry', label: 'Profit Trees', Icon: Trees },
-  { path: '/b2b', label: 'Direct Market', Icon: Store },
-  { path: '/market', label: 'Mandi Rates', Icon: BarChart3 },
   { path: '/schemes', label: 'Schemes', Icon: Landmark }
 ];
 
@@ -138,7 +138,7 @@ function UserProfile() {
           {mockUser.avatar}
         </div>
         <div className="hidden sm:block text-left">
-          <p className="text-[10px] font-black text-gray-400 uppercase tracking-wider leading-none mb-0.5">Mera Profile</p>
+          <p className="text-[10px] font-black text-gray-400 uppercase tracking-wider leading-none mb-0.5">My Profile</p>
           <div className="flex items-center gap-1">
             <span className="text-xs font-bold text-gray-700">{mockUser.name}</span>
             <ChevronDown className={`w-3 h-3 text-gray-400 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
@@ -165,7 +165,7 @@ function UserProfile() {
               {/* AgriCoins Section */}
               <div className="bg-primary-600 rounded-2xl p-3 text-white shadow-lg shadow-primary-600/20 flex items-center justify-between group cursor-pointer hover:scale-[1.02] transition-transform">
                 <div className="flex items-center gap-2.5">
-                  <span className="text-xl group-hover:rotate-12 transition-transform">🪙</span>
+                  <span className="text-xl group-hover:rotate-12 transition-transform"><Award className="w-5 h-5" /></span>
                   <div>
                     <p className="text-[10px] font-black text-primary-100 uppercase tracking-widest leading-none">AgriCoins</p>
                     <p className="text-sm font-black mt-0.5">{mockUser.coins.toLocaleString()}</p>

@@ -53,7 +53,7 @@ export default function DiseaseScanner() {
             <ScanLine className="w-10 h-10 text-green-600 animate-pulse" />
           </div>
           <h1 className="text-4xl md:text-5xl font-black text-gray-900 mb-4 tracking-tight">Kisaan Lens <span className="text-sm align-top bg-green-500 text-white px-2 py-1 rounded shadow">BETA</span></h1>
-          <p className="text-gray-600 font-medium text-lg">Bimar fasal ki photo kheinchiye, AI turant bimari aur ilaj bata dega.</p>
+          <p className="text-gray-600 font-medium text-lg">Take a photo of your sick crop. AI will instantly identify the disease and suggest treatment.</p>
         </div>
 
         {status === 'idle' && (

@@ -38,7 +38,7 @@ export default function VoiceInput({ onTranscript, placeholder = 'Bol kar bataei
 
     recognitionRef.current.onstart = () => {
       setIsListening(true);
-      toast.success('Boliye, hum sun rahe hain...', { icon: '🎤' });
+      toast.success('Listening... please speak now');
     };
 
     recognitionRef.current.onresult = (event) => {

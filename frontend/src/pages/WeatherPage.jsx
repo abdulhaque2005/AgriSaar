@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { CloudSun, Droplets, Wind, AlertTriangle, CheckCircle2, MapPin, RefreshCw, Thermometer, Eye, Gauge, Sunrise, Sunset, Loader2 } from 'lucide-react';
+import { CloudSun, Droplets, Wind, AlertTriangle, CheckCircle2, MapPin, RefreshCw, Thermometer, Eye, Gauge, Sunrise, Sunset, Loader2, Wheat } from 'lucide-react';
 import { getWeatherByCoords } from '../services/weatherApi';
 import useLocation from '../hooks/useLocation';
 import Loading from '../components/Loading';
@@ -125,7 +125,7 @@ export default function WeatherPage() {
       {forecast.length > 0 && (
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 relative z-20 mb-10">
           <h2 className="text-lg font-extrabold text-gray-900 mb-4 flex items-center gap-2">
-            <CloudSun className="w-5 h-5 text-blue-600" /> 5-Din ka Forecast
+            <CloudSun className="w-5 h-5 text-blue-600" /> 5-Day Forecast
           </h2>
           <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin" style={{ scrollbarWidth: 'thin' }}>
             {forecast.map((day, i) => (
@@ -157,7 +157,7 @@ export default function WeatherPage() {
               <span className="flex items-center gap-2">
                 <AlertTriangle className="w-6 h-6 text-primary-600" /> AI Farming Advisory
               </span>
-              {data.advisory && <SpeakButton text={data.advisory} label="🔊 Listen" />}
+              {data.advisory && <SpeakButton text={data.advisory} label="Listen" />}
             </h2>
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
               <div className="prose prose-sm max-w-none whitespace-pre-wrap text-gray-700 leading-relaxed font-medium">
@@ -168,7 +168,7 @@ export default function WeatherPage() {
             {(!data.advisory) && (
               <div className="mt-4 bg-green-50 text-green-800 p-6 border border-green-200 rounded-2xl flex items-center gap-3 shadow-sm">
                 <CheckCircle2 className="w-6 h-6 text-green-500" />
-                <span className="font-bold">Mausam bilkul saaf hai. Normal farming shuru rakhein.</span>
+                <span className="font-bold">Weather is clear. Continue normal farming activities.</span>
               </div>
             )}
           </div>
@@ -176,7 +176,7 @@ export default function WeatherPage() {
           {/* Crop Impact Sidebar */}
           <div className="lg:col-span-2">
             <h2 className="text-xl font-extrabold text-gray-900 mb-4 flex items-center gap-2">
-              🌾 Aaj ka Crop Impact
+              <Wheat className="w-6 h-6 text-amber-600" /> Today's Crop Impact
             </h2>
             <div className="bg-gradient-to-br from-primary-800 to-primary-900 rounded-2xl p-6 text-white relative overflow-hidden">
               <div className="absolute -right-6 -bottom-6 opacity-10">
@@ -186,27 +186,27 @@ export default function WeatherPage() {
                 <div className="bg-white/10 rounded-xl p-4 border border-white/10">
                   <p className="text-primary-200 text-xs font-bold uppercase mb-1">Temperature Impact</p>
                   <p className="text-sm font-medium">
-                    {current?.temp > 40 ? '⚠️ Heat wave alert — ensure irrigation and use mulching' :
-                      current?.temp > 35 ? '☀️ High temperature — irrigate early morning' :
-                        current?.temp < 10 ? '❄️ Cold temperatures — use frost protection for crops' :
-                          current?.temp < 20 ? '🌡️ Cool weather — ideal for Rabi crops' :
-                            '✅ Temperature is perfect for farming'}
+                    {current?.temp > 40 ? 'Heat wave alert — ensure irrigation and use mulching' :
+                      current?.temp > 35 ? 'High temperature — irrigate early morning' :
+                        current?.temp < 10 ? 'Cold temperatures — use frost protection for crops' :
+                          current?.temp < 20 ? 'Cool weather — ideal for Rabi crops' :
+                            'Temperature is perfect for farming'}
                   </p>
                 </div>
                 <div className="bg-white/10 rounded-xl p-4 border border-white/10">
                   <p className="text-primary-200 text-xs font-bold uppercase mb-1">Humidity Impact</p>
                   <p className="text-sm font-medium">
-                    {current?.humidity > 85 ? '⚠️ Very high humidity — risk of fungal disease, apply preventive spray' :
-                      current?.humidity > 70 ? '💧 Good humidity — reduce irrigation frequency' :
-                        current?.humidity < 30 ? '🏜️ Dry air — increase irrigation' :
-                          '✅ Humidity level is normal'}
+                    {current?.humidity > 85 ? 'Very high humidity — risk of fungal disease, apply preventive spray' :
+                      current?.humidity > 70 ? 'Good humidity — reduce irrigation frequency' :
+                        current?.humidity < 30 ? 'Dry air — increase irrigation' :
+                          'Humidity level is normal'}
                   </p>
                 </div>
                 <div className="bg-white/10 rounded-xl p-4 border border-white/10">
                   <p className="text-primary-200 text-xs font-bold uppercase mb-1">Best Action</p>
                   <p className="text-sm font-bold">
-                    {current?.temp > 35 ? '💧 Best time for irrigation: 5-7 AM' :
-                      '🌾 Continue normal farming routine'}
+                    {current?.temp > 35 ? 'Best time for irrigation: 5-7 AM' :
+                      'Continue normal farming routine'}
                   </p>
                 </div>
               </div>

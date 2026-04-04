@@ -1,42 +1,48 @@
 import { useState, useEffect, useCallback } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Wheat, Leaf, Bot, FlaskConical, TrendingUp, Landmark } from 'lucide-react';
 
 const slides = [
   {
     img: 'https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=1920&q=80',
     title: 'Smart Wheat Farming',
-    subtitle: 'AI se padaiye apni gehu ki fasal, mitti ke hisaab se',
-    tag: '🌾 Rabi Season'
+    subtitle: 'AI-driven crop optimization based on your soil conditions',
+    tag: 'Rabi Season',
+    tagIcon: <Wheat className="w-3.5 h-3.5" />
   },
   {
     img: 'https://images.unsplash.com/photo-1500595046743-cd271d694d30?w=1920&q=80',
     title: 'Precision Rice Cultivation',
-    subtitle: 'Pani aur khaad ka sahi istemaal — AI guide karega',
-    tag: '🌿 Kharif Season'
+    subtitle: 'Optimize water and fertilizer usage with intelligent guidance',
+    tag: 'Kharif Season',
+    tagIcon: <Leaf className="w-3.5 h-3.5" />
   },
   {
     img: 'https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=1920&q=80',
     title: 'Modern Agriculture Tech',
-    subtitle: 'Drone survey se lekar mitti test tak — sab ek jagah',
-    tag: '🤖 AI Powered'
+    subtitle: 'From drone surveys to soil testing — everything in one platform',
+    tag: 'AI Powered',
+    tagIcon: <Bot className="w-3.5 h-3.5" />
   },
   {
     img: 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=1920&q=80',
     title: 'Fertile Soil Intelligence',
-    subtitle: 'N, P, K, pH sab kuch analyze karke best plan milega',
-    tag: '🧪 Soil Analysis'
+    subtitle: 'Complete N, P, K, pH analysis with actionable recommendations',
+    tag: 'Soil Analysis',
+    tagIcon: <FlaskConical className="w-3.5 h-3.5" />
   },
   {
     img: 'https://images.unsplash.com/photo-1586771107445-d3ca888129ff?w=1920&q=80',
     title: 'Mandi Price Prediction',
-    subtitle: 'Market trends aur MSP ke hisaab se sell timing',
-    tag: '📈 Market Insights'
+    subtitle: 'Market trends and MSP-based sell timing recommendations',
+    tag: 'Market Insights',
+    tagIcon: <TrendingUp className="w-3.5 h-3.5" />
   },
   {
     img: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=1920&q=80',
     title: 'Govt Schemes & Subsidies',
-    subtitle: 'PM Kisan se lekar PMFBY tak — sabka guide yahan',
-    tag: '🏛️ Sarkari Yojana'
+    subtitle: 'From PM Kisan to PMFBY — complete guide to all benefits',
+    tag: 'Government',
+    tagIcon: <Landmark className="w-3.5 h-3.5" />
   }
 ];
 
@@ -82,8 +88,8 @@ export default function HeroCarousel({ children }) {
 
       {/* Slide Tag */}
       <div className="absolute top-24 left-1/2 -translate-x-1/2 z-20 transition-all duration-500">
-        <span className="bg-white/10 backdrop-blur-xl border border-white/20 text-white text-sm font-bold px-5 py-2 rounded-full shadow-lg">
-          {slides[current].tag}
+        <span className="bg-white/10 backdrop-blur-xl border border-white/20 text-white text-sm font-bold px-5 py-2 rounded-full shadow-lg inline-flex items-center gap-2">
+          {slides[current].tagIcon} {slides[current].tag}
         </span>
       </div>
 

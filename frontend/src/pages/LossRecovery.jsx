@@ -6,10 +6,10 @@ import Loading from '../components/Loading';
 import SpeakButton from '../components/SpeakButton';
 
 const PROBLEMS = [
-  { id: 'rain', icon: <CloudRain className="w-8 h-8" />, label: 'Unseasonal Rain / Flood', desc: 'Sthiti: Baarish ya baad se fasal kharab ho gayi' },
-  { id: 'pest', icon: <Bug className="w-8 h-8" />, label: 'Pest Attack', desc: 'Sthiti: Keedo/bimaari ne hamla kiya' },
-  { id: 'drought', icon: <Sun className="w-8 h-8" />, label: 'Drought / Dry Spell', desc: 'Sthiti: Paani ki kami aur sukhad' },
-  { id: 'other', icon: <XCircle className="w-8 h-8" />, label: 'Other Crop Damage', desc: 'Sthiti: Kisi annya kaaran se nuksan' }
+  { id: 'rain', icon: <CloudRain className="w-8 h-8" />, label: 'Unseasonal Rain / Flood', desc: 'Crop damaged by heavy rain or flooding' },
+  { id: 'pest', icon: <Bug className="w-8 h-8" />, label: 'Pest Attack', desc: 'Insects or disease attacking the crop' },
+  { id: 'drought', icon: <Sun className="w-8 h-8" />, label: 'Drought / Dry Spell', desc: 'Water shortage and dry conditions' },
+  { id: 'other', icon: <XCircle className="w-8 h-8" />, label: 'Other Crop Damage', desc: 'Other causes of crop loss' }
 ];
 
 export default function LossRecovery() {
@@ -59,13 +59,13 @@ export default function LossRecovery() {
             <HeartHandshake className="w-10 h-10 text-red-600" />
           </div>
           <h1 className="text-4xl md:text-5xl font-black text-gray-900 mb-4 tracking-tight">Disaster Recovery & Support</h1>
-          <p className="text-gray-600 font-medium text-lg">Nuksaan ke baad kya karein? AI se PMFBY Claim, NDRF Funds aur Cash Crops ka plan ({city})</p>
+          <p className="text-gray-600 font-medium text-lg">After crop loss? AI helps with PMFBY claims, NDRF funds, and fast cash crop planning ({city})</p>
         </div>
 
         {status === 'idle' && (
           <div className="bg-white rounded-[2rem] shadow-xl border border-gray-100 p-8 sm:p-12 transition-all">
             <h2 className="text-2xl font-extrabold text-gray-800 mb-8 flex items-center justify-center gap-3">
-              <AlertTriangle className="w-7 h-7 text-amber-500" /> Kripya Aapda (Disaster) Chunein:
+              <AlertTriangle className="w-7 h-7 text-amber-500" /> Select Your Disaster Type:
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-10">
               {PROBLEMS.map((prob) => (
@@ -122,7 +122,7 @@ export default function LossRecovery() {
                 <div className="mt-4">
                   <SpeakButton 
                     text={`Recovery Plan: ${report.compensation?.steps?.join('. ')}. Immediate Actions: ${report.immediateAction?.steps?.join('. ')}. Recovery Crops: ${report.recoveryCrops?.crops?.map(c => c.name + ' takes ' + c.duration).join(', ')}`} 
-                    label="🔊 Listen to Plan" 
+                    label="Listen to Plan" 
                     size="md" 
                   />
                 </div>

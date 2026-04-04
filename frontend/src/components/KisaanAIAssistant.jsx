@@ -297,7 +297,7 @@ export default function KisaanAIAssistant() {
           className="group relative flex items-center"
         >
           <div className="absolute right-full mr-4 bg-white px-4 py-2 rounded-xl shadow-lg border border-primary-100 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-4 group-hover:translate-x-0 whitespace-nowrap hidden sm:block">
-            <p className="text-sm font-extrabold text-gray-800">Hi, Main Kisaan AI hoon! 👋</p>
+            <p className="text-sm font-extrabold text-gray-800">Hello, I'm Kisaan AI!</p>
             <div className="absolute top-1/2 -right-1.5 w-3 h-3 bg-white border-r border-t border-primary-100 transform -translate-y-1/2 rotate-45"></div>
           </div>
 

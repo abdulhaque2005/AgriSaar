@@ -14,11 +14,11 @@ export default function ExportReport({ title, data, elementId = "report-content"
          const preview = JSON.stringify(data, null, 2).replace(/[{}"]/g, "").trim().slice(0, 500);
          textToShare += preview + '\n\n';
        } catch (e) {
-         textToShare += `Dekhiye aapna detailed report AgriSaar App par!\n\n`;
+          textToShare += `View your detailed report on the AgriSaar App!\n\n`;
        }
     }
     
-    textToShare += `👨‍🌾 *Download AgriSaar App now for free Smart Farming!*`;
+    textToShare += `*Download AgriSaar App now for free Smart Farming!*`;
     
     const encoded = encodeURIComponent(textToShare);
     const waUrl = `whatsapp://send?text=${encoded}`;

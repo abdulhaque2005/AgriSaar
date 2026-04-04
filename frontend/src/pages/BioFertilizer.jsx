@@ -1,13 +1,13 @@
 import { useState } from 'react';
-import { Droplet, Leaf, Sprout, CheckCircle2, ArrowRight } from 'lucide-react';
+import { Droplet, Leaf, Sprout, CheckCircle2, ArrowRight, CircleDollarSign } from 'lucide-react';
 import api from '../services/api';
 import Loading from '../components/Loading';
 import SpeakButton from '../components/SpeakButton';
 
 const COMMON_INPUTS = [
-  { name: 'Jeevamrut', desc: 'Cow dung + Urine based liquid fertilizer', icon: '🐄', target: 'Wheat, Rice, Veggies' },
-  { name: 'Neemastra', desc: 'Neem-based natural pest control', icon: '🌿', target: 'Cotton, Tomatoes' },
-  { name: 'Vermicompost', desc: 'Earthworm compost for rich soil', icon: '🪱', target: 'Potatoes, Orchards' },
+  { name: 'Jeevamrut', desc: 'Cow dung + Urine based liquid fertilizer', icon: <Sprout className="w-6 h-6 text-green-600" />, target: 'Wheat, Rice, Veggies' },
+  { name: 'Neemastra', desc: 'Neem-based natural pest control', icon: <Leaf className="w-6 h-6 text-emerald-600" />, target: 'Cotton, Tomatoes' },
+  { name: 'Vermicompost', desc: 'Earthworm compost for rich soil', icon: <Droplet className="w-6 h-6 text-amber-600" />, target: 'Potatoes, Orchards' },
 ];
 
 export default function BioFertilizer() {
@@ -83,27 +83,27 @@ export default function BioFertilizer() {
   };
 
   const getOfflineFallback = (cropName) => {
-    return `🌿 Bio-Input Recipe for ${cropName}:
+    return `Bio-Input Recipe for ${cropName}:
 
-🧪 Jeevamrut Formula:
+Jeevamrut Formula:
 • 10L Water + 1kg Cow Dung + 1L Cow Urine
 • Add 50g Jaggery + Handful of soil from farm
 • Mix well, ferment for 48 hours in shade
 • Apply 200L per acre every 15 days
 
-✅ Benefits:
+Benefits:
 • 60-80% reduction in chemical fertilizer cost
 • Improves soil microbiome & water retention
 • Better taste & quality of produce
 • Zero chemical residue — fully organic
 
-📋 Application Method:
+Application Method:
 • Dilute 1:10 with water
 • Apply near root zone in evening
 • Best results when soil is moist
 • Start from seedling stage
 
-💰 Cost Saving: ₹4,000-8,000 per acre per season`;
+Cost Saving: Rs 4,000-8,000 per acre per season`;
   };
 
   // Format text with markdown-like rendering
@@ -127,7 +127,7 @@ export default function BioFertilizer() {
             <Droplet className="w-8 h-8 text-green-700" />
           </div>
           <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-3">Bio-Fertilizer Intelligence</h1>
-          <p className="text-gray-600 font-medium">Chemical free farming — banayein apni khad, bachayein paise.</p>
+          <p className="text-gray-600 font-medium">Chemical-free farming — make your own fertilizer and save costs.</p>
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
@@ -139,7 +139,7 @@ export default function BioFertilizer() {
               <div className="space-y-4">
                 {COMMON_INPUTS.map((input, i) => (
                   <div key={i} className="flex gap-3 items-start border-b border-gray-50 pb-3 last:border-0">
-                    <div className="text-2xl mt-1">{input.icon}</div>
+                    <div className="mt-1">{input.icon}</div>
                     <div>
                       <h3 className="font-bold text-gray-800">{input.name}</h3>
                       <p className="text-xs text-gray-500 font-medium leading-tight">{input.desc}</p>
@@ -152,15 +152,15 @@ export default function BioFertilizer() {
             
             <div className="bg-gradient-to-br from-green-800 to-green-950 rounded-3xl p-6 text-white text-center shadow-lg">
               <h3 className="font-black text-lg mb-2">Save up to ₹8000/Acre</h3>
-              <p className="text-green-100 text-sm font-medium mb-4">Chemical fertilizer ka kharcha bacha ke profits badhaayein.</p>
-              <div className="text-2xl">💰</div>
+              <p className="text-green-100 text-sm font-medium mb-4">Save money by reducing chemical fertilizer costs.</p>
+              <div className="flex justify-center"><CircleDollarSign className="w-8 h-8 text-green-200" /></div>
             </div>
           </div>
 
           <div className="lg:col-span-2">
             <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 sm:p-10 h-full">
-              <h2 className="text-2xl font-black text-gray-900 mb-2">Apni Fasal Ka Recipe Paayein</h2>
-              <p className="text-gray-500 font-medium mb-8">Apni fasal ka naam likhein aur AI aapko exact bio-fertilizer recipe dega.</p>
+              <h2 className="text-2xl font-black text-gray-900 mb-2">Get Your Crop Recipe</h2>
+              <p className="text-gray-500 font-medium mb-8">Enter your crop name and AI will provide the exact bio-fertilizer recipe.</p>
               
               <form onSubmit={handleSearch} className="flex gap-3 mb-8">
                 <div className="flex-1 relative">
@@ -187,7 +187,7 @@ export default function BioFertilizer() {
                       <CheckCircle2 className="w-6 h-6 text-green-600" />
                       <span className="font-extrabold text-green-900 text-lg">AI Formula for {crop}</span>
                     </div>
-                    <SpeakButton text={data} label="🔊 Listen" size="sm" />
+                    <SpeakButton text={data} label="Listen" size="sm" />
                   </div>
                   <div className="text-gray-800 font-medium whitespace-pre-wrap leading-relaxed text-sm">
                     {formatText(data)}

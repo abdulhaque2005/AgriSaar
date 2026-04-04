@@ -137,7 +137,7 @@ export default function FarmingCalendar() {
             </div>
 
             <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
-              <h3 className="text-base font-extrabold text-gray-900 mb-4">🌾 {season.name} Season Tips</h3>
+              <h3 className="text-base font-extrabold text-gray-900 mb-4 flex items-center gap-2"><Wheat className="w-5 h-5 text-amber-600" /> {season.name} Season Tips</h3>
               <div className="space-y-3">
                 {season.tips.map((tip, i) => (
                   <div key={i} className="flex items-start gap-2 text-sm">
