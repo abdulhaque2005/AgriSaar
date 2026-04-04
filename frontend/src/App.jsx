@@ -17,55 +17,52 @@ import ProfitTrees from './pages/ProfitTrees';
 import DirectMarket from './pages/DirectMarket';
 import DiseaseScanner from './pages/DiseaseScanner';
 
+import { AuthProvider } from './context/AuthContext';
 import { AgriProvider } from './context/AgriContext';
 import FarmerVoiceAssistant from './components/FarmerVoiceAssistant';
 
 function App() {
   return (
-    <AgriProvider>
-      <Router>
-        <div className="min-h-screen bg-[#f8faf8]">
-          <Navbar />
-          <main>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/soil-input" element={<SoilInput />} />
-              <Route path="/analysis" element={<AnalysisDashboard />} />
-              <Route path="/crops" element={<CropRecommendations />} />
-              <Route path="/fertilizer" element={<FertilizerPlan />} />
-              <Route path="/bio-inputs" element={<BioFertilizer />} />
-              <Route path="/recovery" element={<LossRecovery />} />
-              <Route path="/agroforestry" element={<ProfitTrees />} />
-              <Route path="/b2b" element={<DirectMarket />} />
-              <Route path="/weather" element={<WeatherPage />} />
-              <Route path="/market" element={<MarketInsights />} />
-              <Route path="/schemes" element={<GovernmentSchemes />} />
-              <Route path="/calendar" element={<FarmingCalendar />} />
-              <Route path="/subsidy-tracker" element={<SubsidyTracker />} />
-              <Route path="/recovery" element={<LossRecovery />} />
-              <Route path="/bio-inputs" element={<BioFertilizer />} />
-              <Route path="/agroforestry" element={<ProfitTrees />} />
-              <Route path="/direct-market" element={<DirectMarket />} />
-              <Route path="/disease-scanner" element={<DiseaseScanner />} />
-            </Routes>
-          </main>
-          <FarmerVoiceAssistant />
->>>>>>> 649c2b1ba4b238307e98856087c7ebe15980581f
-          <Toaster
-            position="bottom-right"
-            toastOptions={{
-              style: { background: '#1b5e20', color: '#fff', borderRadius: '12px', fontFamily: 'Outfit' },
-              success: { iconTheme: { primary: '#66bb6a', secondary: '#fff' } }
-            }}
-          />
-        </div>
-<<<<<<< HEAD
-      </AuthProvider>
-    </Router>
-=======
-      </Router>
-    </AgriProvider>
->>>>>>> 649c2b1ba4b238307e98856087c7ebe15980581f
+    <AuthProvider>
+      <AgriProvider>
+        <Router>
+          <div className="min-h-screen bg-[#f8faf8]">
+            <Navbar />
+            <main>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/soil-input" element={<SoilInput />} />
+                <Route path="/analysis" element={<AnalysisDashboard />} />
+                <Route path="/crops" element={<CropRecommendations />} />
+                <Route path="/fertilizer" element={<FertilizerPlan />} />
+                <Route path="/bio-inputs" element={<BioFertilizer />} />
+                <Route path="/recovery" element={<LossRecovery />} />
+                <Route path="/agroforestry" element={<ProfitTrees />} />
+                <Route path="/b2b" element={<DirectMarket />} />
+                <Route path="/weather" element={<WeatherPage />} />
+                <Route path="/market" element={<MarketInsights />} />
+                <Route path="/schemes" element={<GovernmentSchemes />} />
+                <Route path="/calendar" element={<FarmingCalendar />} />
+                <Route path="/subsidy-tracker" element={<SubsidyTracker />} />
+                <Route path="/recovery" element={<LossRecovery />} />
+                <Route path="/bio-inputs" element={<BioFertilizer />} />
+                <Route path="/agroforestry" element={<ProfitTrees />} />
+                <Route path="/direct-market" element={<DirectMarket />} />
+                <Route path="/disease-scanner" element={<DiseaseScanner />} />
+              </Routes>
+            </main>
+            <FarmerVoiceAssistant />
+            <Toaster
+              position="bottom-right"
+              toastOptions={{
+                style: { background: '#1b5e20', color: '#fff', borderRadius: '12px', fontFamily: 'Outfit' },
+                success: { iconTheme: { primary: '#66bb6a', secondary: '#fff' } }
+              }}
+            />
+          </div>
+        </Router>
+      </AgriProvider>
+    </AuthProvider>
   );
 }
 

@@ -234,7 +234,6 @@ export default function Home() {
         </div>
       </HeroCarousel>
 
-<<<<<<< HEAD
       {/* Stats Float */}
       <section className="py-4 bg-[#f4f7f4] dark:bg-gray-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -244,50 +243,18 @@ export default function Home() {
                 <div className="flex justify-center mb-2 text-green-600 dark:text-green-400 group-hover:scale-125 transition-transform">{s.icon}</div>
                 <div className="text-4xl font-black bg-gradient-to-r from-green-800 to-emerald-600 dark:from-green-400 dark:to-emerald-300 bg-clip-text text-transparent">{s.value}</div>
                 <div className="text-xs text-gray-500 dark:text-gray-400 mt-1.5 font-bold uppercase tracking-widest">{s.label}</div>
-=======
-      {/* Pro Premium Stats Float */}
-      <section className="relative z-20 -mt-24 px-4 sm:px-6 lg:px-8 max-w-[1400px] mx-auto mb-16">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
-          {stats.map((s, i) => (
-            <div key={i} className="relative overflow-hidden bg-white/95 backdrop-blur-2xl border-white shadow-[0_12px_40px_rgba(22,163,74,0.12)] rounded-[2rem] p-6 sm:p-8 text-center hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(22,163,74,0.18)] transition-all duration-400 group">
-              <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-primary-100 to-transparent opacity-50 rounded-bl-full pointer-events-none transition-transform group-hover:scale-125 duration-500"></div>
-              <div className="flex justify-center mb-3 text-primary-500 group-hover:scale-125 transition-transform duration-500 relative z-10">
-                {s.icon}
->>>>>>> 649c2b1ba4b238307e98856087c7ebe15980581f
               </div>
-              <div className="text-3xl sm:text-5xl font-black bg-gradient-to-r from-gray-900 via-primary-900 to-primary-700 bg-clip-text text-transparent tracking-tight relative z-10">
-                {s.value}
-              </div>
-              <div className="text-[10px] sm:text-xs text-primary-700/80 mt-2 font-extrabold uppercase tracking-[0.2em] relative z-10">
-                {s.label}
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
 
-<<<<<<< HEAD
       {/* Quick Actions */}
       <section className="py-10 bg-[#f4f7f4] dark:bg-gray-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-center text-xl font-extrabold text-gray-700 dark:text-gray-200 mb-6">⚡ Quick Actions — Seedha Shuru Karo</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-=======
-      {/* Impactful Quick Actions Grid */}
-      <section className="py-12 bg-transparent">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <h2 className="text-3xl font-black text-gray-900 flex items-center gap-3">
-                <Zap className="w-8 h-8 text-amber-500 fill-amber-500 drop-shadow-sm" /> 
-                Quick Actions
-              </h2>
-              <p className="text-gray-500 font-bold mt-1 ml-11">Navigate directly to the tools you need</p>
-            </div>
-          </div>
-          
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5 sm:gap-6">
->>>>>>> 649c2b1ba4b238307e98856087c7ebe15980581f
+
             {[
               { icon: '🧪', label: 'Check Soil', sub: 'Soil Test', path: '/soil-input', color: 'bg-[#fff7ed]', border: 'border-orange-200', text: 'text-orange-900' },
               { icon: '🌾', label: 'Select Crop', sub: 'Best Fasal', path: '/crops', color: 'bg-[#f0fdf4]', border: 'border-green-200', text: 'text-green-900' },
@@ -296,7 +263,6 @@ export default function Home() {
               { icon: '🤝', label: 'Direct Sell', sub: 'B2B markets', path: '/b2b', color: 'bg-[#eff6ff]', border: 'border-blue-200', text: 'text-blue-900' },
               { icon: '💰', label: 'Price List', sub: 'Market Rates', path: '/market', color: 'bg-[#faf5ff]', border: 'border-purple-200', text: 'text-purple-900' },
             ].map((a, i) => (
-<<<<<<< HEAD
               <Link key={i} to={a.path} className="group flex flex-col items-center text-center gap-3 bg-white dark:bg-gray-900 rounded-3xl p-6 border border-gray-100 dark:border-gray-800 hover:shadow-xl hover:border-green-200 transition-all hover:-translate-y-1">
                 <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${a.color} flex items-center justify-center text-3xl shadow-lg group-hover:scale-110 transition-transform`}>
                   {a.icon}
@@ -304,18 +270,7 @@ export default function Home() {
                 <div>
                   <p className="font-extrabold text-gray-900 dark:text-white text-sm">{a.label}</p>
                   <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">{a.sub}</p>
-=======
-              <Link key={i} to={a.path} className="group flex flex-col items-center justify-center text-center gap-4 bg-white rounded-[2rem] p-8 border hover:border-transparent hover:shadow-[0_20px_50px_rgba(22,163,74,0.15)] transition-all duration-300 hover:-translate-y-2 relative overflow-hidden">
-                <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 ${a.color}`}></div>
-                <div className="relative z-10 flex flex-col items-center">
-                   <div className={`w-20 h-20 rounded-3xl ${a.color} border ${a.border} flex items-center justify-center text-4xl shadow-sm group-hover:shadow-md group-hover:bg-white group-hover:-translate-y-2 transition-all duration-500`}>
-                    {a.icon}
-                  </div>
-                  <div className="mt-4">
-                    <p className={`font-black text-lg ${a.text}`}>{a.label}</p>
-                    <p className="text-xs text-gray-500 font-bold mt-0.5 opacity-80 uppercase tracking-widest">{a.sub}</p>
-                  </div>
->>>>>>> 649c2b1ba4b238307e98856087c7ebe15980581f
+
                 </div>
               </Link>
             ))}
@@ -327,17 +282,11 @@ export default function Home() {
       <section className="py-16 bg-[#f4f7f4] dark:bg-gray-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
-<<<<<<< HEAD
             <span className="inline-block bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-widest mb-4">AI Recommended</span>
             <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white mb-3">🌾 Is Season Ki Best Fasalein</h2>
             <p className="text-gray-500 dark:text-gray-400 max-w-xl mx-auto font-medium mb-8">Real-time mandi data aur soil analysis ke based par top profitable crops</p>
             <div className="inline-flex bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-1 gap-1 shadow-sm">
-=======
-            <span className="inline-block bg-green-100 text-green-700 text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-widest mb-4">AI Recommended</span>
-            <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-3">🌾 Best Crops for this Season</h2>
-            <p className="text-gray-500 max-w-xl mx-auto font-medium mb-8">Top profitable crops based on real-time market data and soil analysis</p>
-            <div className="inline-flex bg-white border border-gray-200 rounded-2xl p-1 gap-1 shadow-sm">
->>>>>>> 649c2b1ba4b238307e98856087c7ebe15980581f
+
               {cropTabs.map(tab => (
                 <button key={tab} onClick={() => { setActiveTab(tab); setShowAll(false); }}
                   className={`px-5 py-2 rounded-xl text-sm font-black transition-all duration-200 ${activeTab === tab ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-md' : 'text-gray-500 dark:text-gray-400 hover:text-green-700 dark:hover:text-green-300 hover:bg-green-50 dark:hover:bg-gray-800'}`}>
@@ -375,13 +324,9 @@ export default function Home() {
                   <p className="text-xs text-gray-500 dark:text-gray-400 font-medium mt-auto flex items-start gap-1.5 leading-relaxed">
                     <span className="mt-0.5">💡</span>{crop.tip}
                   </p>
-<<<<<<< HEAD
                   <div className="mt-3 flex items-center gap-1 text-xs font-extrabold text-green-600 dark:text-green-400 opacity-0 group-hover:opacity-100 translate-x-2 group-hover:translate-x-0 transition-all duration-300">
                     Detail dekho <ArrowRight className="w-3 h-3" />
-=======
-                  <div className="mt-3 flex items-center gap-1 text-xs font-extrabold text-green-600 opacity-0 group-hover:opacity-100 translate-x-2 group-hover:translate-x-0 transition-all duration-300">
-                    View Details <ArrowRight className="w-3 h-3" />
->>>>>>> 649c2b1ba4b238307e98856087c7ebe15980581f
+
                   </div>
                 </div>
               </Link>
@@ -390,13 +335,9 @@ export default function Home() {
           {filteredCrops.length > 6 && (
             <div className="text-center mt-10">
               <button onClick={() => setShowAll(p => !p)}
-<<<<<<< HEAD
                 className="inline-flex items-center gap-2 bg-white dark:bg-gray-900 border-2 border-green-300 dark:border-green-800 text-green-700 dark:text-green-400 font-black px-8 py-3 rounded-2xl hover:bg-green-50 dark:hover:bg-gray-800 transition-all hover:shadow-lg">
                 {showAll ? 'Kam Dikhaao ▲' : `Aur ${filteredCrops.length - 6} Fasalein Dekho ▼`}
-=======
-                className="inline-flex items-center gap-2 bg-white border-2 border-green-300 text-green-700 font-black px-8 py-3 rounded-2xl hover:bg-green-50 transition-all hover:shadow-lg">
-                {showAll ? 'Show Less ▲' : `View ${filteredCrops.length - 6} More Crops ▼`}
->>>>>>> 649c2b1ba4b238307e98856087c7ebe15980581f
+
               </button>
             </div>
           )}
@@ -407,15 +348,10 @@ export default function Home() {
       <section className="py-16 bg-white dark:bg-gray-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
-<<<<<<< HEAD
             <span className="inline-block bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-widest mb-4">Live Data</span>
             <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white mb-3">📈 Aaj Ki Mandi Rates</h2>
             <p className="text-gray-500 dark:text-gray-400 font-medium">Real-time market prices — AI se analyzed</p>
-=======
-            <span className="inline-block bg-violet-100 text-violet-700 text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-widest mb-4">Live Data</span>
-            <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-3">📈 Today's Market Rates</h2>
-            <p className="text-gray-500 font-medium">Real-time market prices — analyzed by AI</p>
->>>>>>> 649c2b1ba4b238307e98856087c7ebe15980581f
+
           </div>
           <div className="bg-white dark:bg-gray-900 rounded-3xl border border-gray-100 dark:border-gray-800 shadow-lg overflow-hidden">
             <div className="grid grid-cols-3 bg-gradient-to-r from-green-800 to-emerald-700 px-6 py-4 text-white text-sm font-black uppercase tracking-widest">
@@ -428,15 +364,10 @@ export default function Home() {
                 <span className={`text-right font-black text-sm ${r.up ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400'}`}>{r.up ? '▲' : '▼'} {r.change}</span>
               </div>
             ))}
-<<<<<<< HEAD
             <div className="px-6 py-4 bg-green-50 dark:bg-green-900/20 flex justify-between items-center">
               <span className="text-xs text-green-700 dark:text-green-400 font-bold">Data updated automatically</span>
               <Link to="/market" className="text-sm font-extrabold text-green-700 dark:text-green-400 hover:text-green-900 dark:hover:text-green-200 flex items-center gap-1">Poori list dekho <ArrowRight className="w-4 h-4" /></Link>
-=======
-            <div className="px-6 py-4 bg-green-50 flex justify-between items-center">
-              <span className="text-xs text-green-700 font-bold">Data updated automatically</span>
-              <Link to="/market" className="text-sm font-extrabold text-green-700 hover:text-green-900 flex items-center gap-1">View full list <ArrowRight className="w-4 h-4" /></Link>
->>>>>>> 649c2b1ba4b238307e98856087c7ebe15980581f
+
             </div>
           </div>
         </div>
@@ -446,15 +377,10 @@ export default function Home() {
       <section className="py-16 bg-[#f4f7f4] dark:bg-gray-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-<<<<<<< HEAD
             <span className="inline-block bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-widest mb-4">Farming Types</span>
             <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white mb-3">🚜 Apna Farming Style Chunein</h2>
             <p className="text-gray-500 dark:text-gray-400 max-w-xl mx-auto font-medium">Har kisan ke liye alag approach — AI se guided</p>
-=======
-            <span className="inline-block bg-teal-100 text-teal-700 text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-widest mb-4">Farming Types</span>
-            <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-3">🚜 Choose Your Farming Style</h2>
-            <p className="text-gray-500 max-w-xl mx-auto font-medium">A unique AI-guided approach for every farmer</p>
->>>>>>> 649c2b1ba4b238307e98856087c7ebe15980581f
+
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {farmingStyles.map((fs, i) => (
@@ -476,15 +402,10 @@ export default function Home() {
       <section className="py-16 bg-white dark:bg-gray-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-<<<<<<< HEAD
             <span className="inline-block bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-widest mb-4">Seasonal Guide</span>
             <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white mb-3">📅 Season Ke Hisaab Se Fasalein</h2>
             <p className="text-gray-500 dark:text-gray-400 max-w-xl mx-auto font-medium">Sahi season mein sahi fasal — AI guaranteed</p>
-=======
-            <span className="inline-block bg-orange-100 text-orange-700 text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-widest mb-4">Seasonal Guide</span>
-            <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-3">📅 Crops by Season</h2>
-            <p className="text-gray-500 max-w-xl mx-auto font-medium">The right crop for the right season — backed by AI</p>
->>>>>>> 649c2b1ba4b238307e98856087c7ebe15980581f
+
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {seasons.map((s, i) => (
@@ -505,13 +426,9 @@ export default function Home() {
                   <p className="text-sm text-gray-600 dark:text-gray-400 font-medium flex items-center gap-2">
                     <Zap className="w-4 h-4 text-amber-500 flex-shrink-0" />{s.tip}
                   </p>
-<<<<<<< HEAD
                   <Link to="/calendar" className="mt-4 inline-flex items-center gap-1.5 text-sm font-extrabold text-green-600 dark:text-green-400 opacity-0 group-hover:opacity-100 transition-all duration-300">
                     Calendar Dekho <ArrowRight className="w-4 h-4" />
-=======
-                  <Link to="/calendar" className="mt-4 inline-flex items-center gap-1.5 text-sm font-extrabold text-green-600 opacity-0 group-hover:opacity-100 transition-all duration-300">
-                    View Calendar <ArrowRight className="w-4 h-4" />
->>>>>>> 649c2b1ba4b238307e98856087c7ebe15980581f
+
                   </Link>
                 </div>
               </div>
@@ -524,15 +441,10 @@ export default function Home() {
       <section className="py-16 bg-[#f4f7f4] dark:bg-gray-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-<<<<<<< HEAD
             <span className="inline-block bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-widest mb-4">Pro Tips</span>
             <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white mb-3">⚡ Smart Farming Tips</h2>
             <p className="text-gray-500 dark:text-gray-400 font-medium">Ye tips apnao, yield aur income dono badhao</p>
-=======
-            <span className="inline-block bg-violet-100 text-violet-700 text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-widest mb-4">Pro Tips</span>
-            <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-3">⚡ Smart Farming Tips</h2>
-            <p className="text-gray-500 font-medium">Follow these tips to boost both your yield and income</p>
->>>>>>> 649c2b1ba4b238307e98856087c7ebe15980581f
+
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {smartTips.map((tip, i) => (
@@ -550,19 +462,12 @@ export default function Home() {
       <section className="py-16 bg-white dark:bg-gray-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
-<<<<<<< HEAD
             <span className="inline-block bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-widest mb-4">All AI Tools</span>
             <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white flex items-center justify-center gap-3 mb-3">
               <Tractor className="w-8 h-8 text-green-600" /> Hamari Subidhayein
             </h2>
             <p className="text-gray-500 dark:text-gray-400 max-w-xl mx-auto font-medium text-lg">{city} mein farming ke liye AI-powered tools</p>
-=======
-            <span className="inline-block bg-emerald-100 text-emerald-700 text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-widest mb-4">All AI Tools</span>
-            <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 flex items-center justify-center gap-3 mb-3">
-              <Tractor className="w-8 h-8 text-green-600" /> Our Services
-            </h2>
-            <p className="text-gray-500 max-w-xl mx-auto font-medium text-lg">AI-powered farming tools for {city}</p>
->>>>>>> 649c2b1ba4b238307e98856087c7ebe15980581f
+
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((f, i) => (
@@ -570,17 +475,11 @@ export default function Home() {
                 <div className={`w-14 h-14 mb-5 rounded-2xl bg-gradient-to-br ${f.color} flex items-center justify-center text-white shadow-md group-hover:scale-110 transition-transform duration-300`}>
                   {f.icon}
                 </div>
-<<<<<<< HEAD
                 <h3 className="text-lg font-extrabold text-gray-900 dark:text-white mb-2 group-hover:text-green-800 transition-colors">{f.title}</h3>
                 <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed flex-grow font-medium">{f.desc}</p>
                 <div className="mt-5 flex items-center gap-1.5 text-sm font-extrabold text-green-600 dark:text-green-400 opacity-0 group-hover:opacity-100 transition-all translate-x-2 group-hover:translate-x-0 duration-300">
                   Abhi Kholein <ArrowRight className="w-4 h-4" />
-=======
-                <h3 className="text-lg font-extrabold text-gray-900 mb-2 group-hover:text-green-800 transition-colors">{f.title}</h3>
-                <p className="text-sm text-gray-500 leading-relaxed flex-grow font-medium">{f.desc}</p>
-                <div className="mt-5 flex items-center gap-1.5 text-sm font-extrabold text-green-600 opacity-0 group-hover:opacity-100 transition-all translate-x-2 group-hover:translate-x-0 duration-300">
-                  Open Now <ArrowRight className="w-4 h-4" />
->>>>>>> 649c2b1ba4b238307e98856087c7ebe15980581f
+
                 </div>
               </Link>
             ))}
@@ -592,13 +491,9 @@ export default function Home() {
       <section className="py-16 bg-[#f4f7f4] dark:bg-gray-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
-<<<<<<< HEAD
             <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white mb-3">⚡ Kaise Kaam Karta Hai?</h2>
             <p className="text-gray-500 dark:text-gray-400 font-medium">3 simple steps mein poora farming guide</p>
-=======
-            <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-3">⚡ How It Works</h2>
-            <p className="text-gray-500 font-medium">A complete farming guide in 3 simple steps</p>
->>>>>>> 649c2b1ba4b238307e98856087c7ebe15980581f
+
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
@@ -621,13 +516,9 @@ export default function Home() {
       <section className="py-16 bg-white dark:bg-gray-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-<<<<<<< HEAD
             <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white mb-3">❤️ Kisan Kya Kehte Hain</h2>
             <p className="text-gray-500 dark:text-gray-400 font-medium">Humare users ki asli kahaniyaan</p>
-=======
-            <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-3">❤️ What Farmers Say</h2>
-            <p className="text-gray-500 font-medium">Real stories from our users</p>
->>>>>>> 649c2b1ba4b238307e98856087c7ebe15980581f
+
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {testimonials.map((t, i) => (

@@ -1,6 +1,9 @@
 import { useState, useRef, useCallback } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, Sprout, FlaskConical, Wheat, BarChart3, Landmark, Home as HomeIcon, HeartHandshake, Trees, Store, Droplet, Globe, ChevronDown, User, Settings, LogOut, Moon, Sun, Award, ChevronRight, CalendarDays, Bell } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
+import toast from 'react-hot-toast';
 
 const navLinks = [
   { path: '/', label: 'Home', Icon: HomeIcon },
