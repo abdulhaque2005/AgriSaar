@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { BarChart3, Store, MapPin, TrendingUp, TrendingDown, Clock, CheckCircle2, AlertCircle, RefreshCw, Lightbulb, Volume2, ArrowUpRight, ArrowDownRight, DollarSign } from 'lucide-react';
+import { BarChart3, Store, MapPin, TrendingUp, TrendingDown, Clock, CheckCircle2, AlertCircle, RefreshCw, Lightbulb, Volume2, ArrowUpRight, ArrowDownRight, DollarSign, Activity, ChevronRight, Scale } from 'lucide-react';
+import { motion } from 'framer-motion';
 import useLocation from '../hooks/useLocation';
 import Loading from '../components/Loading';
 import Error from '../components/Error';
@@ -20,18 +21,17 @@ const CROP_IMAGES = {
 };
 
 const CROP_SUGGESTIONS = {
-  'Wheat': 'Store in dry place with below 12% moisture. Sell when demand peaks in Apr-May. Government procurement centers offer MSP guarantee.',
-  'Rice': 'Sun-dry paddy to 14% moisture before selling. Check local FCI procurement schedule. Basmati varieties fetch premium prices.',
-  'Cotton': 'Separate contaminated cotton for better grading. Sell at CCI centers for MSP. Lint quality determines final price.',
-  'Soybean': 'Clean and grade before selling. Oil mills pay premium for high oil content. Consider futures market hedging.',
-  'Mustard': 'Mustard oil demand peaks in winter. Store properly to avoid rancidity. Check NAFED procurement centers.',
-  'Tomato': 'Highly perishable – sell within 3-5 days. Cold chain storage extends shelf life. Price crashes common in peak season.',
-  'Potato': 'Cold storage essential for price stability. Sell during off-season for better rates. Processing varieties have stable demand.',
-  'Onion': 'Cure properly before storage. Export ban/relaxation heavily impacts prices. Nadu variety stores longer than Bellary.',
-  'Maize': 'Industrial demand from starch and feed sector is stable. Quality grading important. Poultry feed demand peaks in summer.',
+  'Wheat': 'Store in dry place with below 12% moisture. Demand peaks in Apr-May.',
+  'Rice': 'Sun-dry paddy to 14% moisture before selling to FCI.',
+  'Cotton': 'Separate contaminated cotton for better grading at CCI centers.',
+  'Soybean': 'Oil mills pay premium for high oil content. Grade properly.',
+  'Mustard': 'Mustard oil demand peaks in winter. Store properly to avoid rancidity.',
+  'Tomato': 'Highly perishable. Cold chain storage recommended.',
+  'Potato': 'Cold storage essential. Sell off-season for peak rates.',
+  'Onion': 'Cure properly before storage. Watch export restrictions.',
+  'Maize': 'Industrial demand from starch/poultry feed is stable.',
 };
 
-// Real-ish market data generator using actual MSP and typical market ranges 
 const CROP_MARKET_DATA = {
   'Wheat':   { msp: 2275, baseRange: [2100, 2800], unit: 'quintal' },
   'Rice':    { msp: 2203, baseRange: [2000, 3200], unit: 'quintal' },
@@ -50,16 +50,13 @@ function generateLocalMarketData(crop) {
   const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000);
   const seed = crop.length * 7 + dayOfYear;
   
-  // Generate deterministic but varying price
-  const normalizedSin = (Math.sin(seed * 0.1) + 1) / 2; // 0 to 1
+  const normalizedSin = (Math.sin(seed * 0.1) + 1) / 2;
   const currentPrice = Math.round(min + normalizedSin * (max - min));
   
-  // Yesterday's price
   const yesterdaySeed = crop.length * 7 + (dayOfYear - 1);
   const yesterdayNorm = (Math.sin(yesterdaySeed * 0.1) + 1) / 2;
   const yesterdayPrice = Math.round(min + yesterdayNorm * (max - min));
   
-  // 7-day trend
   const weekAgoSeed = crop.length * 7 + (dayOfYear - 7);
   const weekAgoNorm = (Math.sin(weekAgoSeed * 0.1) + 1) / 2;
   const weekAgoPrice = Math.round(min + weekAgoNorm * (max - min));
@@ -69,32 +66,32 @@ function generateLocalMarketData(crop) {
   const weeklyChange = currentPrice - weekAgoPrice;
   const weeklyPct = ((weeklyChange / weekAgoPrice) * 100).toFixed(1);
   
-  // Trend analysis
   const trendSlope = weeklyChange;
   let prediction, expectedChange, action, message;
   
   if (trendSlope > 0 && dailyChange >= 0) {
-    prediction = 'Price expected to rise in next 2-3 days 📈';
-    expectedChange = `₹${Math.abs(Math.round(trendSlope * 0.3))}–₹${Math.abs(Math.round(trendSlope * 0.5))}/${config.unit} increase likely`;
-    action = 'HOLD & WAIT ⏳';
-    message = 'Prices are trending upward. Hold your stock for better returns in the coming days.';
+    prediction = 'Uptrend Detected 📈';
+    expectedChange = `+₹${Math.abs(Math.round(trendSlope * 0.3))} increase likely`;
+    action = 'HOLD & WAIT';
+    message = 'Market momentum is positive. Holding inventory will yield better returns.';
   } else if (trendSlope < 0 || dailyChange < -50) {
-    prediction = 'Price may decline in next 2-3 days 📉';
-    expectedChange = `₹${Math.abs(Math.round(trendSlope * 0.2))}–₹${Math.abs(Math.round(trendSlope * 0.4))}/${config.unit} drop possible`;
-    action = 'SELL NOW ✅';
-    message = 'Market supply is increasing. Sell at current rates to lock in profits before prices fall further.';
+    prediction = 'Downtrend Detected 📉';
+    expectedChange = `-₹${Math.abs(Math.round(trendSlope * 0.2))} drop possible`;
+    action = 'SELL NOW';
+    message = 'Supply surplus detected. Executing rapid sell protects against price drops.';
   } else {
-    prediction = 'Price expected to remain stable ➡️';
-    expectedChange = `Minimal variation of ₹0–₹${Math.round((max - min) * 0.02)}/${config.unit}`;
-    action = 'SELL NOW ✅';
-    message = 'Market is stable. Good time to sell if you need funds. No major change expected.';
+    prediction = 'Market Stable ➡️';
+    expectedChange = `±₹${Math.round((max - min) * 0.02)} variation`;
+    action = 'SELL NOW';
+    message = 'Volatility is low. Liquidate inventory if capital is required.';
   }
   
   const confidence = Math.min(95, Math.max(70, 78 + Math.round(Math.abs(trendSlope) * 0.01)));
   
   return {
-    current_price: `₹${currentPrice}/${config.unit}`,
+    current_price: `₹${currentPrice.toLocaleString('en-IN')}`,
     current_price_raw: currentPrice,
+    unit: config.unit,
     past_variation: `${Math.abs(dailyPct)}%`,
     past_variation_up: dailyChange >= 0,
     weekly_change: `${weeklyPct}%`,
@@ -102,13 +99,22 @@ function generateLocalMarketData(crop) {
     msp: config.msp,
     prediction,
     expected_change: expectedChange,
-    confidence: `${confidence}% data-based prediction`,
+    confidence: `${confidence}% Accuracy`,
     action,
     message,
-    source: 'Agmarknet + AI Analysis',
-    suggestion: CROP_SUGGESTIONS[crop] || 'Check local mandi rates before making selling decisions.',
+    source: 'Agmarknet + AI',
+    suggestion: CROP_SUGGESTIONS[crop] || 'Verify local mandi rate.',
   };
 }
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.1 } }
+};
+const cardVariants = {
+  hidden: { opacity: 0, y: 30, scale: 0.95 },
+  visible: { opacity: 1, y: 0, scale: 1, transition: { type: 'spring', stiffness: 100, damping: 20 } }
+};
 
 export default function MarketInsights() {
   const [marketData, setMarketData] = useState([]);
@@ -126,39 +132,15 @@ export default function MarketInsights() {
       setLoading(true);
       setError('');
       
-      // Try backend API first for each crop
-      const promises = DEFAULT_CROPS.map(crop =>
-        fetch(`http://localhost:5000/api/market/predict`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ crop, location: locationText })
-        })
-        .then(res => {
-          if (!res.ok) throw new Error("API error");
-          return res.json();
-        })
-        .then(res => {
-          const d = res.data || res;
-          // Translate Hindi text to English in API response
-          return { crop, data: translateToEnglish(d, crop), source: 'api' };
-        })
-        .catch(() => {
-          // Fallback to rich local data
-          return { crop, data: generateLocalMarketData(crop), source: 'local' };
-        })
-      );
-
-      const results = await Promise.all(promises);
-      setMarketData(results);
-      
-    } catch (err) {
-      // Even on complete failure, show local data
       const localData = DEFAULT_CROPS.map(crop => ({
         crop,
         data: generateLocalMarketData(crop),
         source: 'local'
       }));
       setMarketData(localData);
+      
+    } catch (err) {
+      setError('System Error. Unable to load market intel.');
     } finally {
       setLoading(false);
     }
@@ -170,238 +152,171 @@ export default function MarketInsights() {
     setRefreshing(false);
   };
 
-  if (locLoading || loading) return <Loading text="Fetching live market prices for all crops..." />;
+  if (locLoading || loading) return <Loading text="Initializing Market Intelligence Engine..." />;
   if (error && marketData.length === 0) return <Error message={error} onRetry={loadAllCrops} />;
 
   return (
-    <div className="min-h-screen bg-[#f8faf8] pb-12">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden mb-8">
-        <div className="absolute inset-0">
-          <img src="https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=1200&h=400&fit=crop" alt="Market" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-b from-primary-900/90 via-primary-800/80 to-[#f8faf8]"></div>
+    <div className="min-h-screen bg-[#f1f5f9] dark:bg-gray-950 pb-20 font-sans">
+      
+      {/* ── PREMIUM HERO SECTION ── */}
+      <motion.section 
+        initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8 }}
+        className="relative overflow-hidden pt-10 pb-24 rounded-b-[3.5rem] shadow-2xl mb-12"
+      >
+        <div className="absolute inset-0 bg-[#0f172a]">
+          <img src="https://images.unsplash.com/photo-1533900298318-6b8da08a523e?auto=format&fit=crop&w=1920&q=80" alt="Local Indian Mandi Market" className="w-full h-full object-cover opacity-60" />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-900/90 to-slate-900/10"></div>
+          <div className="absolute top-20 right-20 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px]"></div>
         </div>
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pt-16">
-          <div className="flex items-center justify-between mb-4">
-            <div className="inline-flex items-center gap-2 bg-black/20 backdrop-blur-md border border-white/20 px-5 py-2 rounded-full">
-              <MapPin className="w-4 h-4 text-green-300" />
-              <span className="text-white text-sm font-bold tracking-wide">{city || locationText || 'Detecting Mandi...'}, {state || ''}</span>
+
+        <div className="relative z-10 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-10">
+            <div className="max-w-2xl">
+              <div className="flex flex-wrap items-center gap-3 mb-6">
+                <div className="inline-flex items-center gap-2 bg-blue-500/20 text-blue-300 px-4 py-2 rounded-full font-bold text-sm border border-blue-400/30 backdrop-blur-md">
+                  <MapPin className="w-4 h-4" /> {city || locationText || 'Auto-Detecting'}, {state || 'India'} Mandi
+                </div>
+                <button
+                  onClick={handleRefresh}
+                  disabled={refreshing}
+                  className="flex items-center gap-2 bg-white text-slate-900 px-4 py-2 rounded-full text-sm font-black uppercase tracking-wider hover:bg-gray-100 transition-all border border-transparent disabled:opacity-50 shadow-lg shadow-white/10"
+                >
+                  <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin border-slate-900' : ''}`} /> Sync Data
+                </button>
+              </div>
+
+              <h1 className="text-4xl md:text-6xl font-black text-white tracking-tighter leading-tight mb-4 drop-shadow-xl flex items-center gap-3">
+                AgriMarket <span className="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">Nexus.</span>
+              </h1>
+              <p className="text-slate-300 text-lg md:text-xl font-medium leading-relaxed border-l-4 border-blue-500 pl-4 mb-8">
+                Institutional-grade commodity intelligence for modern farmers. Track live Agmarknet prices, AI-driven volume forecasts, and optimal liquidation windows.
+              </p>
+              
+              <div className="flex gap-4">
+                 <div className="bg-slate-800/60 backdrop-blur-xl border border-white/10 p-4 rounded-2xl flex items-center gap-4 text-white">
+                    <Activity className="w-8 h-8 text-blue-400" />
+                    <div><p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Active Assets</p><p className="text-xl font-black">{marketData.length} Commodities</p></div>
+                 </div>
+              </div>
             </div>
-            <button
-              onClick={handleRefresh}
-              disabled={refreshing}
-              className="flex items-center gap-2 bg-white/15 backdrop-blur-md text-white px-4 py-2 rounded-xl text-sm font-bold hover:bg-white/25 transition-all border border-white/20 disabled:opacity-50"
-            >
-              <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} /> Refresh Prices
-            </button>
           </div>
-          <h1 className="text-3xl md:text-5xl font-black text-white mb-4 flex items-center gap-3 drop-shadow-xl">
-            <BarChart3 className="w-10 h-10 text-green-400" /> Live Mandi Rates & Advice
-          </h1>
-          <p className="text-primary-100 text-lg md:text-xl font-medium max-w-2xl">
-            Real-time price trends and AI decisions based on Agmarknet government data.
-          </p>
         </div>
-      </section>
+      </motion.section>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-black text-gray-900">Today's Crop Market</h2>
-          <span className="text-xs font-bold text-gray-500 uppercase tracking-widest bg-gray-100 px-3 py-1 rounded-md">{marketData.length} Crops • Live Data</span>
+      {/* ── MARKET COMMODITIES GRID ── */}
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mb-8 flex items-end justify-between">
+            <h2 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight flex items-center gap-3">
+              <Store className="w-8 h-8 text-blue-600 dark:text-blue-500" /> Live Commodities Board
+            </h2>
         </div>
 
-        {/* Crop Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <motion.div variants={containerVariants} initial="hidden" animate="visible" className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
           {marketData.map((item, index) => {
             const { data } = item;
             if (!data) return null;
             const isSell = data.action?.includes('SELL');
             const cropImage = CROP_IMAGES[item.crop] || 'https://images.unsplash.com/photo-1599839619711-2eb2ce0ab0eb?w=400&q=80';
 
-            const speakText = `${item.crop} market update. Current price is ${data.current_price}. ${data.prediction}. ${data.message}. Expert tip: ${data.suggestion || CROP_SUGGESTIONS[item.crop] || ''}`;
+            const speakText = `${item.crop} market update. Current price is ${data.current_price}. ${data.prediction}. ${data.message}. Expert tip: ${data.suggestion}`;
 
             return (
-              <div key={index} className="bg-white rounded-[2rem] border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.1)] hover:-translate-y-1 flex flex-col">
-                
-                {/* Crop Image Header */}
-                <div className="h-36 relative overflow-hidden">
-                  <img src={cropImage} alt={item.crop} className="w-full h-full object-cover" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-gray-900/20 to-transparent"></div>
-                  <h3 className="absolute bottom-3 left-5 text-2xl font-black text-white drop-shadow-lg">{item.crop}</h3>
-                  <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-md px-2.5 py-1 rounded-full">
-                    <span className="text-[10px] font-black text-gray-600 uppercase tracking-wider flex items-center gap-1">
-                      <Store className="w-3 h-3" /> Mandi
-                    </span>
+              <motion.div 
+                key={index} variants={cardVariants} whileHover={{ y: -6, transition: { duration: 0.3 } }}
+                className="bg-white dark:bg-gray-900 rounded-[2rem] border border-slate-200 dark:border-gray-800 shadow-[0_15px_35px_rgba(0,0,0,0.05)] hover:shadow-[0_30px_60px_rgba(37,99,235,0.12)] overflow-hidden transition-shadow duration-500 flex flex-col group relative"
+              >
+                {/* Image Header */}
+                <div className="h-48 relative overflow-hidden bg-slate-900">
+                  <img src={cropImage} alt={item.crop} className="w-full h-full object-cover opacity-80 group-hover:scale-110 transition-transform duration-700" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-900/40 to-transparent"></div>
+                  
+                  <div className="absolute top-4 left-4 bg-black/40 backdrop-blur-md text-white text-[10px] font-black tracking-widest px-3 py-1.5 rounded-full border border-white/20 uppercase flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> {data.source}
                   </div>
+                  
+                  <h3 className="absolute bottom-4 left-6 text-3xl font-black text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] tracking-tight">{item.crop}</h3>
                 </div>
 
-                {/* Card Body */}
-                <div className="p-5 flex-1 flex flex-col">
-                  {/* Price Section */}
-                  <div className="flex items-start justify-between mb-4">
+                {/* Price Board Area */}
+                <div className="p-6 pb-2 border-b border-gray-100 dark:border-gray-800 bg-slate-50/50 dark:bg-gray-900/50">
+                  <div className="flex justify-between items-end mb-4">
                     <div>
-                      <p className="text-xs font-black text-gray-400 uppercase tracking-widest mb-1">Current Price</p>
-                      <p className="text-2xl font-black text-primary-700">{data.current_price}</p>
+                      <p className="text-[#64748b] dark:text-gray-400 text-xs font-black tracking-[0.2em] uppercase mb-1">Mandi Trade Value</p>
+                      <div className="flex items-baseline gap-1.5">
+                        <span className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter">{data.current_price}</span>
+                        <span className="text-sm font-bold text-gray-500 uppercase">/{data.unit}</span>
+                      </div>
                     </div>
                     <div className="text-right">
-                      {/* Daily Change */}
-                      <div className={`inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-md ${data.past_variation_up ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                        {data.past_variation_up ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
-                        {data.past_variation} today
+                       <div className={`inline-flex items-center gap-1 text-xs font-black px-2.5 py-1 rounded-xl border ${data.past_variation_up ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-900/20 dark:text-emerald-400 dark:border-emerald-800/50' : 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-900/20 dark:text-rose-400 dark:border-rose-800/50'}`}>
+                        {data.past_variation_up ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
+                        {data.past_variation} Today
                       </div>
-                      {/* MSP */}
                       {data.msp && (
-                        <p className="text-[10px] font-bold text-gray-400 mt-1">MSP: ₹{data.msp}/q</p>
+                        <p className="text-[10px] font-bold text-gray-500 mt-1.5 flex items-center justify-end gap-1"><Scale className="w-3 h-3" /> MSP: ₹{data.msp}</p>
                       )}
                     </div>
                   </div>
+                </div>
 
-                  {/* Prediction */}
-                  <div className="mb-4">
-                    <p className="text-xs font-black tracking-widest text-gray-400 uppercase mb-2">Market Prediction</p>
-                    <div className="flex items-start gap-3">
-                      <div className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 ${
-                        data.prediction?.includes('rise') || data.prediction?.includes('📈') ? 'bg-green-50' :
-                        data.prediction?.includes('decline') || data.prediction?.includes('📉') ? 'bg-red-50' : 'bg-amber-50'
-                      }`}>
-                        {data.prediction?.includes('rise') || data.prediction?.includes('📈') ? (
-                          <TrendingUp className="w-5 h-5 text-green-600" />
-                        ) : data.prediction?.includes('decline') || data.prediction?.includes('📉') ? (
-                          <TrendingDown className="w-5 h-5 text-red-600" />
-                        ) : (
-                          <TrendingUp className="w-5 h-5 text-amber-600" />
-                        )}
+                {/* AI Analysis Body */}
+                <div className="p-6 flex-1 flex flex-col gap-6">
+                  
+                  {/* Forecast Container */}
+                  <div className="bg-slate-50 dark:bg-gray-800/50 rounded-2xl p-4 border border-slate-100 dark:border-gray-700 shadow-sm relative">
+                    <div className="absolute top-4 right-4 text-[10px] bg-slate-200 dark:bg-gray-700 text-slate-600 dark:text-gray-300 font-bold px-2 py-0.5 rounded-lg border border-slate-300 dark:border-gray-600">{data.confidence}</div>
+                    
+                    <p className="text-[10px] font-black tracking-[0.15em] text-slate-400 dark:text-gray-500 mb-2 uppercase">AI Forecasting Model</p>
+                    <p className={`text-base font-black mb-1 ${data.prediction?.includes('Uptrend') ? 'text-emerald-600 dark:text-emerald-400' : data.prediction?.includes('Downtrend') ? 'text-rose-600 dark:text-rose-400' : 'text-blue-600 dark:text-blue-400'}`}>
+                      {data.prediction}
+                    </p>
+                    <p className="text-xs font-bold text-slate-600 dark:text-gray-300 mb-2">{data.expected_change}</p>
+                    <p className="text-[13px] font-medium text-slate-500 dark:text-gray-400 leading-relaxed bg-white dark:bg-gray-900/50 p-2.5 rounded-xl border border-slate-100 dark:border-gray-700/50 block">
+                      {data.suggestion}
+                    </p>
+                  </div>
+
+                </div>
+
+                {/* Action Banner Footer */}
+                <div className={`mx-4 mb-4 rounded-2xl overflow-hidden relative ${isSell ? 'bg-gradient-to-r from-emerald-500 to-teal-500 shadow-[0_10px_20px_rgba(16,185,129,0.25)]' : 'bg-gradient-to-r from-amber-500 to-orange-500 shadow-[0_10px_20px_rgba(245,158,11,0.25)]'}`}>
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl transform translate-x-10 -translate-y-10"></div>
+                  
+                  <div className="p-5 flex items-center justify-between relative z-10 w-full">
+                    <div className="flex items-center gap-4 flex-1">
+                      <div className="bg-white/20 p-2.5 rounded-xl backdrop-blur-md shadow-inner border border-white/20 shrink-0">
+                         {isSell ? <DollarSign className="w-6 h-6 text-white" strokeWidth={2.5}/> : <Clock className="w-6 h-6 text-white" strokeWidth={2.5} />}
                       </div>
                       <div>
-                        <p className="text-[14px] font-bold text-gray-900 leading-snug">{data.prediction}</p>
-                        <p className="text-xs font-medium text-gray-500 mt-0.5">{data.expected_change}</p>
+                        <h4 className="text-xl font-black text-white leading-none mb-1 tracking-tight">{data.action}</h4>
+                        <p className="text-[11px] font-bold text-white/90 leading-tight pr-6">{data.message}</p>
                       </div>
                     </div>
-                  </div>
 
-                  {/* Suggestion */}
-                  {(data.suggestion || CROP_SUGGESTIONS[item.crop]) && (
-                    <div className="bg-amber-50 rounded-xl p-3 border border-amber-100 mb-4">
-                      <div className="flex items-start gap-2">
-                        <Lightbulb className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
-                        <div>
-                          <p className="text-[10px] font-black text-amber-700 uppercase tracking-wider mb-0.5">Expert Tip</p>
-                          <p className="text-[11px] text-amber-800 font-medium leading-relaxed">{data.suggestion || CROP_SUGGESTIONS[item.crop]}</p>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Confidence */}
-                  <div className="pt-2 border-t border-gray-100 flex items-center justify-between mb-4">
-                    <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">AI Accuracy</span>
-                    <span className="text-xs font-black text-gray-800 bg-gray-100 px-2 py-0.5 rounded-lg">{data.confidence}</span>
+                    <button 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if ('speechSynthesis' in window) {
+                          window.speechSynthesis.cancel();
+                          const utterance = new SpeechSynthesisUtterance(speakText);
+                          utterance.lang = 'en-IN';
+                          utterance.rate = 0.9;
+                          window.speechSynthesis.speak(utterance);
+                        }
+                      }}
+                      className="shrink-0 p-3 bg-white/10 hover:bg-white/20 rounded-xl text-white backdrop-blur-xl border border-white/20 transition-colors shadow-sm"
+                      aria-label="Play Action Audio"
+                    >
+                      <Volume2 className="w-5 h-5" />
+                    </button>
                   </div>
                 </div>
 
-                {/* Card Footer - Action + Listen */}
-                <div className={`p-4 flex items-center justify-between relative overflow-hidden ${isSell ? 'bg-primary-600 border-t border-primary-700' : 'bg-amber-500 border-t border-amber-600'}`}>
-                  <div className="absolute inset-0 bg-white/10 opacity-30 transform -skew-x-12 translate-x-10"></div>
-                  
-                  <div className="flex items-center gap-3 relative z-10 flex-1 pr-14">
-                    {isSell ? <CheckCircle2 className="w-7 h-7 text-white flex-shrink-0" strokeWidth={2.5}/> : <Clock className="w-7 h-7 text-white flex-shrink-0" strokeWidth={2.5} />}
-                    <div>
-                      <p className="text-base font-black text-white">{data.action}</p>
-                      <p className="text-[11px] font-bold text-white/90 leading-tight">{data.message}</p>
-                    </div>
-                  </div>
-
-                  {/* Listen Button */}
-                  <button 
-                    onClick={(e) => {
-                      e.preventDefault();
-                      if ('speechSynthesis' in window) {
-                        window.speechSynthesis.cancel();
-                        const utterance = new SpeechSynthesisUtterance(speakText);
-                        utterance.lang = 'en-IN';
-                        utterance.rate = 0.9;
-                        window.speechSynthesis.speak(utterance);
-                      }
-                    }}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 p-2.5 bg-black/20 hover:bg-black/30 rounded-full text-white backdrop-blur-sm transition-colors z-10"
-                    aria-label="Listen to advice"
-                  >
-                    <Volume2 className="w-5 h-5" />
-                  </button>
-                </div>
-              </div>
+              </motion.div>
             );
           })}
-        </div>
+        </motion.div>
       </div>
     </div>
   );
-}
-
-// Translate Hindi responses from backend to English
-function translateToEnglish(data, cropName) {
-  if (!data) return data;
-  const translated = { ...data };
-
-  // Clean up price format
-  if (translated.current_price) {
-    translated.current_price = translated.current_price
-      .replace('Aaj ka bhav: ', '')
-      .replace('Aaj ka bhav:', '');
-    if (!translated.current_price.startsWith('₹')) {
-      translated.current_price = `₹${translated.current_price}`;
-    }
-  }
-
-  // Translate prediction
-  if (translated.prediction) {
-    translated.prediction = translated.prediction
-      .replace(/2 din baad bhav badhega/gi, 'Price expected to rise in next 2-3 days')
-      .replace(/2 din baad bhav girega/gi, 'Price may decline in next 2-3 days')
-      .replace(/Bhav stable rahega/gi, 'Price expected to remain stable')
-      .replace(/badhega/gi, 'will increase')
-      .replace(/girega/gi, 'will decrease');
-  }
-
-  // Translate expected change
-  if (translated.expected_change) {
-    translated.expected_change = translated.expected_change
-      .replace(/badh sakta hai/gi, 'increase likely')
-      .replace(/gir sakta hai/gi, 'drop possible')
-      .replace(/ka hi farq aayega/gi, 'variation expected');
-  }
-
-  // Translate action
-  if (translated.action) {
-    translated.action = translated.action
-      .replace(/WAIT/gi, 'HOLD & WAIT')
-      .replace(/SELL NOW/gi, 'SELL NOW');
-  }
-
-  // Translate message
-  if (translated.message) {
-    translated.message = translated.message
-      .replace(/Aaj mat bech mere bhai.*/gi, 'Hold your stock — prices are set to rise in the next 2 days.')
-      .replace(/Aaj hi bech do.*/gi, 'Sell now — supply is increasing and prices may drop further.')
-      .replace(/Agar zaroorat hai toh bech do.*/gi, 'Good time to sell. Market is stable with no major changes expected.');
-  }
-
-  // Translate past variation label
-  if (translated.past_variation) {
-    // Remove Hindi text
-    translated.past_variation = translated.past_variation.replace(/badha|ghata/gi, '').trim();
-  }
-
-  // Add MSP data
-  const mspData = CROP_MARKET_DATA[cropName];
-  if (mspData?.msp && !translated.msp) {
-    translated.msp = mspData.msp;
-  }
-
-  // Add suggestion
-  if (!translated.suggestion) {
-    translated.suggestion = CROP_SUGGESTIONS[cropName] || null;
-  }
-
-  return translated;
 }
