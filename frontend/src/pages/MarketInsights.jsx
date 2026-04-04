@@ -5,6 +5,7 @@ import useLocation from '../hooks/useLocation';
 import Loading from '../components/Loading';
 import Error from '../components/Error';
 import SpeakButton from '../components/SpeakButton';
+import getPageLanguage, { getSpeechLang } from '../utils/getPageLanguage';
 
 const DEFAULT_CROPS = ['Wheat', 'Rice', 'Cotton', 'Soybean', 'Mustard', 'Tomato', 'Potato', 'Onion', 'Maize'];
 
@@ -299,15 +300,19 @@ export default function MarketInsights() {
                         if ('speechSynthesis' in window) {
                           window.speechSynthesis.cancel();
                           const utterance = new SpeechSynthesisUtterance(speakText);
-                          utterance.lang = 'en-IN';
+                          const lang = getPageLanguage();
+                          utterance.lang = getSpeechLang(lang);
                           utterance.rate = 0.9;
+                          const voices = window.speechSynthesis.getVoices();
+                          const v = voices.find(v => v.lang.startsWith(lang)) || voices.find(v => v.lang.includes('IN')) || voices[0];
+                          if (v) utterance.voice = v;
                           window.speechSynthesis.speak(utterance);
                         }
                       }}
-                      className="shrink-0 p-3 bg-white/10 hover:bg-white/20 rounded-xl text-white backdrop-blur-xl border border-white/20 transition-colors shadow-sm"
+                      className="shrink-0 flex items-center gap-2 px-4 py-3 bg-white/20 hover:bg-white/30 rounded-xl text-white backdrop-blur-xl border border-white/20 transition-all shadow-sm font-black text-xs uppercase tracking-widest"
                       aria-label="Play Action Audio"
                     >
-                      <Volume2 className="w-5 h-5" />
+                      <Volume2 className="w-5 h-5" /> Listen
                     </button>
                   </div>
                 </div>

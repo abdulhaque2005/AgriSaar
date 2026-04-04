@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import api from '../services/api';
 import useLocation from '../hooks/useLocation';
 import Loading from '../components/Loading';
+import getPageLanguage, { getSpeechLang } from '../utils/getPageLanguage';
 
 const TREE_ASSETS = {
   'Teak (Sagwan)': {
@@ -46,8 +47,12 @@ export default function ProfitTrees() {
     if ('speechSynthesis' in window && data) {
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(data.replace(/\*\*|_/g, ''));
-      utterance.lang = 'en-IN';
+      const lang = getPageLanguage();
+      utterance.lang = getSpeechLang(lang);
       utterance.rate = 0.95;
+      const voices = window.speechSynthesis.getVoices();
+      const v = voices.find(v => v.lang.startsWith(lang)) || voices.find(v => v.lang.includes('IN')) || voices[0];
+      if (v) utterance.voice = v;
       window.speechSynthesis.speak(utterance);
     }
   };

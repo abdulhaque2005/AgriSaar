@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Volume2, Square, Loader2 } from 'lucide-react';
+import getPageLanguage, { getSpeechLang } from '../utils/getPageLanguage';
 
 /**
  * Reusable "Listen" button — calls ElevenLabs TTS via backend (Rachel female voice).
@@ -88,39 +89,27 @@ export default function SpeakButton({ text, label = 'Listen', size = 'sm' }) {
       const clean = txt.replace(/[\u{1F300}-\u{1FAD6}\u{2600}-\u{27BF}#*_\[\]()]/gu, '').replace(/\n+/g, '. ');
       const utter = new SpeechSynthesisUtterance(clean);
       utter.rate = 0.95;
-      utter.lang = /[\u0900-\u097F]/.test(clean) ? 'hi-IN' : 'en-IN';
-      // Try to pick a female voice - prioritizing Indian Female, then any Female
+
+      // AUTO-DETECT page language from Google Translate
+      const pageLang = getPageLanguage();
+      const speechLang = getSpeechLang(pageLang);
+      utter.lang = speechLang;
+
       const voices = window.speechSynthesis.getVoices();
-      
-      // EXHAUSTIVE FEMALE VOICE SEARCH - Priority: Indian Female, then Global Female
-      const femaleKeywords = ['female', 'kalpana', 'priya', 'swara', 'samantha', 'zira', 'google hindi', 'microsoft k', 'neerja', 'lisa', 'victoria', 'heather', 'sara'];
-      const femaleVoices = voices.filter(v => 
-        femaleKeywords.some(kw => v.name.toLowerCase().includes(kw))
-      );
-      
-      // Try Hindi Female specifically first
-      let bestVoice = femaleVoices.find(v => v.lang.includes('hi'));
-      
-      // Then any female voice
-      if (!bestVoice) bestVoice = femaleVoices[0];
-      
-      // Then any Hindi voice
-      if (!bestVoice) bestVoice = voices.find(v => v.lang.includes('hi'));
-      
-      // Fallback to first available
+      const langCode = pageLang; // 'hi', 'bn', 'ta', etc.
+
+      // Find voice matching the detected language
+      let bestVoice = voices.find(v => v.lang.startsWith(langCode));
+      // Fallback: any Indian voice
+      if (!bestVoice) bestVoice = voices.find(v => v.lang.includes('IN'));
+      // Final fallback
       if (!bestVoice) bestVoice = voices[0];
 
-      if (bestVoice) {
-        console.log('STRICT_VOICE_SELECTION:', bestVoice.name, bestVoice.lang);
-        utter.voice = bestVoice;
-      }
+      if (bestVoice) utter.voice = bestVoice;
       
       utter.onstart = () => setStatus('playing');
       utter.onend = () => setStatus('idle');
-      utter.onerror = (e) => {
-        console.error('Speech synthesis error:', e);
-        setStatus('idle');
-      };
+      utter.onerror = () => setStatus('idle');
       window.speechSynthesis.speak(utter);
     }
   };
