@@ -456,7 +456,7 @@ export default function WeatherPage() {
                   <div>
                     <span className="text-white font-black text-lg tracking-widest uppercase block leading-none">{activeCity || 'Locating...'}</span>
                     <span className="text-white/60 font-medium text-[10px] uppercase tracking-widest mt-1 block border-t border-white/10 pt-1">
-                      {activeState && activeState !== activeCity ? `${activeState}, India` : 'India'}
+                      {activeState && activeState !== 'India' && activeState !== activeCity ? `${activeState}, India` : 'India'}
                     </span>
                   </div>
                 </motion.div>
