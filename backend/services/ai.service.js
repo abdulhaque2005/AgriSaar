@@ -1,12 +1,18 @@
-import { GoogleGenAI } from '@google/genai';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import { logger } from '../utils/logger.js';
-import { analyzeSoil } from './soilAnalysis.service.js';
-import { recommendCrops } from './cropRecommendation.service.js';
-import { getFertilizerPlan } from './fertilizer.service.js';
-import { getWeatherAdvisory } from './weather.service.js';
-import { findSchemes } from './govScheme.service.js';
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+let _ai = null;
+function getAI() {
+  if (!_ai) {
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+      logger.error('GEMINI_API_KEY is missing in .env');
+      throw new Error('GEMINI_API_KEY is missing');
+    }
+    _ai = new GoogleGenerativeAI(apiKey);
+  }
+  return _ai;
+}
 
 export async function masterAdvisor(input) {
   const { soilData, location, crop, season, farmerQuery } = input;
@@ -57,11 +63,10 @@ Keep under 300 words.`;
 
   try {
     logger.ai('Calling Gemini MASTER MODE...');
-    const response = await ai.models.generateContent({
-      model: 'gemini-2.0-flash',
-      contents: masterPrompt
-    });
-    return { masterAdvice: response.text, details: results, query: farmerQuery || null };
+    const model = getAI().getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const result = await model.generateContent(masterPrompt);
+    const response = await result.response;
+    return { masterAdvice: response.text(), details: results, query: farmerQuery || null };
   } catch (error) {
     logger.error(`Gemini master error: ${error.message}`);
     let fallback = `## 🌾 Smart Farming Report\n\n`;
@@ -73,37 +78,95 @@ Keep under 300 words.`;
 }
 
 export async function recoveryAdvisor(problem, soilData) {
-  const prompt = `You are a crop recovery expert for Indian farmers. Respond in English.
+  const prompt = `You are a specialized crop recovery and disaster management expert for Indian farmers. Respond in English.
 
-PROBLEM: ${problem}
-${soilData ? `SOIL: N=${soilData.nitrogen}, P=${soilData.phosphorus}, K=${soilData.potassium}, pH=${soilData.ph}` : ''}
+PROBLEM ENCOUNTERED: ${problem}
+${soilData ? `SOIL DATA: N=${soilData.nitrogen}, P=${soilData.phosphorus}, K=${soilData.potassium}, pH=${soilData.ph}` : ''}
 
-TASK:
-1. Assess damage type
-2. Suggest recovery crops (low cost, short duration)
-3. Give immediate action plan
-4. Mention any insurance/govt support
+TASK: Provide a comprehensive 3-part recovery strategy.
+1. Government & Insurance: Steps to claim PMFBY insurance or NDRF compensation.
+2. Immediate Action: Crucial steps to take in the next 48 hours to save the land/remaining crop.
+3. Recovery Crops: Suggest 2-3 specific short-duration, high-yield cash crops suitable for this situation to recover financial loss.
 
-Keep under 200 words. Be encouraging.`;
+IMPORTANT: You MUST respond ONLY with a valid JSON object in the exact format below, with NO markdown formatting, NO backticks, NO "json" label.
+{
+  "compensation": {
+    "title": "Government Support & Insurance",
+    "steps": ["step 1", "step 2", "step 3"]
+  },
+  "immediateAction": {
+    "title": "Immediate Actions (48 Hours)",
+    "steps": ["action 1", "action 2"]
+  },
+  "recoveryCrops": {
+    "title": "Fast Recovery Cash Crops",
+    "crops": [
+      { "name": "Crop Name", "duration": "xx days", "reason": "Why it works here" }
+    ]
+  }
+}`;
 
   try {
-    logger.ai('Calling Gemini for recovery advice...');
-    const response = await ai.models.generateContent({
-      model: 'gemini-2.0-flash',
-      contents: prompt
+    logger.ai('Calling Gemini for advanced structured recovery advice...');
+    const model = getAI().getGenerativeModel({ 
+      model: 'gemini-1.5-flash',
+      generationConfig: { responseMimeType: "application/json" }
     });
-    return { problem, recovery: response.text };
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    let rawText = response.text().trim();
+    // In case model ignores mimeType and wraps in markdown (fallback cleanup)
+    if (rawText.startsWith('\`\`\`json')) {
+      rawText = rawText.substring(7, rawText.length - 3).trim();
+    } else if (rawText.startsWith('\`\`\`')) {
+      rawText = rawText.substring(3, rawText.length - 3).trim();
+    }
+    
+    let structuredData;
+    try {
+      structuredData = JSON.parse(rawText);
+    } catch (parseError) {
+      logger.error('Failed to parse Gemini JSON, falling back', parseError);
+      throw new Error("JSON Parse failed");
+    }
+
+    return { problem, recovery: structuredData };
   } catch (error) {
     logger.error(`Gemini recovery error: ${error.message}`);
+    const fallbackStructured = {
+      compensation: {
+        title: "Government Support & Insurance",
+        steps: [
+          "File PMFBY claim within 72 hours via Crop Insurance App",
+          "Inform local agriculture officer about crop loss for NDRF compensation check",
+          "Click photos of the damaged field as proof"
+        ]
+      },
+      immediateAction: {
+        title: "Immediate Actions (48 Hours)",
+        steps: [
+          "Ensure proper drainage if flooded, or retain moisture if drought",
+          "Do not apply fresh chemical fertilizers immediately",
+          "Clear dead plant debris to prevent pests"
+        ]
+      },
+      recoveryCrops: {
+        title: "Fast Recovery Cash Crops",
+        crops: [
+          { name: "Green Gram (Moong)", duration: "60 days", reason: "Fastest cash crop, requires less water" },
+          { name: "Radish / Spinach", duration: "40 days", reason: "Quick harvest to get immediate cash flow" }
+        ]
+      }
+    };
     return {
       problem,
-      recovery: `## Recovery Plan\n\n🌿 Try short duration crops (Green Gram, Black Gram — 60 days)\n💧 Maintain soil moisture\n📋 File a claim in PM Fasal Bima Yojana\n💪 Stay strong — recovery is possible!`
+      recovery: fallbackStructured
     };
   }
 }
 
 export async function processVoiceQuery(transcript) {
-  const prompt = `You are AgriSaar Fast Voice AI for farmers.
+  const prompt = `You are AgriSaar Fast Voice AI for farmers. Use a professional, helpful female voice tone.
 
 USER SPEECH: "${transcript}"
 
@@ -117,14 +180,20 @@ OUTPUT ONLY THE RESPONSE TEXT. NO INTRO. NO QUOTES.`;
 
   try {
     logger.ai('Calling Gemini for Voice AI...');
-    const response = await ai.models.generateContent({
-      model: 'gemini-2.0-flash',
-      contents: prompt
+    const model = getAI().getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const result = await model.generateContent({
+      contents: [{ role: 'user', parts: [{ text: prompt }] }],
+      generationConfig: {
+        maxOutputTokens: 200,
+        temperature: 0.7,
+      }
     });
-    return { success: true, advice: response.text.trim() };
+    const response = await result.response;
+    return { success: true, advice: response.text().trim() };
   } catch (error) {
-    logger.error(`Gemini voice error: ${error.message}`);
-    return { success: false, advice: `Main samajh nahi paaya. Kripya dobara bolein.` };
+    console.error('STRICT_AI_ERROR:', error);
+    logger.error(`Gemini voice error [Model: gemini-1.5-flash]: ${error.message}`);
+    return { success: false, advice: `Maafi chaahte hain, AI server se jud nahi pa raha hai. Kripya thodi der baad koshish karein.` };
   }
 }
 
@@ -162,15 +231,14 @@ Keep response under 250 words. Be specific to the location.`;
 
   try {
     logger.ai('Calling Gemini for nearby farming info...');
-    const response = await ai.models.generateContent({
-      model: 'gemini-2.0-flash',
-      contents: prompt
-    });
+    const model = getAI().getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
     return {
       location: location || `${lat}, ${lon}`,
       season: currentSeason,
       month: currentMonth,
-      info: response.text,
+      info: response.text(),
       timestamp: new Date().toISOString()
     };
   } catch (error) {
@@ -181,6 +249,69 @@ Keep response under 250 words. Be specific to the location.`;
       month: currentMonth,
       info: `🏛️ Nearby Advisors: Apne district ke KVK (Krishi Vigyan Kendra) se contact karein\n🌾 Active Crops: Season ke hisaab se crops chal rahi hain\n📞 Helpline: Kisan Call Center — 1800-180-1551 (Free)\n\n_AI info temporarily unavailable._`,
       timestamp: new Date().toISOString()
+    };
+  }
+}
+
+export async function getAgroforestryAdvice(location) {
+  const prompt = `You are an agroforestry (tree farming) expert for Indian farmers. Respond in English.
+
+FARMER LOCATION: ${location || 'India'}
+
+TASK: Identify the top 3 high-profit trees/plants for this region (e.g., Teak, Sandalwood, Bamboo, Malabar Neem).
+For each, provide:
+1. Estimated profit per acre after 5-10 years.
+2. Ease of maintenance.
+3. Market demand.
+4. Soil/Water requirement.
+
+Keep response under 250 words. Focus on maximum profit for small farmers.`;
+
+  try {
+    logger.ai('Calling Gemini for agroforestry advice...');
+    const model = getAI().getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    return { location, advice: response.text() };
+  } catch (error) {
+    logger.error(`Gemini agroforestry error: ${error.message}`);
+    return {
+      location,
+      advice: `🌲 Recommended Trees: Teak, Bamboo, and Lemon.\n💰 High Profit: Teak/Sandalwood (Long term)\n💧 Maintenance: Medium\n\n_Detailed AI report unavailable._`
+    };
+  }
+}
+
+export async function getBioInputIntelligence(crop) {
+  const prompt = `You are an organic farming (ZBNF/Organic) expert for Indian farmers. Respond in English.
+
+CROP: ${crop || 'General/Multi-crop'}
+
+TASK: Provide intelligence on Bio-fertilizers and Bio-pesticides specifically for this crop.
+Include:
+1. One specific bio-organic recipe (e.g., Jeevamrut, Neemastra).
+2. Benefits over chemical alternatives.
+3. Application method.
+
+Keep response under 200 words. Be practical and low-cost.`;
+
+  try {
+    logger.ai('Calling Gemini for bio-input intelligence...');
+    const model = getAI().getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    return { crop, intelligence: response.text() };
+  } catch (error) {
+    logger.error(`Gemini bio-input error: ${error.message}`);
+    return {
+      crop,
+      intelligence: `🌿 Bio-Input Formula for ${crop || 'your crop'}:
+      
+1. Jeevamrut: 10L Water + 1kg Cow Dung + 1L Cow Urine + 100g Jaggery.
+2. Mix and ferment for 3 days.
+3. Spray on roots every 15 days.
+
+(Note: Connection issue with AI server, displaying stable offline recipe.)`
     };
   }
 }
