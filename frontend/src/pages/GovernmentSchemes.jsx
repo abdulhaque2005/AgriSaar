@@ -16,13 +16,16 @@ const CATEGORY_CONFIG = {
   'Innovation': { color: 'teal', bg: 'bg-teal-500/10', border: 'border-teal-500/20', text: 'text-teal-500', icon: '▴' }
 };
 
-const SCHEME_IMAGES = [
-  'https://images.unsplash.com/photo-1589923188900-85dae523342b?auto=format&fit=crop&w=800&q=80',
-  'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?auto=format&fit=crop&w=800&q=80',
-  'https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&w=800&q=80',
-  'https://plus.unsplash.com/premium_photo-1661908871033-6447c234a65b?auto=format&fit=crop&w=800&q=80',
-  'https://images.unsplash.com/photo-1530267981375-f0de937f5f13?auto=format&fit=crop&w=800&q=80'
-];
+// Each scheme gets its own real, contextual image
+const SCHEME_IMAGE_MAP = {
+  'PM-KISAN Samman Nidhi': 'https://images.unsplash.com/photo-1589923188900-85dae523342b?auto=format&fit=crop&w=800&q=80',
+  'PM Fasal Bima Yojana (PMFBY)': 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80',
+  'Kisan Credit Card (KCC)': 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=800&q=80',
+  'Soil Health Card Scheme': 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&w=800&q=80',
+  'PM Kisan Maandhan Yojana': 'https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=800&q=80',
+  'PM Krishi Sinchayee Yojana': 'https://images.unsplash.com/photo-1622383563227-04401ab4e5ea?auto=format&fit=crop&w=800&q=80',
+  'default': 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?auto=format&fit=crop&w=800&q=80'
+};
 
 function getSchemeApplyUrl(schemeName) {
   if (!schemeName) return 'https://www.india.gov.in/topics/agriculture';
@@ -38,12 +41,12 @@ function getSchemeApplyUrl(schemeName) {
 function getFallbackSchemes() {
   return {
     schemes: [
-      { name: 'PM-KISAN Samman Nidhi', category: 'Direct Benefit', amount: '₹6,000 / Year', description: 'Direct income support credited in 3 equal installments to bank accounts.', eligibility: 'All landholding farmer families', documents: ['Aadhaar', 'Land Records', 'Bank Passbook'] },
-      { name: 'PM Fasal Bima Yojana (PMFBY)', category: 'Insurance', amount: 'Full Crop Cover', description: 'Lowest premium insurance against natural calamities and pest attacks.', eligibility: 'All farmers growing notified crops', documents: ['Sowing Cert', 'Land Record', 'ID Proof'] },
-      { name: 'Kisan Credit Card (KCC)', category: 'Loan', amount: '₹3 Lakh @ 4% p.a.', description: 'Flexible short-term credit for crop production and personal consumption.', eligibility: 'Farmers, Sharecroppers, Tenant farmers', documents: ['Land Record', 'ID Proof', 'Photo'] },
-      { name: 'Soil Health Card Scheme', category: 'Support', amount: 'Free Soil Testing', description: 'Personalized nutrient analysis and fertilizer recommendations every 2 years.', eligibility: 'All farm owners', documents: ['Land Sample ID', 'Aadhaar'] },
-      { name: 'PM Kisan Maandhan Yojana', category: 'Pension', amount: '₹3,000 / Month', description: 'Old age pension scheme for small and marginal farmers.', eligibility: 'Farmers aged 18-40 years', documents: ['Aadhaar', 'Saving Bank A/c'] },
-      { name: 'PM Krishi Sinchayee Yojana', category: 'Subsidy', amount: 'Up to 75% Subsidy', description: 'Subsidy for micro-irrigation (Drip/Sprinkler) systems.', eligibility: 'Farmers with verified land', documents: ['Land Map', 'Bank Details'] }
+      { name: 'PM-KISAN Samman Nidhi', category: 'Direct Benefit', amount: '₹6,000 / Year', description: 'Direct income support credited in 3 equal installments to bank accounts. Over 11 crore farmers already enrolled.', eligibility: 'All landholding farmer families', documents: ['Aadhaar', 'Land Records', 'Bank Passbook'], image: SCHEME_IMAGE_MAP['PM-KISAN Samman Nidhi'] },
+      { name: 'PM Fasal Bima Yojana (PMFBY)', category: 'Insurance', amount: 'Full Crop Cover', description: 'Lowest premium crop insurance against natural calamities, pests, and diseases. Covers pre-sowing to post-harvest.', eligibility: 'All farmers growing notified crops', documents: ['Sowing Cert', 'Land Record', 'ID Proof'], image: SCHEME_IMAGE_MAP['PM Fasal Bima Yojana (PMFBY)'] },
+      { name: 'Kisan Credit Card (KCC)', category: 'Loan', amount: '₹3 Lakh @ 4% p.a.', description: 'Flexible short-term credit for crop production, dairy, and fisheries at subsidized interest rates.', eligibility: 'Farmers, Sharecroppers, Tenant farmers', documents: ['Land Record', 'ID Proof', 'Photo'], image: SCHEME_IMAGE_MAP['Kisan Credit Card (KCC)'] },
+      { name: 'Soil Health Card Scheme', category: 'Support', amount: 'Free Soil Testing', description: 'Government provides free soil nutrient analysis and personalized fertilizer recommendations every 2 years.', eligibility: 'All farm owners', documents: ['Land Sample ID', 'Aadhaar'], image: SCHEME_IMAGE_MAP['Soil Health Card Scheme'] },
+      { name: 'PM Kisan Maandhan Yojana', category: 'Pension', amount: '₹3,000 / Month', description: 'Voluntary pension scheme — ₹55 to ₹200 monthly contribution with equal government match. Pension from age 60.', eligibility: 'Small/Marginal farmers aged 18-40', documents: ['Aadhaar', 'Saving Bank A/c'], image: SCHEME_IMAGE_MAP['PM Kisan Maandhan Yojana'] },
+      { name: 'PM Krishi Sinchayee Yojana', category: 'Subsidy', amount: 'Up to 75% Subsidy', description: 'Capital subsidy for drip irrigation, sprinkler systems, and water harvesting structures. Saves 40-50% water.', eligibility: 'Farmers with verified land', documents: ['Land Map', 'Bank Details'], image: SCHEME_IMAGE_MAP['PM Krishi Sinchayee Yojana'] }
     ],
     recommendation: 'Based on your profile as a small landholder, we highly recommend prioritizing PM-KISAN for liquidity and PMFBY for risk management. Also, apply for the Soil Health Card immediately to reduce fertilizer costs by up to 25%.',
     totalBenefitValue: '₹6K - ₹5L+'
@@ -300,7 +303,7 @@ export default function GovernmentSchemes() {
         >
           {filteredSchemes.map((scheme, i) => {
             const config = CATEGORY_CONFIG[scheme.category] || CATEGORY_CONFIG['Support'];
-            const img = SCHEME_IMAGES[i % SCHEME_IMAGES.length];
+            const img = scheme.image || SCHEME_IMAGE_MAP[scheme.name] || SCHEME_IMAGE_MAP['default'];
             const applyUrl = scheme.url || getSchemeApplyUrl(scheme.name);
 
             return (
@@ -350,12 +353,15 @@ export default function GovernmentSchemes() {
                      </div>
                   </div>
 
-                  {/* Apply Button */}
+                  {/* Apply Button — Premium */}
                   <a 
                     href={applyUrl} target="_blank" rel="noopener noreferrer"
-                    className="w-full bg-slate-900 dark:bg-blue-600 text-white rounded-[1.5rem] py-4 px-6 font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3 shadow-xl hover:shadow-blue-500/20 transition-all active:scale-95"
+                    className="relative w-full overflow-hidden bg-gradient-to-r from-emerald-600 via-green-600 to-teal-600 text-white rounded-2xl py-4 px-6 font-black text-sm uppercase tracking-widest flex items-center justify-center gap-3 shadow-lg shadow-emerald-600/30 hover:shadow-emerald-500/40 hover:scale-[1.02] hover:-translate-y-0.5 transition-all duration-300 active:scale-[0.98] group/btn"
                   >
-                    Official Portal <ExternalLink className="w-4 h-4" />
+                    <span className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-200%] group-hover/btn:translate-x-[200%] transition-transform duration-700"></span>
+                    <ExternalLink className="w-5 h-5" />
+                    Apply on Official Portal
+                    <ChevronRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
                   </a>
                 </div>
               </motion.div>
