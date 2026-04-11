@@ -3,7 +3,7 @@ import { logger } from '../utils/logger.js';
 import { GOVERNMENT_SCHEMES } from '../utils/constants.js';
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
 export async function findSchemes(location, crop, farmerType) {
   const schemesList = GOVERNMENT_SCHEMES.map(s => 

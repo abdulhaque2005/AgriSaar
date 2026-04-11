@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { Helmet } from 'react-helmet';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Download, AlertTriangle, Cpu, Wheat, FlaskConical, Sprout } from 'lucide-react';
 import { useAgri } from '../context/AgriContext';
@@ -36,6 +37,14 @@ export default function AnalysisDashboard() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <Helmet>
+        <title>AI Soil Analysis Report — Detailed Mitti Report | AgriSaar</title>
+        <meta name="description" content="View your complete AI-generated soil health report — NPK levels, pH score, organic carbon analysis with crop & fertilizer recommendations tailored to your land." />
+        <meta property="og:title" content="AI Soil Analysis Report | AgriSaar" />
+        <meta property="og:description" content="Complete AI-powered soil health checkup with detailed nutrient analysis, crop recommendations, and fertilizer plans." />
+        <meta property="og:type" content="website" />
+        <meta name="keywords" content="soil report, AI analysis, NPK levels, pH analysis, soil health card, farming report, AgriSaar" />
+      </Helmet>
       {/* Hero Section */}
       <section className="relative overflow-hidden mb-10 rounded-3xl mx-px mt-2 shadow-sm border border-gray-100">
         <div className="absolute inset-0">

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Helmet } from 'react-helmet';
 import { CalendarDays, MapPin, Sprout, Sun, CloudRain, Snowflake, RefreshCw, Wheat } from 'lucide-react';
 import { getCalendar } from '../services/calendarApi';
 import useLocation from '../hooks/useLocation';
@@ -177,6 +178,14 @@ export default function FarmingCalendar() {
 
   return (
     <div className="min-h-screen bg-[#f8faf8]">
+      <Helmet>
+        <title>Farming Calendar — Fasal Panchang & Crop Schedule | AgriSaar</title>
+        <meta name="description" content="Complete farming calendar from sowing to harvest — Rabi, Kharif, Zaid season schedules with land preparation, fertilizer timing, irrigation, and harvesting guides for 10+ crops." />
+        <meta property="og:title" content="Farming Calendar — Fasal Panchang | AgriSaar" />
+        <meta property="og:description" content="Season-wise crop scheduling for Indian farmers. Know exactly when to sow, irrigate, spray, and harvest." />
+        <meta property="og:type" content="website" />
+        <meta name="keywords" content="farming calendar, fasal panchang, crop schedule, Rabi season, Kharif season, sowing time, harvest time, AgriSaar" />
+      </Helmet>
       <section className="relative overflow-hidden">
         <div className="absolute inset-0">
           <img src="https://images.unsplash.com/photo-1592982537447-6f23fcf93eb9?auto=format&fit=crop&w=1200&h=400&q=80" alt="Farm Calendar" className="w-full h-full object-cover" />

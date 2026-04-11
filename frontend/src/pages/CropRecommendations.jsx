@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
-import { Wheat, CheckCircle2, TrendingUp, DollarSign, CloudSun, Droplets, MapPin, Volume2, Square, Loader2, Sprout, Thermometer, Calendar, Lightbulb, ArrowUpRight, ArrowDownRight, RefreshCw, Wind, Sun, Star, UploadCloud, Camera } from 'lucide-react';
+import { Helmet } from 'react-helmet';
+import { Wheat, CheckCircle2, TrendingUp, DollarSign, CloudSun, Droplets, MapPin, Volume2, Square, Loader2, Sprout, Thermometer, Calendar, Lightbulb, ArrowUpRight, ArrowDownRight, RefreshCw, Wind, Sun, Star, UploadCloud, Camera, Leaf } from 'lucide-react';
 import { useAgri } from '../context/AgriContext';
 import { getCrops } from '../services/cropApi';
 import useLocation from '../hooks/useLocation';
@@ -325,6 +326,7 @@ function CropDetailCard({ crop, rank, score, reason, weatherTemp }) {
 export default function CropRecommendations() {
   const { setAnalysis } = useAgri();
   const [data, setData] = useState(null);
+  const [isDefaultData, setIsDefaultData] = useState(false);
   const [weatherData, setWeatherData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -385,6 +387,8 @@ export default function CropRecommendations() {
       setError('');
       
       const saved = localStorage.getItem('agrisaar_soil');
+      setIsDefaultData(!saved);
+      
       const soilData = saved ? JSON.parse(saved) : {
         nitrogen: 200, phosphorus: 25, potassium: 180, ph: 6.5, organicCarbon: 0.6
       };
@@ -439,6 +443,14 @@ export default function CropRecommendations() {
 
   return (
     <div className="min-h-screen bg-[#f4f8f4] dark:bg-gray-950 pb-20 font-sans">
+      <Helmet>
+        <title>Smart Crop Intelligence — AI Fasal Sujhaav | AgriSaar</title>
+        <meta name="description" content="Get AI-powered crop recommendations based on your soil, climate, and location. Know the best crops to grow with MSP prices, yield estimates, season info, and profitability analysis." />
+        <meta property="og:title" content="Smart Crop Intelligence — AI Fasal Sujhaav | AgriSaar" />
+        <meta property="og:description" content="AI recommends the most profitable crops based on your soil data, weather conditions, and local market prices. 50+ Indian crops supported." />
+        <meta property="og:type" content="website" />
+        <meta name="keywords" content="crop recommendation, fasal sujhaav, best crop to grow, AI farming, MSP price, crop profitability, Indian agriculture, AgriSaar" />
+      </Helmet>
       
       {/* ── PREMIUM HERO SECTION ── */}
       <motion.section 
@@ -628,12 +640,24 @@ export default function CropRecommendations() {
         )}
 
         {/* ── TOP CROP RECOMMENDATIONS GRID ── */}
-        <div className="flex items-end justify-between mb-8">
-          <div>
-            <h2 className="text-3xl md:text-5xl font-black text-gray-900 dark:text-white tracking-tight flex items-center gap-4">
-              Best Options <span className="bg-green-100 dark:bg-green-900/40 text-green-600 dark:text-green-400 px-4 py-1.5 rounded-full text-base font-black uppercase tracking-widest align-middle shadow-inner">AI Ranked</span>
-            </h2>
-            <p className="text-gray-500 dark:text-gray-400 font-bold mt-2 text-lg">Top {data.topCrops?.length || 0} carefully selected crops tailored for maximum yield.</p>
+        <div className="flex flex-col mb-8 gap-4">
+          {isDefaultData && (
+            <div className="bg-amber-50 dark:bg-amber-900/20 border-l-4 border-amber-500 p-4 rounded-r-2xl shadow-sm flex gap-3 items-start md:items-center">
+              <AlertCircle className="w-6 h-6 text-amber-500 shrink-0 mt-0.5 md:mt-0" />
+              <div>
+                <h4 className="font-bold text-amber-800 dark:text-amber-400">Default Soil Data Detected</h4>
+                <p className="text-sm text-amber-700/80 dark:text-amber-500/80">Using standard Indian soil estimates. For highly accurate personalized recommendations, please analyze your actual soil first on the Soil Input page.</p>
+              </div>
+            </div>
+          )}
+
+          <div className="flex items-end justify-between">
+            <div>
+              <h2 className="text-3xl md:text-5xl font-black text-gray-900 dark:text-white tracking-tight flex items-center gap-4">
+                Best Options <span className="bg-green-100 dark:bg-green-900/40 text-green-600 dark:text-green-400 px-4 py-1.5 rounded-full text-base font-black uppercase tracking-widest align-middle shadow-inner">AI Ranked</span>
+              </h2>
+              <p className="text-gray-500 dark:text-gray-400 font-bold mt-2 text-lg">Top {data.topCrops?.length || 0} carefully selected crops tailored for maximum yield.</p>
+            </div>
           </div>
         </div>
         
@@ -686,25 +710,54 @@ function generateSmartRecommendations(soil, weather, stateName) {
   const month = new Date().getMonth() + 1;
   const isKharif = month >= 6 && month <= 10;
   const isRabi = month >= 10 || month <= 3;
+  const isZaid = month >= 3 && month <= 6;
 
   const allCrops = Object.entries(CROP_DATABASE);
   
   const scored = allCrops.map(([name, info]) => {
-    let score = 50;
+    let score = 50; // base score
+    let reasons = [];
     
-    const season = info.season.toLowerCase();
-    if (isRabi && season.includes('rabi')) score += 20;
-    if (isKharif && season.includes('kharif')) score += 20;
-    if (season.includes('year-round')) score += 15;
+    // Season Match
+    const seasonStr = info.season.toLowerCase();
+    if (isRabi && seasonStr.includes('rabi')) { score += 20; reasons.push('Current Rabi season match'); }
+    else if (isKharif && seasonStr.includes('kharif')) { score += 20; reasons.push('Current Kharif season match'); }
+    else if (isZaid && seasonStr.includes('zaid')) { score += 15; reasons.push('Current Zaid season match'); }
+    else if (seasonStr.includes('year-round')) { score += 15; reasons.push('Year-round crop'); }
+    else { score -= 10; }
     
-    if (soil.nitrogen >= 180 && ['Wheat', 'Rice', 'Maize', 'Sugarcane'].includes(name)) score += 10;
-    if (soil.nitrogen < 150 && ['Gram', 'Soybean', 'Bajra'].includes(name)) score += 15;
+    // Soil Parameters Match
+    const { nitrogen = 0, phosphorus = 0, potassium = 0, ph = 7.0 } = soil;
+    
+    // pH check
+    if (ph >= 6.0 && ph <= 7.5) { score += 5; } // Most crops thrive here
+    else if (name === 'Potato' && ph < 6.0) { score += 10; reasons.push('Perfect acidic pH for Potato'); }
+    else if (ph > 8.0 && ['Mustard', 'Cotton'].includes(name)) { score += 5; reasons.push('Tolerates alkaline soil'); }
+    
+    // NPK Logic
+    if (nitrogen >= 180 && ['Wheat', 'Rice', 'Maize', 'Sugarcane', 'Cotton'].includes(name)) { 
+      score += 15; reasons.push('High nitrogen supports heavy feeders'); 
+    }
+    if (nitrogen < 150 && ['Gram', 'Soybean', 'Bajra', 'Groundnut'].includes(name)) { 
+      score += 15; reasons.push('Ideal for low nitrogen soil (Nitrogen fixing/hardy crop)'); 
+    }
+    
+    if (phosphorus >= 25 && potassium >= 150) {
+      score += 5;
+    }
+
+    // Weather / State match
+    if (stateName && info.bestStates.some(s => stateName.toLowerCase().includes(s.toLowerCase()))) {
+      score += 5; reasons.push('Native to your state');
+    }
     
     score = Math.min(98, Math.max(45, score));
+    const finalReason = reasons.length > 0 ? reasons.join(' • ') + '.' : info.suggestion;
+
     return { 
       name, 
       score, 
-      reason: info.suggestion || `Suitable for ${stateName || 'your region'}.`,
+      reason: finalReason,
       medicine: info.medicine || 'Contact expert',
       fertilizer: info.fertilizer || 'NPK 19:19:19',
       profit: info.profit || 'High'
@@ -715,10 +768,10 @@ function generateSmartRecommendations(soil, weather, stateName) {
   const topCrops = scored.slice(0, 6);
   const rotationCrops = scored.slice(6, 9).map(c => ({
     name: c.name,
-    benefit: CROP_DATABASE[c.name]?.suggestion || 'Helps soil health.'
+    benefit: CROP_DATABASE[c.name]?.suggestion || 'Enhances soil organic carbon and breaks pest cycles.'
   }));
 
-  const marketTrends = `Market demand for ${topCrops[0]?.name || 'crops'} is currently high. Recommendation: Apply fertilizers on time for 15% better yield.`;
+  const marketTrends = `${topCrops[0]?.name || 'Your top crop'} is showing strong market stability. Proceeding with ${topCrops[1]?.name || 'a secondary crop'} on some acreage can diversify risk.`;
 
   return { topCrops, rotationCrops, marketTrends };
 }

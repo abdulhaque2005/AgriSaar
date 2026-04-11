@@ -2,7 +2,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import { logger } from '../utils/logger.js';
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
 export async function fetchSubsidyTracker(location, farmerType) {
   const prompt = `You are a transparency and anti-corruption analyzer for Indian farmers. Output strictly in valid JSON format only, without markdown fences or extra text.

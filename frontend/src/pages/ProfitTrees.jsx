@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Helmet } from 'react-helmet';
 import { Trees, TrendingUp, Sun, Droplets, MapPin, Activity, DollarSign, Leaf, ShieldCheck, ChevronRight, Volume2, Info, Clock, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
 import api from '../services/api';
@@ -64,6 +65,14 @@ export default function ProfitTrees() {
 
   return (
     <div className="min-h-screen bg-[#f0f4f0] dark:bg-gray-950 pb-20 font-sans selection:bg-emerald-200">
+      <Helmet>
+        <title>Agroforestry — Profit Trees & Timber Investment | AgriSaar</title>
+        <meta name="description" content="Plant Teak, Bamboo, Sandalwood, and Mahogany for long-term high ROI. AI-powered agroforestry guide with profitability analysis, growth timelines, and carbon credit potential." />
+        <meta property="og:title" content="Agroforestry — Profit Trees & Timber Investment | AgriSaar" />
+        <meta property="og:description" content="Discover high-profit tree farming — 10-year investment plans for Sagwan, Bamboo, Sandalwood with ROI, water needs, and market value." />
+        <meta property="og:type" content="website" />
+        <meta name="keywords" content="agroforestry, profit trees, teak farming, sagwan, bamboo, sandalwood, timber investment, carbon credit, AgriSaar" />
+      </Helmet>
       
       {/* HERO */}
       <motion.section 

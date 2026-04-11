@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Helmet } from 'react-helmet';
 import { Sprout, CalendarClock, Beaker, Ban, Search, Leaf, ShieldCheck, AlertTriangle, Droplets, TestTube, Volume2, Filter, Lightbulb, CheckCircle2 } from 'lucide-react';
 import { useAgri } from '../context/AgriContext';
 import { getFertilizerPlan } from '../services/fertilizerApi';
@@ -80,6 +81,14 @@ export default function FertilizerPlan() {
 
   return (
     <div className="min-h-screen bg-[#f8faf8] pb-12">
+      <Helmet>
+        <title>Fertilizer & Crop Medicine Guide — Khad Davai Yojana | AgriSaar</title>
+        <meta name="description" content="Complete database of agricultural fertilizers, pesticides, fungicides, and bio-agents with exact doses, safety guidelines, and application timing for Indian crops." />
+        <meta property="og:title" content="Fertilizer & Crop Medicine Guide | AgriSaar" />
+        <meta property="og:description" content="Find the right fertilizer and pesticide for your crop — DAP, Urea, Neem Oil, Trichoderma, and 15+ medicines with dose, timing, and safety info." />
+        <meta property="og:type" content="website" />
+        <meta name="keywords" content="fertilizer plan, pesticide guide, khad, davai, crop medicine, DAP, urea, bio-fertilizer, organic farming, AgriSaar" />
+      </Helmet>
       {/* Hero Section */}
       <section className="relative overflow-hidden mb-8">
         <div className="absolute inset-0">

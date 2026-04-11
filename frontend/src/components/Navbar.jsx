@@ -237,31 +237,34 @@ function LanguageSelector() {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef(null);
 
+  const getCurrentCode = () => {
+    return localStorage.getItem('agrisaar_language') || 'en';
+  };
+
   const getCurrentLangLabel = () => {
-    const match = document.cookie.match(/googtrans=\/en\/([a-z]{2})/);
-    const code = match ? match[1] : 'en';
+    const code = getCurrentCode();
     return languages.find(l => l.code === code)?.label?.split(' ')[0] || 'English';
   };
 
-  const getCurrentCode = () => {
-    const match = document.cookie.match(/googtrans=\/en\/([a-z]{2})/);
-    return match ? match[1] : 'en';
-  };
-
   const changeLanguage = (langCode) => {
-    // Standardize to e.g. /en/en for English to satisfy Google script
+    // 1. Save preference to localStorage (primary source of truth)
+    localStorage.setItem('agrisaar_language', langCode);
+
+    // 2. Set cookie on all possible domains for Google Translate
     const pathValue = langCode === 'en' ? '/en/en' : `/en/${langCode}`;
     document.cookie = `googtrans=${pathValue}; path=/;`;
+    document.cookie = `googtrans=${pathValue}; path=/; domain=${window.location.hostname}`;
+    // Handle Vercel subdomains
+    const parts = window.location.hostname.split('.');
+    if (parts.length > 2) {
+      const parentDomain = parts.slice(-2).join('.');
+      document.cookie = `googtrans=${pathValue}; path=/; domain=.${parentDomain}`;
+    }
+
+    // 3. Reload to apply translation
+    setIsOpen(false);
     window.location.reload();
   };
-
-  // Ensure English is the explicit default if nothing is set
-  useEffect(() => {
-    const match = document.cookie.match(/googtrans=\/en\/([a-z]{2})/);
-    if (!match) {
-      document.cookie = "googtrans=/en/en; path=/;";
-    }
-  }, []);
 
   return (
     <div className="relative" ref={menuRef}>

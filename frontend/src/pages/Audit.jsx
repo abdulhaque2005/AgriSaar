@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Helmet } from 'react-helmet';
 import { LifeBuoy, AlertTriangle, CloudRain, Bug, Sun, Sprout, ArrowRight, XCircle, ShieldCheck, Clock, CheckCircle2, ChevronRight, Landmark, Trees, TrendingUp, Droplets, MapPin, Calculator, IndianRupee } from 'lucide-react';
 import api from '../services/api';
 import useLocation from '../hooks/useLocation';
@@ -63,6 +64,14 @@ export default function Audit() {
 
   return (
     <div className="min-h-screen bg-[#f8faf8]">
+      <Helmet>
+        <title>Income & Risk Audit — AI Farm Financial Analysis | AgriSaar</title>
+        <meta name="description" content="AI-powered farm financial audit — assess crop risk, profit potential, loss recovery options, and agroforestry investment returns. Protect your farming income with data-driven decisions." />
+        <meta property="og:title" content="Income & Risk Audit — Farm Financial Analysis | AgriSaar" />
+        <meta property="og:description" content="Complete AI financial audit for farmers — risk assessment, profit maximization, and recovery planning." />
+        <meta property="og:type" content="website" />
+        <meta name="keywords" content="farm audit, income analysis, risk assessment, crop profit, financial planning, farming income, AgriSaar" />
+      </Helmet>
       {/* Hero Header */}
       <section className="bg-gradient-to-br from-gray-900 to-gray-800 py-16 relative overflow-hidden">
         <div className="absolute top-0 right-0 opacity-10 transform translate-x-1/4 -translate-y-1/4 scale-150">

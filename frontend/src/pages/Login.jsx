@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Helmet } from 'react-helmet';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Mail, Lock, ArrowRight, Sprout, Loader2 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
@@ -51,6 +52,13 @@ export default function Login() {
 
   return (
     <div className="min-h-[calc(100vh-64px)] flex items-center justify-center p-6 relative overflow-hidden bg-[#f0f4f0] dark:bg-gray-950 transition-colors duration-500">
+      <Helmet>
+        <title>Login — Access Your AgriSaar Dashboard</title>
+        <meta name="description" content="Sign in to your AgriSaar account to access personalized crop recommendations, soil reports, weather alerts, and smart farming tools." />
+        <meta property="og:title" content="Login — AgriSaar Smart Farming" />
+        <meta property="og:description" content="Access your AI-powered farming dashboard. Login with email or Google." />
+        <meta property="og:type" content="website" />
+      </Helmet>
       {/* Background blobs */}
       <div className="absolute top-0 -left-20 w-96 h-96 bg-primary-100 dark:bg-primary-900/10 rounded-full blur-3xl opacity-50 animate-pulse" />
       <div className="absolute bottom-0 -right-20 w-96 h-96 bg-primary-200 dark:bg-primary-800/10 rounded-full blur-3xl opacity-50 animate-pulse" style={{ animationDelay: '1s' }} />

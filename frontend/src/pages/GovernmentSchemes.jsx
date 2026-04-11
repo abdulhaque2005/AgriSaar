@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Helmet } from 'react-helmet';
 import { Landmark, MapPin, RefreshCw, ExternalLink, IndianRupee, Search, ChevronRight, ShieldCheck, FileText, Sparkles, Loader2, Info, CheckCircle2, Clock, Filter, AlertCircle, Building2, UserCheck, TrendingUp } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { findSchemes } from '../services/schemeApi';
@@ -103,6 +104,14 @@ export default function GovernmentSchemes() {
 
   return (
     <div className="min-h-screen bg-gray-50/50 dark:bg-gray-950 pb-20 font-sans selection:bg-blue-200">
+      <Helmet>
+        <title>Government Schemes — Sarkari Yojana for Farmers | AgriSaar</title>
+        <meta name="description" content="Discover all Indian government schemes for farmers — PM-KISAN, PMFBY, Kisan Credit Card, Soil Health Card, PM Kisan Maandhan. Check eligibility and apply online." />
+        <meta property="og:title" content="Government Schemes — Sarkari Yojana for Farmers | AgriSaar" />
+        <meta property="og:description" content="Find and apply for 10+ government farming schemes. AI matches schemes to your profile — land size, income, and location." />
+        <meta property="og:type" content="website" />
+        <meta name="keywords" content="sarkari yojana, PM KISAN, PMFBY, Kisan Credit Card, government schemes farmers, subsidy, AgriSaar" />
+      </Helmet>
       
       {/* ── STUNNING GOVERNMENT NEXUS HERO ── */}
       <motion.section 

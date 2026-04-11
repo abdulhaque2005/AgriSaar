@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Helmet } from 'react-helmet';
 import { HeartHandshake, AlertTriangle, CloudRain, Bug, Sun, Sprout, ArrowRight, XCircle, ShieldCheck, Clock, CheckCircle2, ChevronRight, Landmark } from 'lucide-react';
 import api from '../services/api';
 import useLocation from '../hooks/useLocation';
@@ -53,6 +54,14 @@ export default function LossRecovery() {
 
   return (
     <div className="min-h-screen bg-[#f4f7f4] py-12">
+      <Helmet>
+        <title>Disaster Recovery & Crop Loss Support — Fasal Nuksan Madad | AgriSaar</title>
+        <meta name="description" content="Crop damaged by rain, pest, or drought? Get instant AI-powered recovery plans — PMFBY insurance claims, NDRF fund guidance, emergency cash crop suggestions, and direct govt helpline access." />
+        <meta property="og:title" content="Disaster Recovery — Fasal Nuksan Madad | AgriSaar" />
+        <meta property="og:description" content="Emergency farming support — AI helps with crop loss recovery, insurance claims, fast cash crop planning, and government disaster relief." />
+        <meta property="og:type" content="website" />
+        <meta name="keywords" content="crop loss, disaster recovery, PMFBY claim, flood damage, pest attack, drought relief, fasal nuksan, AgriSaar" />
+      </Helmet>
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-10">
           <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-red-100 mb-5 shadow-inner border-4 border-white">

@@ -3,7 +3,7 @@ import { logger } from '../utils/logger.js';
 import { SOIL_THRESHOLDS, PH_RANGES } from '../utils/constants.js';
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
 function classifySoil(ph) {
   for (const [key, range] of Object.entries(PH_RANGES)) {

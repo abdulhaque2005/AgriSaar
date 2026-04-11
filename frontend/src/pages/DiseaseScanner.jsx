@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import { Helmet } from 'react-helmet';
 import { Camera, UploadCloud, ScanLine, Leaf, AlertTriangle, ShieldCheck, ArrowRight, CheckCircle2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import SpeakButton from '../components/SpeakButton';
@@ -6,38 +7,58 @@ import { detectDisease } from '../services/aiApi.js';
 
 export default function DiseaseScanner() {
   const [image, setImage] = useState(null);
-  const [status, setStatus] = useState('idle'); // idle | scanning | result
+  const [status, setStatus] = useState('idle'); // idle | scanning | result | error
   const [result, setResult] = useState(null);
+  const [errorMsg, setErrorMsg] = useState('');
   const fileInputRef = useRef(null);
+  const cameraInputRef = useRef(null);
 
-  const handleImageSelect = async (e) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const url = URL.createObjectURL(file);
-      setImage(url);
-      setStatus('scanning');
-      
-      try {
-        const data = await detectDisease(file);
+  const processImage = async (file) => {
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+    setImage(url);
+    setStatus('scanning');
+    setErrorMsg('');
+    
+    try {
+      const data = await detectDisease(file);
+      if (data && data.disease) {
         setResult(data);
         setStatus('result');
         toast.success("AI Analysis Complete!");
-      } catch (error) {
-        console.error(error);
-        toast.error("Failed to analyze image. Please try again.");
-        setStatus('idle');
+      } else {
+        throw new Error('Invalid response from AI');
       }
+    } catch (error) {
+      console.error(error);
+      setErrorMsg(error.message || 'Failed to analyze image');
+      setStatus('error');
+      toast.error("Analysis failed. Please try again with a clearer photo.");
     }
+  };
+
+  const handleImageSelect = async (e) => {
+    const file = e.target.files?.[0];
+    if (file) await processImage(file);
   };
 
   const reset = () => {
     setImage(null);
     setResult(null);
     setStatus('idle');
+    setErrorMsg('');
   };
 
   return (
     <div className="min-h-screen bg-[#f4f7f4] py-12">
+      <Helmet>
+        <title>Kisaan Lens PRO — AI Crop Disease Scanner | AgriSaar</title>
+        <meta name="description" content="Upload a photo of your sick crop and get instant AI diagnosis. Identifies plant diseases, pest damage, and nutrient deficiencies with treatment recommendations." />
+        <meta property="og:title" content="Kisaan Lens PRO — AI Crop Disease Scanner | AgriSaar" />
+        <meta property="og:description" content="AI-powered plant disease detection from a single photo. Get instant diagnosis with treatment and medicine recommendations." />
+        <meta property="og:type" content="website" />
+        <meta name="keywords" content="crop disease scanner, plant disease, AI diagnosis, pest detection, crop health, kisaan lens, AgriSaar" />
+      </Helmet>
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-10">
           <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-green-100 mb-5 shadow-inner border-4 border-white">
@@ -59,15 +80,25 @@ export default function DiseaseScanner() {
               <h2 className="text-2xl font-black text-gray-800 mb-3">Upload Leaf Photo</h2>
               <p className="text-gray-500 font-medium">Capture directly from your mobile camera or upload from gallery</p>
               
-              <div className="mt-8 flex justify-center gap-4">
-                <button className="bg-green-600 text-white px-8 py-3 rounded-xl font-bold flex items-center gap-2 shadow-lg shadow-green-600/30">
+              <div className="mt-8 flex justify-center gap-4" onClick={(e) => e.stopPropagation()}>
+                <button onClick={() => cameraInputRef.current?.click()} className="bg-green-600 text-white px-8 py-3 rounded-xl font-bold flex items-center gap-2 shadow-lg shadow-green-600/30 hover:bg-green-700 transition-colors">
                   <Camera className="w-5 h-5" /> Open Camera
                 </button>
-                <button className="bg-white text-green-700 border border-green-200 px-8 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-green-50">
+                <button onClick={() => fileInputRef.current?.click()} className="bg-white text-green-700 border border-green-200 px-8 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-green-50 transition-colors">
                   <UploadCloud className="w-5 h-5" /> Gallery
                 </button>
               </div>
             </div>
+            {/* Camera input — opens rear camera on mobile */}
+            <input 
+              type="file" 
+              accept="image/*" 
+              capture="environment"
+              className="hidden" 
+              ref={cameraInputRef} 
+              onChange={handleImageSelect}
+            />
+            {/* Gallery input — opens file picker */}
             <input 
               type="file" 
               accept="image/*" 
@@ -75,6 +106,28 @@ export default function DiseaseScanner() {
               ref={fileInputRef} 
               onChange={handleImageSelect}
             />
+          </div>
+        )}
+
+        {/* Error State with Retry */}
+        {status === 'error' && (
+          <div className="bg-white rounded-[2rem] shadow-xl border border-red-100 p-8 text-center animate-fade-in">
+            {image && (
+              <div className="w-full max-w-xs mx-auto h-56 rounded-2xl overflow-hidden shadow-lg mb-6 border-2 border-red-200">
+                <img src={image} alt="Failed scan" className="w-full h-full object-cover" />
+              </div>
+            )}
+            <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <AlertTriangle className="w-8 h-8 text-red-500" />
+            </div>
+            <h2 className="text-2xl font-black text-gray-800 mb-3">Analysis Failed</h2>
+            <p className="text-gray-500 font-medium mb-2">{errorMsg || 'Could not identify disease from this image.'}</p>
+            <p className="text-sm text-gray-400 mb-6">Tips: Use a well-lit, close-up photo of the affected leaf. Avoid blurry or distant shots.</p>
+            <div className="flex justify-center gap-4">
+              <button onClick={reset} className="bg-green-600 text-white px-8 py-3 rounded-xl font-bold flex items-center gap-2 shadow-lg shadow-green-600/30 hover:bg-green-700 transition-colors">
+                <Camera className="w-5 h-5" /> Try Again
+              </button>
+            </div>
           </div>
         )}
 

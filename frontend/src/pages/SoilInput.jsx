@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Helmet } from "react-helmet"
 import { PenTool, UploadCloud, Info, FlaskConical, Leaf, Beaker, Flame, ThermometerSun, ArrowRight, CheckCircle2, XCircle, HelpCircle } from 'lucide-react';
 import SoilForm from '../components/SoilForm';
 import UploadBox from '../components/UploadBox';
@@ -143,16 +144,16 @@ export default function SoilInput() {
     if (soilResult) {
       const cropResult = await getCrops(numericData);
       const fertResult = await getFertilizer({ ...numericData, crop: numericData.crop });
-      
+
       const combinedAnalysis = {
         soil: soilResult,
         crops: cropResult,
         fertilizer: fertResult,
         inputData: numericData
       };
-      
+
       setAnalysis(combinedAnalysis);
-      
+
       navigate('/analysis', {
         state: combinedAnalysis
       });
@@ -165,6 +166,15 @@ export default function SoilInput() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <Helmet>
+        <title>Soil Analysis — AI Mitti Jaanch | AgriSaar</title>
+        <meta name="description" content="Enter your soil data manually or upload a soil health card — AgriSaar AI instantly analyzes N, P, K, pH, and organic carbon levels to give smart farming recommendations." />
+        <meta property="og:title" content="Soil Analysis — AI Mitti Jaanch | AgriSaar" />
+        <meta property="og:description" content="Get instant AI-powered soil health reports with NPK, pH analysis and crop-specific fertilizer recommendations for Indian farmers." />
+        <meta property="og:type" content="website" />
+        <meta name="keywords" content="soil analysis, mitti jaanch, NPK test, soil health card, pH test, AgriSaar, Indian farming, soil report" />
+      </Helmet>
+
       <div className="mb-8">
         <h1 className="section-title flex items-center gap-3">
           <FlaskConical className="w-8 h-8 text-primary-700" /> Soil Analysis

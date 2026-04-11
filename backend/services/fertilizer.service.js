@@ -3,7 +3,7 @@ import { logger } from '../utils/logger.js';
 import { FERTILIZER_MAP } from '../utils/constants.js';
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
 export async function getFertilizerPlan(soilData, crop) {
   // Use a default empty object if soilData is missing

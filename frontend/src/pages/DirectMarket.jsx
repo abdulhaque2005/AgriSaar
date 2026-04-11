@@ -1,4 +1,5 @@
 import { Store, ShoppingCart, Smartphone, ArrowUpRight, TrendingUp, ShieldCheck } from 'lucide-react';
+import { Helmet } from 'react-helmet';
 
 const COMPANIES = [
   { name: 'e-NAM', desc: 'Government online mandi portal. Sell anywhere in India.', web: 'https://enam.gov.in', type: 'Govt Portal' },
@@ -11,6 +12,14 @@ const COMPANIES = [
 export default function DirectMarket() {
   return (
     <div className="min-h-screen bg-white">
+      <Helmet>
+        <title>Direct Market (B2B) — Bina Bichauliye Becho | AgriSaar</title>
+        <meta name="description" content="Sell your produce directly to companies like e-NAM, DeHaat, Ninjacart, WayCool, and ITC e-Choupal. Remove middlemen and get 20-40% higher prices for your crops." />
+        <meta property="og:title" content="Direct Market (B2B) — Bina Bichauliye Becho | AgriSaar" />
+        <meta property="og:description" content="Connect directly with large buyers — e-NAM, DeHaat, Ninjacart. Skip the mandi middlemen and maximize your farm income." />
+        <meta property="og:type" content="website" />
+        <meta name="keywords" content="direct market, B2B farming, e-NAM, DeHaat, Ninjacart, sell crops online, no middleman, bichauliye, AgriSaar" />
+      </Helmet>
       {/* Hero */}
       <div className="bg-gradient-to-r from-emerald-800 to-green-900 py-16 text-center px-4">
         <Store className="w-16 h-16 text-emerald-400 mx-auto mb-4" />

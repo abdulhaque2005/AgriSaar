@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { Loader2, Sprout } from 'lucide-react';
@@ -42,6 +43,10 @@ export default function AuthCallback() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-[#f8faf8] dark:bg-gray-950 gap-4">
+      <Helmet>
+        <title>Authenticating... | AgriSaar</title>
+        <meta name="description" content="Verifying your identity and setting up your AgriSaar session." />
+      </Helmet>
       {error ? (
         <>
           <div className="w-16 h-16 bg-red-100 dark:bg-red-900/20 rounded-2xl flex items-center justify-center">

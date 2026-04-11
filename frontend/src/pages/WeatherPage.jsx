@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { Helmet } from 'react-helmet';
 import { CloudRain, Thermometer, Droplets, Wind, Sun, MapPin, AlertTriangle, ShieldCheck, Send, MessageCircle, Phone, RefreshCw, Eye, CloudSun, Volume2, Sunrise, Sunset, Gauge, Bell, Sprout, Bug, CalendarClock, Antenna, Search, Command, CheckCircle2, XCircle, ShieldAlert, Zap, CloudLightning, Home } from 'lucide-react';
 import useLocation from '../hooks/useLocation';
 import Loading from '../components/Loading';
@@ -6,6 +7,7 @@ import SpeakButton from '../components/SpeakButton';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
+import { sendWhatsAppAlert } from '../services/alertService';
 
 function analyzeWeather(current, forecast) {
   const alerts = [];
@@ -22,7 +24,7 @@ function analyzeWeather(current, forecast) {
     const d = (f.description || '').toLowerCase();
     return d.includes('rain') || d.includes('drizzle') || d.includes('shower') || d.includes('thunder');
   });
-  const rainProbability = isRaining ? 90 : willRain ? 70 : humidity > 85 ? 55 : 20;
+  const rainProbability = isRaining ? 90 : willRain ? 70 : humidity > 85 ? 40 : 20;
 
   let sprayStatus = { allowed: true, reason: 'Mausham bilkul saaf hai. Aap chemical ya fertilizer spray kar sakte hain.', time: 'Sunrise to 10 AM / After 4 PM', color: 'text-green-600', icon: <CheckCircle2 className="w-5 h-5 text-green-600" /> };
   let diseaseRisk = { risk: 'Low', reason: 'Fungal aur pest ka khatra kam hai.', color: 'text-green-600', icon: <ShieldCheck className="w-5 h-5 text-green-600" /> };
@@ -106,8 +108,8 @@ function analyzeWeather(current, forecast) {
   }
 
   let tomorrowDecision = null;
-  if (forecast?.length > 0) {
-    const tmr = forecast[0];
+  if (forecast?.length > 1) {
+    const tmr = forecast[1];
     const tmrDesc = (tmr?.description || '').toLowerCase();
     const tmrRain = tmrDesc.includes('rain') || tmrDesc.includes('shower') || tmrDesc.includes('thunder');
     const tmrHot = (tmr?.tempMax || 0) > 38;
@@ -374,17 +376,31 @@ export default function WeatherPage() {
   };
 
   const handlePersonalAlert = () => {
+    if (analysis.alerts.length === 0) {
+      toast.error("Safe Weather! No emergency alerts to send.");
+      return;
+    }
+
     setIsSendingPersonal(true);
     setShowSmsPreview(true);
+    
+    const whatsappMsg = analysis.alerts[0].whatsappMsg || `AgriSaar Alert \n📍 ${activeCity}\nCurrent Weather: ${current?.temp}°C, ${current?.description}`;
+    // Format phone to just numbers, or use default fallback if missing
+    const rawPhone = mockUser.phone?.replace(/\D/g, '') || '';
+    const phoneNum = rawPhone.length >= 10 ? rawPhone : '917870929584';
     
     // Auto-hide preview after 6 seconds
     setTimeout(() => {
       setShowSmsPreview(false);
       setIsSendingPersonal(false);
+      
+      // Open actual Whatsapp
+      sendWhatsAppAlert(whatsappMsg, phoneNum);
+      
       toast.success(
         <div className="flex flex-col">
-          <span className="font-black text-lg">Alert Delivered ✅</span>
-          <span className="text-sm">Check your phone! SMS alert successfully sent via AgriSaar.</span>
+          <span className="font-black text-lg">Alert Open ✅</span>
+          <span className="text-sm">WhatsApp opened with your AgriSaar weather alert.</span>
         </div>, 
         { duration: 4000, style: { background: '#047857', color: '#fff' } }
       );
@@ -424,6 +440,14 @@ export default function WeatherPage() {
 
   return (
     <div className="min-h-screen bg-[#f1f5f9] dark:bg-gray-950 pb-16 font-sans">
+      <Helmet>
+        <title>Weather Advisory — Mausam Salah for Farmers | AgriSaar</title>
+        <meta name="description" content="Real-time weather updates with AI-powered farming advisory. Get rain alerts, frost warnings, spray timings, irrigation advice, and SMS weather broadcasts for your village." />
+        <meta property="og:title" content="Weather Advisory — Mausam Salah for Farmers | AgriSaar" />
+        <meta property="og:description" content="Live weather intelligence for Indian farmers — temperature, humidity, wind, rain forecast with actionable farming advice and danger alerts." />
+        <meta property="og:type" content="website" />
+        <meta name="keywords" content="weather advisory, mausam, farming weather, rain alert, frost warning, kisaan mausam, weather forecast India, AgriSaar" />
+      </Helmet>
       
       {/* ── HIGH-LEVEL HERO SECTION ── */}
       <motion.section 

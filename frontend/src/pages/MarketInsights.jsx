@@ -1,23 +1,25 @@
 import { useState, useEffect } from 'react';
+import { Helmet } from 'react-helmet';
 import { BarChart3, Store, MapPin, TrendingUp, TrendingDown, Clock, CheckCircle2, AlertCircle, RefreshCw, Lightbulb, Volume2, ArrowUpRight, ArrowDownRight, DollarSign, Activity, ChevronRight, Scale } from 'lucide-react';
 import { motion } from 'framer-motion';
 import useLocation from '../hooks/useLocation';
 import Loading from '../components/Loading';
 import Error from '../components/Error';
 import SpeakButton from '../components/SpeakButton';
+import { getMarketPrediction } from '../services/marketApi';
 import getPageLanguage, { getSpeechLang } from '../utils/getPageLanguage';
 
 const DEFAULT_CROPS = ['Wheat', 'Rice', 'Cotton', 'Soybean', 'Mustard', 'Tomato', 'Potato', 'Onion', 'Maize'];
 
 const CROP_IMAGES = {
   'Wheat': 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?auto=format&fit=crop&w=400&q=80',
-  'Rice': '/Rice.png',
-  'Cotton': '/cotton.png',
+  'Rice': 'https://images.unsplash.com/photo-1536054953990-725eb1a3189f?auto=format&fit=crop&w=400&q=80',
+  'Cotton': 'https://images.unsplash.com/photo-1594631252845-29fc4cc8cde9?auto=format&fit=crop&w=400&q=80',
   'Soybean': 'https://images.unsplash.com/photo-1599586120429-48281b6f0ece?auto=format&fit=crop&w=400&q=80',
-  'Mustard': 'https://images.unsplash.com/photo-1501004318855-fce63e0b0b6e?auto=format&fit=crop&w=400&q=80',
+  'Mustard': 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=400&q=80',
   'Tomato': 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&w=400&q=80',
   'Potato': 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?auto=format&fit=crop&w=400&q=80',
-  'Onion': 'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?auto=format&fit=crop&w=400&q=80',
+  'Onion': 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?auto=format&fit=crop&w=400&q=80',
   'Maize': 'https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&w=400&q=80',
 };
 
@@ -133,15 +135,34 @@ export default function MarketInsights() {
       setLoading(true);
       setError('');
       
+      // Try fetching real market data from backend API (Agmarknet Data.gov.in)
+      const results = await Promise.allSettled(
+        DEFAULT_CROPS.map(async (crop) => {
+          try {
+            const res = await getMarketPrediction({ crop, location: locationText || city || 'India' });
+            const data = res.data || res;
+            if (data && data.current_price) {
+              return { crop, data: { ...data, suggestion: CROP_SUGGESTIONS[crop] || data.suggestion || 'Verify local mandi rate.' }, source: 'api' };
+            }
+            throw new Error('No valid data from API');
+          } catch {
+            // Fallback to local generated data for this crop
+            return { crop, data: generateLocalMarketData(crop), source: 'local' };
+          }
+        })
+      );
+      
+      const marketResults = results.map(r => r.status === 'fulfilled' ? r.value : null).filter(Boolean);
+      setMarketData(marketResults);
+      
+    } catch (err) {
+      // Final fallback: use local data for all crops
       const localData = DEFAULT_CROPS.map(crop => ({
         crop,
         data: generateLocalMarketData(crop),
         source: 'local'
       }));
       setMarketData(localData);
-      
-    } catch (err) {
-      setError('System Error. Unable to load market intel.');
     } finally {
       setLoading(false);
     }
@@ -158,6 +179,14 @@ export default function MarketInsights() {
 
   return (
     <div className="min-h-screen bg-[#f1f5f9] dark:bg-gray-950 pb-20 font-sans">
+      <Helmet>
+        <title>Market Insights — Mandi Bhav & Price Prediction | AgriSaar</title>
+        <meta name="description" content="Track real-time mandi prices, get AI-powered market predictions, and find the best time to sell your crop. Covers Wheat, Rice, Cotton, Soybean, Tomato, Potato, and more." />
+        <meta property="og:title" content="Market Insights — Mandi Bhav & Price Prediction | AgriSaar" />
+        <meta property="og:description" content="Live crop market prices with AI prediction trends. Know when to sell, where to sell, and maximize your farm income." />
+        <meta property="og:type" content="website" />
+        <meta name="keywords" content="mandi bhav, market price, mandi rate today, crop price prediction, wheat price, rice price, AgriSaar, kisaan market" />
+      </Helmet>
       
       {/* ── PREMIUM HERO SECTION ── */}
       <motion.section 
@@ -219,7 +248,8 @@ export default function MarketInsights() {
             const isSell = data.action?.includes('SELL');
             const cropImage = CROP_IMAGES[item.crop] || 'https://images.unsplash.com/photo-1599839619711-2eb2ce0ab0eb?w=400&q=80';
 
-            const speakText = `${item.crop} market update. Current price is ${data.current_price}. ${data.prediction}. ${data.message}. Expert tip: ${data.suggestion}`;
+            const suggestionText = data.suggestion || CROP_SUGGESTIONS[item.crop] || 'Store properly and monitor prices.';
+            const speakText = `${item.crop} market update. Current price is ${data.current_price}. ${data.prediction}. ${data.message}. Expert tip: ${suggestionText}`;
 
             return (
               <motion.div 

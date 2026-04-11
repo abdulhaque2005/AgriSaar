@@ -50,13 +50,19 @@
   <body>
     <div id="root"></div>
     <script type="text/javascript">
-      // ENFORCE DEFAULT REGARDLESS OF PREVIOUS SESSIONS
-      if (!sessionStorage.getItem('agrisaar_lang_init')) {
-        document.cookie = "googtrans=/en/en; path=/";
-        // Also clear domain-specific variants just in case
-        document.cookie = "googtrans=/en/en; path=/; domain=" + window.location.hostname;
-        sessionStorage.setItem('agrisaar_lang_init', 'true');
-      }
+      // Restore user's saved language preference (or default to English)
+      (function() {
+        var savedLang = localStorage.getItem('agrisaar_language') || 'en';
+        var pathValue = savedLang === 'en' ? '/en/en' : '/en/' + savedLang;
+        document.cookie = "googtrans=" + pathValue + "; path=/";
+        document.cookie = "googtrans=" + pathValue + "; path=/; domain=" + window.location.hostname;
+        // Also set on parent domain for Vercel subdomains
+        var parts = window.location.hostname.split('.');
+        if (parts.length > 2) {
+          var parentDomain = parts.slice(-2).join('.');
+          document.cookie = "googtrans=" + pathValue + "; path=/; domain=." + parentDomain;
+        }
+      })();
     </script>
     <script type="module" src="/src/main.jsx"></script>
     <script type="text/javascript">

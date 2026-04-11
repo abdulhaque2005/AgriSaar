@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Helmet } from 'react-helmet';
 import { Search, ShieldAlert, AlertTriangle, Scale, Target, Send, ShieldCheck, HeartHandshake } from 'lucide-react';
 import api from '../services/api';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LabelList, Legend } from 'recharts';
@@ -49,6 +50,14 @@ export default function SubsidyTracker() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <Helmet>
+        <title>Kisaan Haq Tracker — Subsidy & Scheme Delivery Status | AgriSaar</title>
+        <meta name="description" content="Track government subsidy delivery status, scheme transparency, and farmer rights. AI-powered audit of PMFBY claims, PM-KISAN payments, and corruption alerts." />
+        <meta property="og:title" content="Kisaan Haq Tracker — Subsidy Delivery Status | AgriSaar" />
+        <meta property="og:description" content="Check if your government subsidies and scheme benefits are being delivered fairly. Transparency tracker for Indian farmers." />
+        <meta property="og:type" content="website" />
+        <meta name="keywords" content="subsidy tracker, kisaan haq, PM KISAN status, PMFBY claim, government scheme status, corruption audit, AgriSaar" />
+      </Helmet>
       <div className="mb-10 text-center">
         <h1 className="section-title flex items-center justify-center gap-3">
           <Scale className="w-8 h-8 text-primary-700" /> Kisaan Haq Tracker

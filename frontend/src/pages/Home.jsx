@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import {
   Sprout, FlaskConical, Wheat, CloudSun, BarChart3, Landmark,
   CalendarDays, ArrowRight, Sparkles, Tractor, MapPin, Zap,
@@ -191,6 +192,15 @@ export default function Home() {
 
   return (
     <div className="overflow-hidden bg-[#f4f7f4] dark:bg-gray-950 transition-colors duration-500">
+      <Helmet>
+        <title>AgriSaar — AI-Powered Smart Farming Platform for Indian Kisaan</title>
+        <meta name="description" content="AgriSaar is India's #1 AI farming platform — get smart crop recommendations, soil analysis, weather advisory, market prices, government schemes, fertilizer plans, and more. Boost your farm income with AI." />
+        <meta property="og:title" content="AgriSaar — AI-Powered Smart Farming Platform for Indian Kisaan" />
+        <meta property="og:description" content="11+ AI modules, 50+ crops supported. Soil analysis, crop intelligence, weather alerts, market predictions, govt schemes — all in one platform for Indian farmers." />
+        <meta property="og:type" content="website" />
+        <meta name="keywords" content="AgriSaar, smart farming, AI agriculture, Indian farming, crop recommendation, soil analysis, mandi price, government schemes, kisaan, precision agriculture" />
+        <link rel="canonical" href="https://agrisaar.vercel.app/" />
+      </Helmet>
       <MarketTicker />
 
       {/* Hero */}

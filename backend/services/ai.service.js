@@ -1,5 +1,10 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { logger } from '../utils/logger.js';
+import { analyzeSoil } from './soilAnalysis.service.js';
+import { recommendCrops } from './cropRecommendation.service.js';
+import { getFertilizerPlan } from './fertilizer.service.js';
+import { getWeatherAdvisory } from './weather.service.js';
+import { findSchemes } from './govScheme.service.js';
 
 let _ai = null;
 function getAI() {
@@ -63,7 +68,7 @@ Keep under 300 words.`;
 
   try {
     logger.ai('Calling Gemini MASTER MODE...');
-    const model = getAI().getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const model = getAI().getGenerativeModel({ model: 'gemini-2.5-flash' });
     const result = await model.generateContent(masterPrompt);
     const response = await result.response;
     return { masterAdvice: response.text(), details: results, query: farmerQuery || null };
@@ -109,7 +114,7 @@ IMPORTANT: You MUST respond ONLY with a valid JSON object in the exact format be
   try {
     logger.ai('Calling Gemini for advanced structured recovery advice...');
     const model = getAI().getGenerativeModel({ 
-      model: 'gemini-1.5-flash',
+      model: 'gemini-2.5-flash',
       generationConfig: { responseMimeType: "application/json" }
     });
     const result = await model.generateContent(prompt);
@@ -180,7 +185,7 @@ OUTPUT ONLY THE RESPONSE TEXT. NO INTRO. NO QUOTES.`;
 
   try {
     logger.ai('Calling Gemini for Voice AI...');
-    const model = getAI().getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const model = getAI().getGenerativeModel({ model: 'gemini-2.5-flash' });
     const result = await model.generateContent({
       contents: [{ role: 'user', parts: [{ text: prompt }] }],
       generationConfig: {
@@ -192,7 +197,7 @@ OUTPUT ONLY THE RESPONSE TEXT. NO INTRO. NO QUOTES.`;
     return { success: true, advice: response.text().trim() };
   } catch (error) {
     console.error('STRICT_AI_ERROR:', error);
-    logger.error(`Gemini voice error [Model: gemini-1.5-flash]: ${error.message}`);
+    logger.error(`Gemini voice error [Model: gemini-2.5-flash]: ${error.message}`);
     return { success: false, advice: `Maafi chaahte hain, AI server se jud nahi pa raha hai. Kripya thodi der baad koshish karein.` };
   }
 }
@@ -231,7 +236,7 @@ Keep response under 250 words. Be specific to the location.`;
 
   try {
     logger.ai('Calling Gemini for nearby farming info...');
-    const model = getAI().getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const model = getAI().getGenerativeModel({ model: 'gemini-2.5-flash' });
     const result = await model.generateContent(prompt);
     const response = await result.response;
     return {
@@ -269,7 +274,7 @@ Keep response under 250 words. Focus on maximum profit for small farmers.`;
 
   try {
     logger.ai('Calling Gemini for agroforestry advice...');
-    const model = getAI().getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const model = getAI().getGenerativeModel({ model: 'gemini-2.5-flash' });
     const result = await model.generateContent(prompt);
     const response = await result.response;
     return { location, advice: response.text() };
@@ -297,7 +302,7 @@ Keep response under 200 words. Be practical and low-cost.`;
 
   try {
     logger.ai('Calling Gemini for bio-input intelligence...');
-    const model = getAI().getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const model = getAI().getGenerativeModel({ model: 'gemini-2.5-flash' });
     const result = await model.generateContent(prompt);
     const response = await result.response;
     return { crop, intelligence: response.text() };
@@ -351,7 +356,7 @@ IMPORTANT: You MUST respond ONLY with a valid JSON object in the exact format be
   try {
     logger.ai('Calling Gemini Vision for disease detection...');
     const model = getAI().getGenerativeModel({ 
-      model: 'gemini-1.5-flash',
+      model: 'gemini-2.5-flash',
       generationConfig: { responseMimeType: "application/json" }
     });
 

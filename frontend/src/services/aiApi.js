@@ -9,8 +9,11 @@ export const detectDisease = async (imageFile) => {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
+      timeout: 60000, // 60s timeout for image analysis
     });
-    return response.data;
+    // api interceptor already strips response.data, so 'response' IS the data
+    // Backend wraps in successResponse: { success: true, data: {...}, message: '...' }
+    return response.data || response;
   } catch (error) {
     console.error('Disease detection error:', error);
     throw error;

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Helmet } from 'react-helmet';
 import { Link, useNavigate } from 'react-router-dom';
 import { User, Mail, Lock, Phone, ArrowRight, Sprout, Loader2, CheckCircle2 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
@@ -52,6 +53,13 @@ export default function Signup() {
 
   return (
     <div className="min-h-[calc(100vh-64px)] flex items-center justify-center p-6 relative overflow-hidden bg-[#f0f4f0] dark:bg-gray-950 transition-colors duration-500">
+      <Helmet>
+        <title>Join AgriSaar — Free AI Farming Account for Kisaan</title>
+        <meta name="description" content="Create your free AgriSaar account and unlock AI-powered smart farming tools — crop recommendations, soil analysis, weather alerts, market prices, and government scheme matching." />
+        <meta property="og:title" content="Join AgriSaar — Free AI Farming Account" />
+        <meta property="og:description" content="Sign up for free and access India's most advanced AI farming platform. 11+ modules, 50+ crops, unlimited AI analysis." />
+        <meta property="og:type" content="website" />
+      </Helmet>
       {/* Decorative patterns */}
       <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')] opacity-20 pointer-events-none" />
       <div className="absolute top-0 -left-20 w-96 h-96 bg-primary-100 dark:bg-primary-900/10 rounded-full blur-3xl opacity-50 animate-pulse" />

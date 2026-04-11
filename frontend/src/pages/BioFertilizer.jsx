@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Helmet } from 'react-helmet';
 import { Droplet, Leaf, Sprout, CheckCircle2, ArrowRight, Star, Sparkles, TestTube2, Wind, Search } from 'lucide-react';
 import api from '../services/api';
 import Loading from '../components/Loading';
@@ -114,6 +115,14 @@ Cost Saving: Rs 4,000-8,000 per acre per season`;
 
   return (
     <div className="min-h-screen bg-[#f4f7f4] pb-24 relative overflow-hidden">
+      <Helmet>
+        <title>Bio-Fertilizers & Organic Inputs — Javik Khad Guide | AgriSaar</title>
+        <meta name="description" content="Learn to make Jeevamrut, Neemastra, Vermicompost, and Panchagavya at home. AI-powered organic farming guide with crop-specific bio-fertilizer recommendations." />
+        <meta property="og:title" content="Bio-Fertilizers & Organic Inputs | AgriSaar" />
+        <meta property="og:description" content="Complete guide to organic farming bio-inputs — Jeevamrut, Neemastra, Vermicompost, and more. Low-cost, high-yield natural farming methods." />
+        <meta property="og:type" content="website" />
+        <meta name="keywords" content="bio-fertilizer, organic farming, jeevamrut, neemastra, vermicompost, panchagavya, javik kheti, natural farming, AgriSaar" />
+      </Helmet>
       {/* Decorative Background Elements */}
       <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-gradient-to-br from-green-300/30 to-emerald-400/10 blur-[100px] rounded-full point-events-none" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-gradient-to-tl from-emerald-400/20 to-teal-300/10 blur-[120px] rounded-full point-events-none" />
