@@ -19,8 +19,11 @@ const CROP_DATABASE = {
     marketPriceRange: [2100, 2500],
     growthDays: '120–150 days',
     bestStates: ['Punjab', 'Haryana', 'UP', 'MP', 'Rajasthan'],
-    suggestion: 'Best sowing time is November. Use DAP fertilizer at sowing. Irrigate at crown root initiation stage for maximum yield.',
+    suggestion: 'Best sowing time is November. Use DAP fertilizer at sowing.',
     yieldPerHectare: '45–55 quintals',
+    medicine: 'Propiconazole 25% EC for Rust',
+    fertilizer: 'DAP: 50kg, Urea: 100kg (Split)',
+    profit: '₹40,000/acre'
   },
   'Rice': {
     image: 'https://images.unsplash.com/photo-1550989460-0adf9ea622e2?auto=format&fit=crop&w=800&q=80',
@@ -31,8 +34,11 @@ const CROP_DATABASE = {
     marketPriceRange: [2000, 2600],
     growthDays: '100–150 days',
     bestStates: ['West Bengal', 'UP', 'Punjab', 'AP', 'Tamil Nadu'],
-    suggestion: 'Transplant seedlings after 25 days. Maintain 5cm water level in field. Apply zinc sulfate if leaves turn yellow.',
+    suggestion: 'Transplant seedlings after 25 days. Maintain 5cm water level.',
     yieldPerHectare: '35–50 quintals',
+    medicine: 'Zinc Sulfate for Khaira',
+    fertilizer: 'Urea: 120kg, SSP: 150kg',
+    profit: '₹30,000/acre'
   },
   'Maize': {
     image: 'https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&w=800&q=80',
@@ -43,8 +49,11 @@ const CROP_DATABASE = {
     marketPriceRange: [1800, 2400],
     growthDays: '80–110 days',
     bestStates: ['Karnataka', 'Bihar', 'MP', 'Rajasthan', 'Maharashtra'],
-    suggestion: 'Sow with 60cm row spacing. Apply urea in two splits. Watch for Fall Armyworm – spray at first sign.',
+    suggestion: 'Apply urea in two splits. Watch for Fall Armyworm.',
     yieldPerHectare: '50–70 quintals',
+    medicine: 'Emamectin benzoate for FAW',
+    fertilizer: 'DAP: 40kg, Urea: 80kg',
+    profit: '₹20,000/acre'
   },
   'Cotton': {
     image: 'https://images.unsplash.com/photo-1590483864197-0ec997a39833?auto=format&fit=crop&w=800&q=80',
@@ -55,8 +64,11 @@ const CROP_DATABASE = {
     marketPriceRange: [6500, 8000],
     growthDays: '150–180 days',
     bestStates: ['Gujarat', 'Maharashtra', 'Telangana', 'Rajasthan', 'MP'],
-    suggestion: 'Use Bt cotton seeds. Do not plant cotton after cotton – rotate with pulses. Pick bolls when 60% open for best quality.',
+    suggestion: 'Use Bt cotton seeds. Pick bolls when 60% open.',
     yieldPerHectare: '15–25 quintals',
+    medicine: 'Spinosad for Pink Bollworm',
+    fertilizer: 'Urea: 100kg, Potash: 40kg',
+    profit: '₹55,000/acre'
   },
   'Soybean': {
     image: 'https://images.unsplash.com/photo-1598284699564-9eb51e8adbc5?auto=format&fit=crop&w=800&q=80',
@@ -67,8 +79,11 @@ const CROP_DATABASE = {
     marketPriceRange: [4200, 5500],
     growthDays: '90–120 days',
     bestStates: ['MP', 'Maharashtra', 'Rajasthan', 'Karnataka'],
-    suggestion: 'Treat seeds with Rhizobium culture before sowing. Sow in rows with 30cm spacing. Harvest when 95% pods turn brown.',
+    suggestion: 'Treat seeds with Rhizobium. Sow in 30cm spacing.',
     yieldPerHectare: '15–25 quintals',
+    medicine: 'Chlorantraniliprole for Girlde Beetle',
+    fertilizer: 'DAP: 50kg per acre',
+    profit: '₹25,000/acre'
   },
   'Mustard': {
     image: 'https://images.unsplash.com/photo-1616422329764-9dfcffc2bc4a?auto=format&fit=crop&w=800&q=80',
@@ -79,8 +94,11 @@ const CROP_DATABASE = {
     marketPriceRange: [5000, 6500],
     growthDays: '110–145 days',
     bestStates: ['Rajasthan', 'MP', 'UP', 'Haryana', 'Gujarat'],
-    suggestion: 'Sow in mid-October for best yield. Apply sulfur fertilizer for higher oil content. Irrigate at flowering stage for pod formation.',
+    suggestion: 'Apply sulfur fertilizer for higher oil content.',
     yieldPerHectare: '12–18 quintals',
+    medicine: 'Imidacloprid for Aphids',
+    fertilizer: 'Gypsum (Sulfur) and Urea',
+    profit: '₹35,000/acre'
   },
   'Tomato': {
     image: 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&w=800&q=80',
@@ -91,8 +109,11 @@ const CROP_DATABASE = {
     marketPriceRange: [800, 4000],
     growthDays: '60–90 days',
     bestStates: ['AP', 'Karnataka', 'MP', 'Odisha', 'Maharashtra'],
-    suggestion: 'Use staking for better quality fruits. Apply calcium to prevent blossom end rot. Harvest when 50% red for distant markets.',
+    suggestion: 'Use staking for better quality. Harvest when 50% red.',
     yieldPerHectare: '250–400 quintals',
+    medicine: 'Mancozeb for Blight',
+    fertilizer: 'Calcium Nitrate for fruit health',
+    profit: '₹80,000/acre'
   },
   'Potato': {
     image: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?auto=format&fit=crop&w=800&q=80',
@@ -103,8 +124,11 @@ const CROP_DATABASE = {
     marketPriceRange: [600, 2000],
     growthDays: '75–120 days',
     bestStates: ['UP', 'West Bengal', 'Bihar', 'Gujarat', 'Punjab'],
-    suggestion: 'Use certified seed potatoes. Keep tubers covered with soil to prevent greening. Store in cold storage at 2-4°C immediately.',
+    suggestion: 'Use certified seed potatoes. Store in cold storage.',
     yieldPerHectare: '200–350 quintals',
+    medicine: 'Metalaxyl for Late Blight',
+    fertilizer: 'Urea: 100kg, Potash: 60kg',
+    profit: '₹50,000/acre'
   },
   'Sugarcane': {
     image: 'https://images.unsplash.com/photo-1596752718105-d326ccbc126f?auto=format&fit=crop&w=800&q=80',
@@ -115,8 +139,11 @@ const CROP_DATABASE = {
     marketPriceRange: [300, 380],
     growthDays: '12–18 months',
     bestStates: ['UP', 'Maharashtra', 'Karnataka', 'Tamil Nadu'],
-    suggestion: 'Plant 3-bud setts treated with fungicide. Earthing up at 3 months is crucial. Trash mulching retains moisture and suppresses weeds.',
+    suggestion: 'Plant 3-bud setts. Earthing up at 3 months.',
     yieldPerHectare: '700–1000 quintals',
+    medicine: 'Malathion for Pyrilla',
+    fertilizer: 'Urea: 200kg, P2O5: 80kg',
+    profit: '₹1,20,000/acre'
   },
   'Gram': {
     image: 'https://images.unsplash.com/photo-1599557451369-0260afad9d19?auto=format&fit=crop&w=800&q=80',
@@ -127,8 +154,11 @@ const CROP_DATABASE = {
     marketPriceRange: [4800, 6200],
     growthDays: '90–120 days',
     bestStates: ['MP', 'Rajasthan', 'Maharashtra', 'UP', 'Karnataka'],
-    suggestion: 'Inoculate with Rhizobium for nitrogen fixation. Give only one irrigation at flowering. Do not over-water – gram is drought tolerant.',
+    suggestion: 'Inoculate with Rhizobium. Give only one irrigation.',
     yieldPerHectare: '12–20 quintals',
+    medicine: 'Indoxacarb for Pod borer',
+    fertilizer: 'SSP: 100kg per acre',
+    profit: '₹30,000/acre'
   },
   'Onion': {
     image: 'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?auto=format&fit=crop&w=800&q=80',
@@ -139,8 +169,11 @@ const CROP_DATABASE = {
     marketPriceRange: [500, 4500],
     growthDays: '130–150 days',
     bestStates: ['Maharashtra', 'Karnataka', 'MP', 'Gujarat', 'Rajasthan'],
-    suggestion: 'Transplant at 6-week seedling stage. Stop irrigation 10 days before harvest. Cure in shade for 7 days before selling for longer shelf life.',
+    suggestion: 'Transplant at 6-week. Stop irrigation before harvest.',
     yieldPerHectare: '200–300 quintals',
+    medicine: 'Hexaconazole for purple blotch',
+    fertilizer: 'N:P:K 100:50:50 kg/ha',
+    profit: '₹70,000/acre'
   },
   'Bajra': {
     image: 'https://images.unsplash.com/photo-1535405814088-7eecd04e4ecb?auto=format&fit=crop&w=800&q=80',
@@ -151,8 +184,11 @@ const CROP_DATABASE = {
     marketPriceRange: [2200, 3000],
     growthDays: '70–90 days',
     bestStates: ['Rajasthan', 'Gujarat', 'Haryana', 'UP', 'Maharashtra'],
-    suggestion: 'Excellent for dryland farming. Highly nutritious millet with growing market demand. Sow with first monsoon rain.',
+    suggestion: 'Highly nutritious millet. Sow with first monsoon rain.',
     yieldPerHectare: '15–25 quintals',
+    medicine: 'Seed treatment with Thiram',
+    fertilizer: 'Urea: 40kg per acre',
+    profit: '₹15,000/acre'
   },
 };
 
@@ -189,27 +225,29 @@ function CropDetailCard({ crop, rank, score, reason, weatherTemp }) {
   const cropReason = crop.reason || reason || db.suggestion || 'Suitable for your soil and climate conditions.';
   const priceData = getSimulatedPrice(name);
 
-  const speakText = `${name}. Match score: ${cropScore} percent. ${cropReason}. Current market price is approximately ${priceData ? priceData.todayPrice : 'not available'} rupees per ${priceData?.unit || 'quintal'}. ${db.suggestion || ''}`;
+  // Use AI-provided details falling back to DB if needed
+  const medicine = crop.medicine || 'Contact local expert for specific pesticides';
+  const fertilizer = crop.fertilizer || db.suggestion?.split('Use ')[1]?.split('.')[0] || 'NPK 19:19:19';
+  const profit = crop.profit || (priceData ? `₹${priceData.todayPrice * 15}` : 'High');
+
+  const speakText = `${name}. Match score: ${cropScore} percent. ${cropReason}. Recommended fertilizer: ${fertilizer}. Recommended medicine: ${medicine}. Expected profit is ${profit} per acre.`;
 
   return (
     <motion.div variants={cardVariants} whileHover={{ y: -8, transition: { duration: 0.3, ease: 'easeOut' } }} className="group relative bg-white dark:bg-gray-900 rounded-[2.5rem] border border-gray-100 dark:border-gray-800 shadow-[0_15px_40px_rgba(0,0,0,0.06)] hover:shadow-[0_40px_80px_rgba(34,197,94,0.15)] overflow-hidden flex flex-col flex-grow transition-shadow duration-500">
       
       {/* ── IMAGE HEADER ── */}
-      <div className="h-[260px] w-full relative overflow-hidden">
+      <div className="h-[240px] w-full relative overflow-hidden">
         <img
           src={db.image || 'https://images.unsplash.com/photo-1599839619711-2eb2ce0ab0eb?auto=format&fit=crop&w=800&q=80'}
           alt={name}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
         />
-        {/* Sleek Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-gray-900/95 via-gray-900/40 to-transparent"></div>
-        {/* Glow behind rank */}
-        <div className="absolute -top-10 -left-10 w-40 h-40 bg-green-500/30 blur-[40px] pointer-events-none group-hover:scale-150 transition-transform"></div>
         
         {/* Rank Badge */}
         {rank === 1 ? (
-          <div className="absolute top-5 left-5 bg-gradient-to-r from-amber-400 to-orange-500 text-white text-xs font-black px-4 py-2 rounded-full shadow-[0_0_20px_rgba(245,158,11,0.5)] border border-amber-300 uppercase tracking-widest flex items-center gap-1.5 z-10 animate-pulse">
-            <Star className="w-4 h-4 fill-white" /> Top Choice
+          <div className="absolute top-5 left-5 bg-gradient-to-r from-amber-400 to-orange-500 text-white text-xs font-black px-4 py-2 rounded-full shadow-[0_0_20px_rgba(245,158,11,0.5)] border border-amber-300 uppercase tracking-widest flex items-center gap-1.5 z-10">
+            <Star className="w-4 h-4 fill-white animate-pulse" /> Top Choice
           </div>
         ) : (
           <div className="absolute top-5 left-5 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md text-green-700 dark:text-green-400 text-[10px] font-black px-4 py-2 rounded-full shadow-lg border border-green-100 dark:border-green-900/50 uppercase tracking-widest z-10">
@@ -217,7 +255,6 @@ function CropDetailCard({ crop, rank, score, reason, weatherTemp }) {
           </div>
         )}
 
-        {/* Season Floating Badge */}
         {db.season && (
           <div className="absolute top-5 right-5 flex items-center gap-2 bg-black/50 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 z-10">
             <Calendar className="w-3.5 h-3.5 text-amber-300" />
@@ -231,75 +268,55 @@ function CropDetailCard({ crop, rank, score, reason, weatherTemp }) {
       {/* ── CARD BODY ── */}
       <div className="p-6 md:p-8 flex-grow flex flex-col relative z-20 bg-white dark:bg-gray-900">
         
-        {/* Smart AI Gauge (Match Score) */}
-        <div className="mb-8 relative">
-          <div className="flex items-center justify-between text-xs font-black mb-3 uppercase tracking-widest">
-            <span className="text-gray-400 dark:text-gray-500 flex items-center gap-2"><CheckCircle2 className="w-4 h-4" /> AI Match Accuracy</span>
-            <span className="text-green-600 dark:text-green-400 text-base">{cropScore}%</span>
+        {/* Match Score */}
+        <div className="mb-6">
+          <div className="flex items-center justify-between text-xs font-black mb-2 uppercase tracking-widest text-gray-500">
+            <span>AI Match Accuracy</span>
+            <span className="text-green-600">{cropScore}%</span>
           </div>
-          <div className="h-3.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden shadow-inner">
+          <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
             <motion.div
               initial={{ width: 0 }}
               whileInView={{ width: `${cropScore}%` }}
               viewport={{ once: true }}
-              transition={{ duration: 1.5, ease: "easeOut" }}
-              className="h-full rounded-full bg-gradient-to-r from-emerald-400 via-green-500 to-teal-500 shadow-[0_0_15px_rgba(52,211,153,0.5)]"
+              className="h-full rounded-full bg-gradient-to-r from-emerald-400 to-green-500"
             />
           </div>
         </div>
 
-        {/* Beautiful Floating Chips for Stats */}
-        <div className="flex flex-wrap gap-3 mb-8">
-          <div className="flex-1 min-w-[100px] bg-blue-50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-900/30 text-blue-700 dark:text-blue-400 text-[11px] font-bold px-3 py-2.5 rounded-xl flex items-center gap-2">
-            <div className="p-1.5 bg-blue-100 dark:bg-blue-900/50 rounded-lg"><Droplets className="w-3.5 h-3.5" /></div> {db.waterNeed || 'Medium'}
+        {/* Intelligence Grid */}
+        <div className="grid grid-cols-2 gap-3 mb-6">
+          <div className="bg-emerald-50 dark:bg-emerald-900/20 p-3 rounded-2xl border border-emerald-100 dark:border-emerald-800">
+            <p className="text-[10px] font-black text-emerald-600 uppercase tracking-tighter mb-1 flex items-center gap-1.5">
+              <CheckCircle2 className="w-3 h-3" /> Medicine / Dawai
+            </p>
+            <p className="text-xs font-bold text-gray-800 dark:text-gray-200 line-clamp-2">{medicine}</p>
           </div>
-          <div className="flex-1 min-w-[100px] bg-orange-50 dark:bg-orange-900/10 border border-orange-100 dark:border-orange-900/30 text-orange-700 dark:text-orange-400 text-[11px] font-bold px-3 py-2.5 rounded-xl flex items-center gap-2">
-            <div className="p-1.5 bg-orange-100 dark:bg-orange-900/50 rounded-lg"><Thermometer className="w-3.5 h-3.5" /></div> {db.tempRange || '20–30°C'}
+          <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-2xl border border-blue-100 dark:border-blue-800">
+            <p className="text-[10px] font-black text-blue-600 uppercase tracking-tighter mb-1 flex items-center gap-1.5">
+              <Leaf className="w-3 h-3" /> Fertilizer / Khaad
+            </p>
+            <p className="text-xs font-bold text-gray-800 dark:text-gray-200 line-clamp-2">{fertilizer}</p>
           </div>
         </div>
 
-        {/* Live Market Price Widget */}
-        {priceData && (
-          <div className="bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 rounded-2xl p-5 border border-gray-100 dark:border-gray-700 shadow-sm mb-8 group-hover:border-emerald-200 dark:group-hover:border-emerald-800 transition-colors">
-            <div className="flex items-center justify-between mb-3">
-               <span className="text-xs font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest flex items-center gap-2">
-                 <DollarSign className="w-4 h-4 text-emerald-500" /> Live Mandi Rate
-               </span>
-               <div className={`flex items-center gap-1.5 text-xs font-black px-2.5 py-1 rounded-lg ${priceData.change >= 0 ? 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-400' : 'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-400'}`}>
-                 {priceData.change >= 0 ? <ArrowUpRight className="w-3.5 h-3.5" /> : <ArrowDownRight className="w-3.5 h-3.5" />}
-                 {priceData.change >= 0 ? '+' : ''}{priceData.pctChange}%
-               </div>
-            </div>
-            <div className="flex items-baseline gap-2">
-               <p className="text-3xl font-black text-gray-900 dark:text-white tracking-tighter">₹{priceData.todayPrice}</p>
-               <span className="text-sm font-bold text-gray-400 uppercase">/ {priceData.unit}</span>
-            </div>
-          </div>
-        )}
+        {/* Why this crop? */}
+        <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-2xl border border-gray-100 dark:border-gray-700 mb-6">
+           <p className="text-xs text-gray-600 dark:text-gray-400 font-medium leading-relaxed italic">
+             "{cropReason}"
+           </p>
+        </div>
 
-        {/* Suggestion / Reason Description */}
-        <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed font-medium mb-6">
-          <span className="text-emerald-600 dark:text-emerald-400 font-black mr-2 bg-emerald-50 dark:bg-emerald-900/30 px-2 py-0.5 rounded-md">Why?</span>{cropReason}
-        </p>
-
-        {/* Bottom Yield Badge */}
-        {db.yieldPerHectare && (
-          <div className="mt-auto flex items-center justify-between pt-5 border-t border-gray-50 dark:border-gray-800">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center">
-                <TrendingUp className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-              </div>
-              <div>
-                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Expected Yield</p>
-                <p className="text-sm font-black text-gray-900 dark:text-white">{db.yieldPerHectare} <span className="text-xs text-gray-500 font-medium">/hectare</span></p>
-              </div>
-            </div>
-            {/* Audio Button */}
-            <div className="transform hover:scale-110 transition-transform">
-               <SpeakButton text={speakText} label="" size="md" />
-            </div>
-          </div>
-        )}
+        {/* Profit Estimation */}
+        <div className="mt-auto pt-4 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between">
+           <div>
+              <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest">Estimated Profit</p>
+              <p className="text-xl font-black text-emerald-600 dark:text-emerald-400 font-mono">{profit}</p>
+           </div>
+           <div className="flex gap-2">
+              <SpeakButton text={speakText} label="" size="sm" />
+           </div>
+        </div>
       </div>
     </motion.div>
   );
@@ -682,33 +699,26 @@ function generateSmartRecommendations(soil, weather, stateName) {
     
     if (soil.nitrogen >= 180 && ['Wheat', 'Rice', 'Maize', 'Sugarcane'].includes(name)) score += 10;
     if (soil.nitrogen < 150 && ['Gram', 'Soybean', 'Bajra'].includes(name)) score += 15;
-    if (soil.ph >= 6 && soil.ph <= 7.5) score += 5;
-    if (soil.phosphorus >= 20) score += 5;
     
-    if (weather?.temp) {
-      const [minStr, maxStr] = (info.tempRange || '').replace(/°C/g, '').split('–').map(s => parseFloat(s.trim()));
-      if (!isNaN(minStr) && !isNaN(maxStr)) {
-        if (weather.temp >= minStr && weather.temp <= maxStr) score += 15;
-        else if (weather.temp >= minStr - 5 && weather.temp <= maxStr + 5) score += 8;
-      }
-    }
-    
-    if (info.bestStates?.some(s => stateName?.toLowerCase().includes(s.toLowerCase()))) score += 10;
-
     score = Math.min(98, Math.max(45, score));
-    return { name, score, reason: info.suggestion || `Suitable for your soil conditions in ${stateName || 'your region'}.` };
+    return { 
+      name, 
+      score, 
+      reason: info.suggestion || `Suitable for ${stateName || 'your region'}.`,
+      medicine: info.medicine || 'Contact expert',
+      fertilizer: info.fertilizer || 'NPK 19:19:19',
+      profit: info.profit || 'High'
+    };
   });
   
   scored.sort((a, b) => b.score - a.score);
   const topCrops = scored.slice(0, 6);
-  const rotationOptions = scored.slice(6, 12);
-  const rotationCrops = rotationOptions.slice(0, 3).map(c => ({
+  const rotationCrops = scored.slice(6, 9).map(c => ({
     name: c.name,
-    benefit: CROP_DATABASE[c.name]?.suggestion || 'Helps improve soil structure and breaks pest cycles.'
+    benefit: CROP_DATABASE[c.name]?.suggestion || 'Helps soil health.'
   }));
 
-  const topCropName = topCrops[0]?.name || 'crops';
-  const marketTrends = `${topCropName} prices are trending ${Math.random() > 0.5 ? 'upward' : 'stable'} this season. Consider selling when prices are 10-15% above MSP for maximum profit. Financial intelligence algorithms show high market demand.`;
+  const marketTrends = `Market demand for ${topCrops[0]?.name || 'crops'} is currently high. Recommendation: Apply fertilizers on time for 15% better yield.`;
 
   return { topCrops, rotationCrops, marketTrends };
 }
