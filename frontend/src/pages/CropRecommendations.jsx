@@ -231,7 +231,7 @@ function CropDetailCard({ crop, rank, score, reason, weatherTemp }) {
   const fertilizer = crop.fertilizer || db.suggestion?.split('Use ')[1]?.split('.')[0] || 'NPK 19:19:19';
   const profit = crop.profit || (priceData ? `₹${priceData.todayPrice * 15}` : 'High');
 
-  const speakText = `${name}. Match score: ${cropScore} percent. ${cropReason}. Recommended fertilizer: ${fertilizer}. Recommended medicine: ${medicine}. Expected profit is ${profit} per acre.`;
+  const speakText = `Humari AI report ke mutabik aapko ${name} ki kheti karni chahiye. Match score hai ${cropScore} percent. Dawai ke roop mein ${medicine} istemal karein. Khaad ke liye ${fertilizer} dalein. Ek acre mein lagbhag ${profit} tak ka munafa ho sakta hai.`;
 
   return (
     <motion.div variants={cardVariants} whileHover={{ y: -8, transition: { duration: 0.3, ease: 'easeOut' } }} className="group relative bg-white dark:bg-gray-900 rounded-[2.5rem] border border-gray-100 dark:border-gray-800 shadow-[0_15px_40px_rgba(0,0,0,0.06)] hover:shadow-[0_40px_80px_rgba(34,197,94,0.15)] overflow-hidden flex flex-col flex-grow transition-shadow duration-500">

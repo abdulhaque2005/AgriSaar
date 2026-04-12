@@ -6,9 +6,6 @@ export const detectDisease = async (imageFile) => {
 
   try {
     const response = await api.post('/ai/detect-disease', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
       timeout: 60000, // 60s timeout for image analysis
     });
     // api interceptor already strips response.data, so 'response' IS the data

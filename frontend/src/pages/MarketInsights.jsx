@@ -249,7 +249,9 @@ export default function MarketInsights() {
             const cropImage = CROP_IMAGES[item.crop] || 'https://images.unsplash.com/photo-1599839619711-2eb2ce0ab0eb?w=400&q=80';
 
             const suggestionText = data.suggestion || CROP_SUGGESTIONS[item.crop] || 'Store properly and monitor prices.';
-            const speakText = `${item.crop} market update. Current price is ${data.current_price}. ${data.prediction}. ${data.message}. Expert tip: ${suggestionText}`;
+            let aiSujhaav = data.prediction?.includes('Uptrend') ? 'daam badhne wale hain' : data.prediction?.includes('Downtrend') ? 'daam girne wale hain' : 'daam sthir hain';
+            let actionHindi = data.action?.includes('SELL') ? 'fasal bech de' : 'abhi rok kar rakhein';
+            const speakText = `Kisaan bhai, aaj ${item.crop} ka mandi bhav ${data.current_price} rupaye prati ${data.unit} hai. AI ka anumaan hai ki ${aiSujhaav}. Humari salah hai ki ${actionHindi}.`;
 
             return (
               <motion.div 
