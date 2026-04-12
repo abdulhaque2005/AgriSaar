@@ -180,12 +180,12 @@ export default function MarketInsights() {
   return (
     <div className="min-h-screen bg-[#f1f5f9] dark:bg-gray-950 pb-20 font-sans">
       <Helmet>
-        <title>Market Insights — Mandi Bhav & Price Prediction | AgriSaar</title>
-        <meta name="description" content="Track real-time mandi prices, get AI-powered market predictions, and find the best time to sell your crop. Covers Wheat, Rice, Cotton, Soybean, Tomato, Potato, and more." />
-        <meta property="og:title" content="Market Insights — Mandi Bhav & Price Prediction | AgriSaar" />
-        <meta property="og:description" content="Live crop market prices with AI prediction trends. Know when to sell, where to sell, and maximize your farm income." />
+        <title>Real-Time Market Insights & Crop Price Predictions | AgriSaar</title>
+        <meta name="description" content="Track live commodity market prices, get AI-powered price predictions, and determine the optimal time to sell your agricultural produce for maximum profit." />
+        <meta property="og:title" content="Real-Time Market Insights & Crop Price Predictions | AgriSaar" />
+        <meta property="og:description" content="Track live commodity market prices, get AI-powered price predictions, and determine the optimal time to sell." />
         <meta property="og:type" content="website" />
-        <meta name="keywords" content="mandi bhav, market price, mandi rate today, crop price prediction, wheat price, rice price, AgriSaar, kisaan market" />
+        <meta name="keywords" content="agricultural market prices, live commodity prices, crop price prediction, agriculture market trends, sell crops online, best time to sell crops, farming insights, agricultural economics, AgriSaar market analysis" />
       </Helmet>
       
       {/* ── PREMIUM HERO SECTION ── */}

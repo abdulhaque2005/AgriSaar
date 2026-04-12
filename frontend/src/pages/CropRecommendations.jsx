@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet';
-import { Wheat, CheckCircle2, TrendingUp, DollarSign, CloudSun, Droplets, MapPin, Volume2, Square, Loader2, Sprout, Thermometer, Calendar, Lightbulb, ArrowUpRight, ArrowDownRight, RefreshCw, Wind, Sun, Star, UploadCloud, Camera, Leaf } from 'lucide-react';
+import { Wheat, CheckCircle2, TrendingUp, DollarSign, CloudSun, Droplets, MapPin, Volume2, Square, Loader2, Sprout, Thermometer, Calendar, Lightbulb, ArrowUpRight, ArrowDownRight, RefreshCw, Wind, Sun, Star, UploadCloud, Camera, Leaf, AlertCircle } from 'lucide-react';
 import { useAgri } from '../context/AgriContext';
 import { getCrops } from '../services/cropApi';
 import useLocation from '../hooks/useLocation';
@@ -444,12 +444,12 @@ export default function CropRecommendations() {
   return (
     <div className="min-h-screen bg-[#f4f8f4] dark:bg-gray-950 pb-20 font-sans">
       <Helmet>
-        <title>Smart Crop Intelligence — AI Fasal Sujhaav | AgriSaar</title>
-        <meta name="description" content="Get AI-powered crop recommendations based on your soil, climate, and location. Know the best crops to grow with MSP prices, yield estimates, season info, and profitability analysis." />
-        <meta property="og:title" content="Smart Crop Intelligence — AI Fasal Sujhaav | AgriSaar" />
-        <meta property="og:description" content="AI recommends the most profitable crops based on your soil data, weather conditions, and local market prices. 50+ Indian crops supported." />
+        <title>Smart Crop Recommendations | AI Farming & Soil Analysis | AgriSaar</title>
+        <meta name="description" content="Get precise AI-powered crop recommendations based on your soil data, live weather conditions, and local mandi prices. Discover the most profitable crops to grow for maximum yield." />
+        <meta property="og:title" content="Smart Crop Recommendations | AI Farming & Soil Analysis | AgriSaar" />
+        <meta property="og:description" content="Get precise AI-powered crop recommendations based on your soil data, live weather conditions, and local mandi prices." />
         <meta property="og:type" content="website" />
-        <meta name="keywords" content="crop recommendation, fasal sujhaav, best crop to grow, AI farming, MSP price, crop profitability, Indian agriculture, AgriSaar" />
+        <meta name="keywords" content="crop recommendation, best crop to grow, profitable crops, artificial intelligence farming, soil analysis, smart agriculture tools, highest yield crops, AgriSaar, Indian agriculture, crop rotation options, optimal farming" />
       </Helmet>
       
       {/* ── PREMIUM HERO SECTION ── */}
