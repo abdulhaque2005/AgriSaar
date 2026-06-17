@@ -137,8 +137,20 @@ function UserProfile() {
 
   return (
     <div className="relative" ref={menuRef}>
-      <button
-        onClick={() => setIsOpen(!isOpen)}
+      {!user ? (
+        <Link
+          to="/login"
+          className="flex items-center gap-2 p-1.5 pr-4 rounded-full bg-primary-600 hover:bg-primary-700 text-white transition-all shadow-md active:scale-95 group"
+        >
+          <div className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center">
+            <User className="w-4 h-4 text-white" />
+          </div>
+          <span className="text-sm font-bold tracking-wide">Login / Join</span>
+        </Link>
+      ) : (
+        <>
+          <button
+            onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2 p-1 pr-3 rounded-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 hover:border-primary-300 dark:hover:border-primary-700 hover:shadow-md transition-all active:scale-95 group"
       >
         <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary-600 to-primary-500 flex items-center justify-center text-white text-xs font-black shadow-sm group-hover:scale-105 transition-transform">
@@ -226,6 +238,8 @@ function UserProfile() {
                   </button>
             </div>
           </div>
+        </>
+      )}
         </>
       )}
     </div>

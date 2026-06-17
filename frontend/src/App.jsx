@@ -16,7 +16,8 @@ import BioFertilizer from './pages/BioFertilizer';
 import ProfitTrees from './pages/ProfitTrees';
 import DirectMarket from './pages/DirectMarket';
 import DiseaseScanner from './pages/DiseaseScanner';
-
+import Login from './pages/Login';
+import Signup from './pages/Signup';
 import { AuthProvider } from './context/AuthContext';
 import { AgriProvider } from './context/AgriContext';
 import FarmerVoiceAssistant from './components/FarmerVoiceAssistant';
@@ -45,6 +46,8 @@ function App() {
                 <Route path="/schemes" element={<GovernmentSchemes />} />
                 <Route path="/calendar" element={<FarmingCalendar />} />
                 <Route path="/subsidy-tracker" element={<SubsidyTracker />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<Signup />} />
               </Routes>
             </main>
             <FarmerVoiceAssistant />
