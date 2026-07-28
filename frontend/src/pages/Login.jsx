@@ -6,7 +6,7 @@ import { toast } from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
 
 export default function Login() {
-  const [email, setEmail] = useState('');
+  const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const { login, googleLogin, user } = useAuth();
@@ -25,7 +25,7 @@ export default function Login() {
     e.preventDefault();
     setLoading(true);
     try {
-      await login(email, password);
+      await login(identifier, password);
       toast.success('Successfully logged in! Welcome back, Kisaan!');
       navigate(from, { replace: true });
     } catch (error) {
@@ -90,12 +90,12 @@ export default function Login() {
                     <Mail className="w-5 h-5 text-gray-400 group-focus-within:text-primary-600 transition-colors" />
                   </div>
                   <input
-                    type="email"
+                    type="text"
                     required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    value={identifier}
+                    onChange={(e) => setIdentifier(e.target.value)}
                     className="w-full pl-12 pr-4 py-3.5 bg-gray-50 dark:bg-gray-800 border-2 border-gray-100 dark:border-gray-700 rounded-xl text-sm font-medium focus:ring-primary-500 focus:border-primary-500 focus:bg-white dark:focus:bg-gray-700 transition-all outline-none text-gray-900 dark:text-white"
-                    placeholder="name@example.com"
+                    placeholder="Email or Mobile Number"
                   />
                 </div>
               </div>
@@ -146,13 +146,28 @@ export default function Login() {
               </div>
             </div>
 
-            <div className="mt-6">
+            <div className="mt-6 space-y-3">
               <button
                 onClick={handleGoogleLogin}
                 className="w-full flex items-center justify-center gap-3 bg-white dark:bg-gray-800 border-2 border-gray-100 dark:border-gray-700 hover:border-primary-200 dark:hover:border-primary-800 text-gray-700 dark:text-gray-200 py-3 rounded-xl font-bold transition-all active:scale-[0.98]"
               >
                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" className="w-5 h-5" alt="Google" />
                 Sign in with Google
+              </button>
+              
+              <button
+                type="button"
+                onClick={() => {
+                  const mockUser = { email: 'demo@agrisaar.com', user_metadata: { full_name: 'Demo Farmer' } };
+                  localStorage.setItem('agrisaar_demo_user', JSON.stringify(mockUser));
+                  toast.success('Demo mode activated!');
+                  setTimeout(() => {
+                    window.location.reload();
+                  }, 500);
+                }}
+                className="w-full flex items-center justify-center gap-3 bg-gray-100 dark:bg-gray-800 border-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600 text-gray-700 dark:text-gray-200 py-3 rounded-xl font-bold transition-all active:scale-[0.98]"
+              >
+                Continue as Demo User
               </button>
             </div>
 

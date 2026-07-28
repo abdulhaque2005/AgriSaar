@@ -24,7 +24,7 @@ export default function Signup() {
     e.preventDefault();
     setLoading(true);
     try {
-      await signup(email, password, name);
+      await signup(email, password, name, phone);
       toast.success('Account created! Welcome to AgriSaar family!');
       navigate('/');
     } catch (error) {

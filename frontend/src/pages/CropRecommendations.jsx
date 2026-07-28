@@ -235,7 +235,7 @@ function CropDetailCard({ crop, rank, score, reason, weatherTemp }) {
 
   return (
     <motion.div variants={cardVariants} whileHover={{ y: -8, transition: { duration: 0.3, ease: 'easeOut' } }} className="group relative bg-white dark:bg-gray-900 rounded-[2.5rem] border border-gray-100 dark:border-gray-800 shadow-[0_15px_40px_rgba(0,0,0,0.06)] hover:shadow-[0_40px_80px_rgba(34,197,94,0.15)] overflow-hidden flex flex-col flex-grow transition-shadow duration-500">
-      
+
       {/* ── IMAGE HEADER ── */}
       <div className="h-[240px] w-full relative overflow-hidden">
         <img
@@ -244,7 +244,7 @@ function CropDetailCard({ crop, rank, score, reason, weatherTemp }) {
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-gray-900/95 via-gray-900/40 to-transparent"></div>
-        
+
         {/* Rank Badge */}
         {rank === 1 ? (
           <div className="absolute top-5 left-5 bg-gradient-to-r from-amber-400 to-orange-500 text-white text-xs font-black px-4 py-2 rounded-full shadow-[0_0_20px_rgba(245,158,11,0.5)] border border-amber-300 uppercase tracking-widest flex items-center gap-1.5 z-10">
@@ -268,7 +268,7 @@ function CropDetailCard({ crop, rank, score, reason, weatherTemp }) {
 
       {/* ── CARD BODY ── */}
       <div className="p-6 md:p-8 flex-grow flex flex-col relative z-20 bg-white dark:bg-gray-900">
-        
+
         {/* Match Score */}
         <div className="mb-6">
           <div className="flex items-center justify-between text-xs font-black mb-2 uppercase tracking-widest text-gray-500">
@@ -303,20 +303,20 @@ function CropDetailCard({ crop, rank, score, reason, weatherTemp }) {
 
         {/* Why this crop? */}
         <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-2xl border border-gray-100 dark:border-gray-700 mb-6">
-           <p className="text-xs text-gray-600 dark:text-gray-400 font-medium leading-relaxed italic">
-             "{cropReason}"
-           </p>
+          <p className="text-xs text-gray-600 dark:text-gray-400 font-medium leading-relaxed italic">
+            "{cropReason}"
+          </p>
         </div>
 
         {/* Profit Estimation */}
         <div className="mt-auto pt-4 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between">
-           <div>
-              <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest">Estimated Profit</p>
-              <p className="text-xl font-black text-emerald-600 dark:text-emerald-400 font-mono">{profit}</p>
-           </div>
-           <div className="flex gap-2">
-              <SpeakButton text={speakText} label="" size="sm" />
-           </div>
+          <div>
+            <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest">Estimated Profit</p>
+            <p className="text-xl font-black text-emerald-600 dark:text-emerald-400 font-mono">{profit}</p>
+          </div>
+          <div className="flex gap-2">
+            <SpeakButton text={speakText} label="" size="sm" />
+          </div>
         </div>
       </div>
     </motion.div>
@@ -349,7 +349,7 @@ export default function CropRecommendations() {
       const url = URL.createObjectURL(file);
       setSoilScanImage(url);
       setIsScanningSoil(true);
-      
+
       // Simulate Deep AI Scan of the soil
       setTimeout(async () => {
         setIsScanningSoil(false);
@@ -385,16 +385,16 @@ export default function CropRecommendations() {
     try {
       setLoading(true);
       setError('');
-      
+
       const saved = localStorage.getItem('agrisaar_soil');
       setIsDefaultData(!saved);
-      
+
       const soilData = saved ? JSON.parse(saved) : {
         nitrogen: 200, phosphorus: 25, potassium: 180, ph: 6.5, organicCarbon: 0.6
       };
-      
+
       const loc = locationText || soilData.location || 'India';
-      
+
       // Fetch weather directly
       const weather = await fetchWeather();
       if (weather) setWeatherData(weather);
@@ -451,9 +451,9 @@ export default function CropRecommendations() {
         <meta property="og:type" content="website" />
         <meta name="keywords" content="crop recommendation, best crop to grow, profitable crops, artificial intelligence farming, soil analysis, smart agriculture tools, highest yield crops, AgriSaar, Indian agriculture, crop rotation options, optimal farming" />
       </Helmet>
-      
+
       {/* ── PREMIUM HERO SECTION ── */}
-      <motion.section 
+      <motion.section
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
@@ -461,10 +461,10 @@ export default function CropRecommendations() {
       >
         {/* Background Layer - Fade from left to right so image is visible */}
         <div className="absolute inset-0 z-0 bg-emerald-950">
-          <img 
-            src="https://images.unsplash.com/photo-1586771107445-d3afaf0def4d?auto=format&fit=crop&w=1920&q=80" 
-            alt="Beautiful Modern Farming" 
-            className="w-full h-full object-cover opacity-80" 
+          <img
+            src="https://images.unsplash.com/photo-1586771107445-d3afaf0def4d?auto=format&fit=crop&w=1920&q=80"
+            alt="Beautiful Modern Farming"
+            className="w-full h-full object-cover opacity-80"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-teal-950 via-emerald-900/80 to-transparent"></div>
           <div className="absolute inset-0 bg-gradient-to-t from-teal-950 via-transparent to-transparent opacity-60"></div>
@@ -474,10 +474,10 @@ export default function CropRecommendations() {
         </div>
 
         <div className="relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-10 mt-10 flex flex-col lg:flex-row items-center justify-between">
-          
+
           {/* Left Content Area */}
           <motion.div variants={containerVariants} initial="hidden" animate="visible" className="w-full lg:w-[55%] z-20">
-            
+
             {/* Top Bar Location & Sync */}
             <div className="flex flex-wrap items-center gap-4 mb-8">
               <motion.div variants={cardVariants} className="flex items-center gap-3 bg-white/10 backdrop-blur-3xl px-6 py-3 rounded-[2rem] border border-white/20 shadow-xl">
@@ -527,7 +527,7 @@ export default function CropRecommendations() {
 
           {/* Right Content Area - Futuristic UI Graphic */}
           <div className="hidden lg:flex w-[40%] h-full relative items-center justify-end">
-            <motion.div 
+            <motion.div
               animate={{ y: [-15, 10, -15] }}
               transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
               className="relative w-[380px] h-[380px]"
@@ -549,16 +549,16 @@ export default function CropRecommendations() {
                   </div>
                   <Square className="w-4 h-4 text-white/50" />
                 </div>
-                
+
                 {/* Visualizer UI - Now Clickable for Soil Image Upload */}
-                <div 
+                <div
                   onClick={() => !isScanningSoil && fileInputRef.current?.click()}
                   className={`flex-1 bg-black/40 rounded-2xl border ${soilScanImage ? 'border-emerald-500/50' : 'border-white/10 hover:border-emerald-400/50 cursor-pointer'} relative overflow-hidden flex items-center justify-center transition-colors group`}
                 >
                   <input type="file" accept="image/*" className="hidden" ref={fileInputRef} onChange={handleSoilUpload} />
-                  
+
                   <div className="absolute inset-0 opacity-20 bg-[linear-gradient(rgba(255,255,255,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[size:20px_20px]"></div>
-                  
+
                   {/* Scanner line - Only animate if scanning */}
                   {(isScanningSoil || !soilScanImage) && (
                     <div className={`absolute top-0 left-0 right-0 h-1 bg-emerald-400 shadow-[0_0_20px_2px_#34d399] opacity-70 ${isScanningSoil || !soilScanImage ? 'animate-[scanline_3s_linear_infinite]' : ''} z-20`}></div>
@@ -576,7 +576,7 @@ export default function CropRecommendations() {
                       <p className="text-white/70 font-black text-[10px] tracking-widest uppercase">Click to Upload Soil</p>
                     </div>
                   )}
-                  
+
                   <div className="absolute bottom-4 left-4 bg-emerald-900/80 border border-emerald-500/50 px-3 py-1.5 rounded-lg flex items-center gap-2 backdrop-blur-sm z-30">
                     {isScanningSoil ? (
                       <>
@@ -597,9 +597,9 @@ export default function CropRecommendations() {
                   </div>
                 </div>
               </div>
-              
+
               {/* Floating Stat Widget */}
-              <motion.div 
+              <motion.div
                 animate={{ y: [10, -10, 10] }}
                 transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
                 className="absolute -bottom-8 -left-12 bg-white dark:bg-gray-900 p-5 rounded-3xl border border-gray-100 shadow-2xl flex items-center gap-4 w-[240px]"
@@ -621,7 +621,7 @@ export default function CropRecommendations() {
       {/* ── ALERTS SECTION ── */}
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 mt-6">
         {data.marketTrends && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
             className="mb-12 relative overflow-hidden bg-gradient-to-r from-amber-500 to-orange-500 rounded-[2.5rem] p-8 md:p-10 shadow-[0_20px_50px_rgba(245,158,11,0.2)] border border-amber-300 flex flex-col md:flex-row items-center gap-8 group"
           >
@@ -660,7 +660,7 @@ export default function CropRecommendations() {
             </div>
           </div>
         </div>
-        
+
         <motion.div variants={containerVariants} initial="hidden" animate="visible" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
           {data.topCrops?.map((crop, i) => (
             <CropDetailCard
@@ -713,11 +713,11 @@ function generateSmartRecommendations(soil, weather, stateName) {
   const isZaid = month >= 3 && month <= 6;
 
   const allCrops = Object.entries(CROP_DATABASE);
-  
+
   const scored = allCrops.map(([name, info]) => {
     let score = 50; // base score
     let reasons = [];
-    
+
     // Season Match
     const seasonStr = info.season.toLowerCase();
     if (isRabi && seasonStr.includes('rabi')) { score += 20; reasons.push('Current Rabi season match'); }
@@ -725,23 +725,23 @@ function generateSmartRecommendations(soil, weather, stateName) {
     else if (isZaid && seasonStr.includes('zaid')) { score += 15; reasons.push('Current Zaid season match'); }
     else if (seasonStr.includes('year-round')) { score += 15; reasons.push('Year-round crop'); }
     else { score -= 10; }
-    
+
     // Soil Parameters Match
     const { nitrogen = 0, phosphorus = 0, potassium = 0, ph = 7.0 } = soil;
-    
+
     // pH check
     if (ph >= 6.0 && ph <= 7.5) { score += 5; } // Most crops thrive here
     else if (name === 'Potato' && ph < 6.0) { score += 10; reasons.push('Perfect acidic pH for Potato'); }
     else if (ph > 8.0 && ['Mustard', 'Cotton'].includes(name)) { score += 5; reasons.push('Tolerates alkaline soil'); }
-    
+
     // NPK Logic
-    if (nitrogen >= 180 && ['Wheat', 'Rice', 'Maize', 'Sugarcane', 'Cotton'].includes(name)) { 
-      score += 15; reasons.push('High nitrogen supports heavy feeders'); 
+    if (nitrogen >= 180 && ['Wheat', 'Rice', 'Maize', 'Sugarcane', 'Cotton'].includes(name)) {
+      score += 15; reasons.push('High nitrogen supports heavy feeders');
     }
-    if (nitrogen < 150 && ['Gram', 'Soybean', 'Bajra', 'Groundnut'].includes(name)) { 
-      score += 15; reasons.push('Ideal for low nitrogen soil (Nitrogen fixing/hardy crop)'); 
+    if (nitrogen < 150 && ['Gram', 'Soybean', 'Bajra', 'Groundnut'].includes(name)) {
+      score += 15; reasons.push('Ideal for low nitrogen soil (Nitrogen fixing/hardy crop)');
     }
-    
+
     if (phosphorus >= 25 && potassium >= 150) {
       score += 5;
     }
@@ -750,20 +750,20 @@ function generateSmartRecommendations(soil, weather, stateName) {
     if (stateName && info.bestStates.some(s => stateName.toLowerCase().includes(s.toLowerCase()))) {
       score += 5; reasons.push('Native to your state');
     }
-    
+
     score = Math.min(98, Math.max(45, score));
     const finalReason = reasons.length > 0 ? reasons.join(' • ') + '.' : info.suggestion;
 
-    return { 
-      name, 
-      score, 
+    return {
+      name,
+      score,
       reason: finalReason,
       medicine: info.medicine || 'Contact expert',
       fertilizer: info.fertilizer || 'NPK 19:19:19',
       profit: info.profit || 'High'
     };
   });
-  
+
   scored.sort((a, b) => b.score - a.score);
   const topCrops = scored.slice(0, 6);
   const rotationCrops = scored.slice(6, 9).map(c => ({

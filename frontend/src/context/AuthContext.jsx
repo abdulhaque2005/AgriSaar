@@ -21,7 +21,12 @@ export function AuthProvider({ children }) {
 
       const { data: { session: currentSession } } = await supabase.auth.getSession();
       setSession(currentSession);
-      setUser(currentSession?.user ?? null);
+      const demoUser = localStorage.getItem('agrisaar_demo_user');
+      if (!currentSession && demoUser) {
+        setUser(JSON.parse(demoUser));
+      } else {
+        setUser(currentSession?.user ?? null);
+      }
       setLoading(false);
     };
 
@@ -32,7 +37,12 @@ export function AuthProvider({ children }) {
       const { data: { subscription } } = supabase.auth.onAuthStateChange(
         (_event, newSession) => {
           setSession(newSession);
-          setUser(newSession?.user ?? null);
+          const demoUser = localStorage.getItem('agrisaar_demo_user');
+          if (!newSession && demoUser) {
+            setUser(JSON.parse(demoUser));
+          } else {
+            setUser(newSession?.user ?? null);
+          }
           setLoading(false);
         }
       );
@@ -47,9 +57,9 @@ export function AuthProvider({ children }) {
     return s?.access_token ?? null;
   };
 
-  const signup = async (email, password, name) => {
+  const signup = async (email, password, name, phone) => {
     if (!supabase) {
-      const mockUser = { uid: 'demo-' + Date.now(), email, displayName: name, isDemo: true };
+      const mockUser = { uid: 'demo-' + Date.now(), email, displayName: name, phone: phone, isDemo: true };
       setUser(mockUser);
       localStorage.setItem('agrisaar_demo_user', JSON.stringify(mockUser));
       return { user: mockUser };
@@ -58,21 +68,27 @@ export function AuthProvider({ children }) {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { full_name: name } },
+      options: { data: { full_name: name, phone: phone } },
     });
     if (error) throw error;
     return data;
   };
 
-  const login = async (email, password) => {
+  const login = async (identifier, password) => {
     if (!supabase) {
-      const mockUser = { uid: 'demo-user', email, displayName: email.split('@')[0], isDemo: true };
+      const displayName = identifier.includes('@') ? identifier.split('@')[0] : identifier;
+      const mockUser = { uid: 'demo-user', identifier, displayName, isDemo: true };
       setUser(mockUser);
       localStorage.setItem('agrisaar_demo_user', JSON.stringify(mockUser));
       return { user: mockUser };
     }
 
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    const isEmail = identifier.includes('@');
+    const credentials = isEmail 
+      ? { email: identifier, password } 
+      : { phone: identifier, password };
+
+    const { data, error } = await supabase.auth.signInWithPassword(credentials);
     if (error) throw error;
     return data;
   };

@@ -12,7 +12,7 @@ import { sendWhatsAppAlert } from '../services/alertService';
 function analyzeWeather(current, forecast) {
   const alerts = [];
   const actions = [];
-  let dangerLevel = 'safe'; 
+  let dangerLevel = 'safe';
 
   const temp = current?.temp || 30;
   const humidity = current?.humidity || 50;
@@ -113,7 +113,7 @@ function analyzeWeather(current, forecast) {
     const tmrDesc = (tmr?.description || '').toLowerCase();
     const tmrRain = tmrDesc.includes('rain') || tmrDesc.includes('shower') || tmrDesc.includes('thunder');
     const tmrHot = (tmr?.tempMax || 0) > 38;
-    
+
     if (tmrRain) {
       tomorrowDecision = {
         icon: <CloudLightning className="w-32 h-32 text-blue-200" />,
@@ -195,16 +195,16 @@ export default function WeatherPage() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  
+
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCity, setActiveCity] = useState('');
   const [activeState, setActiveState] = useState('');
   const [mapLat, setMapLat] = useState(23.0225);
   const [mapLon, setMapLon] = useState(72.5714);
-  
+
   const { lat, lon, city: geoCity, state: geoState, loading: locLoading } = useLocation();
   const { user } = useAuth();
-  
+
   const mockUser = {
     name: user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Kisan',
     phone: user?.phone || user?.user_metadata?.phone || '+91 9876543210'
@@ -259,7 +259,7 @@ export default function WeatherPage() {
       const detectedState = await resolveState(apiLat || lat, apiLon || lon);
       setActiveCity(apiCity);
       setActiveState(detectedState === apiCity ? 'India' : detectedState);
-      
+
       setBroadcastCount(Math.floor(Math.random() * 5000) + 1200);
 
       const current = {
@@ -276,41 +276,82 @@ export default function WeatherPage() {
       };
 
       const forecast = [];
-      const seen = new Set();
+      const dailyMap = new Map();
       (forecastRes?.list || []).forEach(item => {
         const date = item.dt_txt?.split(' ')[0];
-        if (date && !seen.has(date) && forecast.length < 5) {
-          seen.add(date);
-          const d = new Date(date);
-          forecast.push({
+        if (!date) return;
+        if (!dailyMap.has(date)) {
+          dailyMap.set(date, {
             date,
-            dayName: d.toLocaleDateString('en-IN', { weekday: 'short' }),
-            fullDay: d.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'short' }),
-            tempMax: Math.round(item.main.temp_max),
-            tempMin: Math.round(item.main.temp_min),
-            humidity: item.main.humidity,
-            wind: (item.wind?.speed * 3.6).toFixed(0),
-            description: item.weather?.[0]?.description || '',
-            icon: item.weather?.[0]?.icon ? `https://openweathermap.org/img/wn/${item.weather[0].icon}@2x.png` : null,
+            tempMaxes: [],
+            tempMins: [],
+            humidities: [],
+            winds: [],
+            // Pick the mid-day entry for description/icon (closest to 12:00)
+            bestItem: item,
+            bestDist: Math.abs(parseInt(item.dt_txt?.split(' ')[1]?.split(':')[0] || '0') - 12),
           });
         }
+        const entry = dailyMap.get(date);
+        entry.tempMaxes.push(item.main.temp_max);
+        entry.tempMins.push(item.main.temp_min);
+        entry.humidities.push(item.main.humidity);
+        entry.winds.push(item.wind?.speed || 0);
+        // Prefer the slot closest to noon for icon/description
+        const hour = parseInt(item.dt_txt?.split(' ')[1]?.split(':')[0] || '0');
+        const dist = Math.abs(hour - 12);
+        if (dist < entry.bestDist) {
+          entry.bestDist = dist;
+          entry.bestItem = item;
+        }
       });
+
+      // Convert aggregated data to forecast array
+      for (const [date, entry] of dailyMap) {
+        if (forecast.length >= 5) break;
+        // Parse date parts manually to avoid timezone shifting
+        const [year, month, day] = date.split('-').map(Number);
+        const d = new Date(year, month - 1, day); // Local date, no UTC shift
+        forecast.push({
+          date,
+          dayName: d.toLocaleDateString('en-IN', { weekday: 'short' }),
+          fullDay: d.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'short' }),
+          tempMax: Math.round(Math.max(...entry.tempMaxes)),
+          tempMin: Math.round(Math.min(...entry.tempMins)),
+          humidity: Math.round(entry.humidities.reduce((a, b) => a + b, 0) / entry.humidities.length),
+          wind: (entry.winds.reduce((a, b) => a + b, 0) / entry.winds.length * 3.6).toFixed(0),
+          description: entry.bestItem.weather?.[0]?.description || '',
+          icon: entry.bestItem.weather?.[0]?.icon ? `https://openweathermap.org/img/wn/${entry.bestItem.weather[0].icon}@2x.png` : null,
+        });
+      }
       setData({ current, forecast });
-    } catch(err) {
+    } catch (err) {
       console.warn("Using Fallback Weather Data (API failed):", err);
       const fallbackCurrent = {
         temp: 32, feelsLike: 34, humidity: 65, wind: 12, pressure: 1013, visibility: 10,
         description: 'Partly cloudy', icon: 'https://openweathermap.org/img/wn/02d@4x.png',
         sunrise: '06:10 AM', sunset: '06:45 PM'
       };
-      
-      const fallbackForecast = [
-        { date: '1', dayName: 'Mon', fullDay: '10 Nov', tempMax: 33, tempMin: 22, humidity: 60, wind: 10, description: 'clear sky', icon: 'https://openweathermap.org/img/wn/01d@2x.png' },
-        { date: '2', dayName: 'Tue', fullDay: '11 Nov', tempMax: 30, tempMin: 21, humidity: 75, wind: 15, description: 'light rain', icon: 'https://openweathermap.org/img/wn/10d@2x.png' },
-        { date: '3', dayName: 'Wed', fullDay: '12 Nov', tempMax: 28, tempMin: 20, humidity: 85, wind: 18, description: 'heavy rain', icon: 'https://openweathermap.org/img/wn/09d@2x.png' },
-        { date: '4', dayName: 'Thu', fullDay: '13 Nov', tempMax: 35, tempMin: 24, humidity: 50, wind: 25, description: 'cloudy', icon: 'https://openweathermap.org/img/wn/03d@2x.png' },
-        { date: '5', dayName: 'Fri', fullDay: '14 Nov', tempMax: 39, tempMin: 26, humidity: 35, wind: 5, description: 'hot sun', icon: 'https://openweathermap.org/img/wn/01d@2x.png' }
+
+      // Generate dynamic fallback dates starting from today
+      const fallbackForecast = [];
+      const fallbackTemplates = [
+        { tempMax: 33, tempMin: 22, humidity: 60, wind: 10, description: 'clear sky', icon: 'https://openweathermap.org/img/wn/01d@2x.png' },
+        { tempMax: 30, tempMin: 21, humidity: 75, wind: 15, description: 'light rain', icon: 'https://openweathermap.org/img/wn/10d@2x.png' },
+        { tempMax: 28, tempMin: 20, humidity: 85, wind: 18, description: 'heavy rain', icon: 'https://openweathermap.org/img/wn/09d@2x.png' },
+        { tempMax: 35, tempMin: 24, humidity: 50, wind: 25, description: 'cloudy', icon: 'https://openweathermap.org/img/wn/03d@2x.png' },
+        { tempMax: 39, tempMin: 26, humidity: 35, wind: 5, description: 'hot sun', icon: 'https://openweathermap.org/img/wn/01d@2x.png' }
       ];
+      for (let i = 0; i < 5; i++) {
+        const d = new Date();
+        d.setDate(d.getDate() + i);
+        fallbackForecast.push({
+          ...fallbackTemplates[i],
+          date: d.toISOString().split('T')[0],
+          dayName: d.toLocaleDateString('en-IN', { weekday: 'short' }),
+          fullDay: d.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'short' }),
+        });
+      }
 
       const manualName = queryParam.includes('q=') ? decodeURIComponent(queryParam.split('q=')[1]) : geoCity || 'Ahmedabad';
 
@@ -368,7 +409,7 @@ export default function WeatherPage() {
         <div className="flex flex-col">
           <span className="font-black text-lg">Broadcast Complete! ✅</span>
           <span className="text-sm">SMS alerts successfully delivered to all {broadcastCount} farmers in {activeCity}.</span>
-        </div>, 
+        </div>,
         { id, duration: 8000, style: { background: '#047857', color: '#fff' } }
       );
       setIsBroadcasting(false);
@@ -383,25 +424,25 @@ export default function WeatherPage() {
 
     setIsSendingPersonal(true);
     setShowSmsPreview(true);
-    
+
     const whatsappMsg = analysis.alerts[0].whatsappMsg || `AgriSaar Alert \n📍 ${activeCity}\nCurrent Weather: ${current?.temp}°C, ${current?.description}`;
     // Format phone to just numbers, or use default fallback if missing
     const rawPhone = mockUser.phone?.replace(/\D/g, '') || '';
     const phoneNum = rawPhone.length >= 10 ? rawPhone : '917870929584';
-    
+
     // Auto-hide preview after 6 seconds
     setTimeout(() => {
       setShowSmsPreview(false);
       setIsSendingPersonal(false);
-      
+
       // Open actual Whatsapp
       sendWhatsAppAlert(whatsappMsg, phoneNum);
-      
+
       toast.success(
         <div className="flex flex-col">
           <span className="font-black text-lg">Alert Open ✅</span>
           <span className="text-sm">WhatsApp opened with your AgriSaar weather alert.</span>
-        </div>, 
+        </div>,
         { duration: 4000, style: { background: '#047857', color: '#fff' } }
       );
     }, 6000);
@@ -413,7 +454,7 @@ export default function WeatherPage() {
   const current = data.current;
   const forecast = data.forecast || [];
   const analysis = analyzeWeather(current, forecast);
-  
+
   // Cinematic Backgrounds based on weather
   const descString = (current?.description || '').toLowerCase();
   let fallbackImg = '';
@@ -448,9 +489,9 @@ export default function WeatherPage() {
         <meta property="og:type" content="website" />
         <meta name="keywords" content="weather advisory, mausam, farming weather, rain alert, frost warning, kisaan mausam, weather forecast India, AgriSaar" />
       </Helmet>
-      
+
       {/* ── HIGH-LEVEL HERO SECTION ── */}
-      <motion.section 
+      <motion.section
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
@@ -461,19 +502,19 @@ export default function WeatherPage() {
           <div className={`absolute inset-0 bg-gradient-to-b ${themeColors.bg}`}></div>
           {/* Danger overlay if severe weather */}
           {analysis.dangerLevel === 'danger' && <div className="absolute inset-0 bg-red-600/20 mix-blend-overlay animate-pulse"></div>}
-          
+
           {/* Decorative Orbs */}
           <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-white/5 rounded-full blur-[100px] pointer-events-none mix-blend-screen"></div>
           <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-primary-400/10 rounded-full blur-[120px] pointer-events-none mix-blend-screen"></div>
         </div>
-        
+
         <div className="relative z-10 max-w-[1400px] w-full mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div variants={containerVariants} initial="hidden" animate="visible">
-            
+
             {/* Top Bar: Manual Search & Tools */}
             <div className="flex flex-col lg:flex-row lg:items-center justify-between mb-8 gap-5">
-              
-               {/* Location Badge */}
+
+              {/* Location Badge */}
               <div className="flex flex-col gap-3">
                 <motion.div variants={itemVariants} className="flex items-center gap-3 bg-black/30 backdrop-blur-3xl px-6 py-4 rounded-[2rem] border border-white/20 shadow-2xl w-max">
                   <MapPin className="w-6 h-6 text-green-400 drop-shadow-[0_0_10px_rgba(74,222,128,0.8)] animate-bounce" />
@@ -488,9 +529,9 @@ export default function WeatherPage() {
               </div>
 
               {/* Ultra Sleek Manual Search Bar */}
-              <motion.form 
+              <motion.form
                 variants={itemVariants}
-                onSubmit={handleManualSearch} 
+                onSubmit={handleManualSearch}
                 className="flex items-center flex-1 max-w-xl mx-auto lg:mx-0 relative group"
               >
                 <div className="absolute inset-y-0 left-5 flex items-center pointer-events-none">
@@ -509,7 +550,7 @@ export default function WeatherPage() {
                   </button>
                 </div>
               </motion.form>
-              
+
               <motion.div variants={itemVariants} className="flex flex-wrap items-center gap-3 justify-center lg:justify-end">
                 <SpeakButton text={overallSpeakText} label="Listen AI Report" size="md" />
                 <button onClick={handleRefresh} disabled={refreshing} className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white px-6 py-4 rounded-full text-sm font-black shadow-xl hover:shadow-[0_0_20px_rgba(59,130,246,0.6)] transition-all border border-blue-400/30 active:scale-95 disabled:opacity-50">
@@ -525,8 +566,8 @@ export default function WeatherPage() {
 
               <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center sm:items-start gap-8 sm:gap-14 relative z-10 w-full xl:w-auto">
                 {current?.icon && (
-                  <motion.div 
-                    whileHover={{ scale: 1.15, rotate: 5 }} 
+                  <motion.div
+                    whileHover={{ scale: 1.15, rotate: 5 }}
                     animate={{ y: [0, -10, 0] }}
                     transition={{ type: "spring", stiffness: 200, y: { repeat: Infinity, duration: 4, ease: "easeInOut" } }}
                     className="relative shrink-0"
@@ -555,11 +596,11 @@ export default function WeatherPage() {
                 <StatsCard icon={<Gauge className="w-7 h-7 text-amber-300 shrink-0" />} label="Pressure" value={`${current?.pressure}`} sub="hPa" />
               </motion.div>
             </div>
-            
+
             {/* 📱 Real-time SMS Delivery Preview */}
             <AnimatePresence>
               {showSmsPreview && (
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, y: 100, scale: 0.8 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 100, scale: 0.8 }}
@@ -577,7 +618,7 @@ export default function WeatherPage() {
                   </div>
                   <div className="bg-white/10 rounded-2xl p-4 border border-white/5 mb-2">
                     <p className="text-white font-bold leading-snug">
-                       "AgriSaar Alert: {activeCity} mein {current?.description} dekhi gayi hai. {analysis.alerts[0]?.titleEn || 'Savdhan rahein!'} kisan sathi khet mein savdhani bartein."
+                      "AgriSaar Alert: {activeCity} mein {current?.description} dekhi gayi hai. {analysis.alerts[0]?.titleEn || 'Savdhan rahein!'} kisan sathi khet mein savdhani bartein."
                     </p>
                   </div>
                   <div className="flex items-center justify-between mt-4">
@@ -615,7 +656,7 @@ export default function WeatherPage() {
             <div className="p-2 bg-green-100 dark:bg-green-900/30 rounded-xl"><Sprout className="w-6 h-6 text-green-600 dark:text-green-400" /></div> Real-time Farming Intelligence
           </h2>
           <div className="grid md:grid-cols-3 gap-6">
-            
+
             <motion.div whileHover={{ scale: 1.02 }} className="bg-white dark:bg-gray-900 border border-gray-200/60 dark:border-gray-800/60 rounded-[2.5rem] p-8 shadow-[0_8px_30px_rgba(0,0,0,0.04)] hover:shadow-xl transition-all">
               <div className="flex items-center gap-5 mb-5">
                 <div className={`w-16 h-16 rounded-[1.5rem] flex items-center justify-center text-3xl shadow-inner ${analysis.sprayStatus.allowed ? 'bg-green-100 dark:bg-green-900/40 text-green-600' : 'bg-red-100 dark:bg-red-900/40 text-red-600'}`}>
@@ -671,17 +712,15 @@ export default function WeatherPage() {
         {analysis.alerts.length > 0 && (
           <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-8 mb-16">
             {analysis.alerts.map((alert, i) => (
-              <motion.div 
-                key={i} 
-                variants={itemVariants} 
-                className={`relative rounded-[3rem] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.12)] border-[6px] ${
-                  alert.severity === 'danger' ? 'border-red-500/20 bg-white ring-[10px] ring-red-500/10' : 'border-amber-500/20 bg-white ring-[10px] ring-amber-500/10'
-                }`}
+              <motion.div
+                key={i}
+                variants={itemVariants}
+                className={`relative rounded-[3rem] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.12)] border-[6px] ${alert.severity === 'danger' ? 'border-red-500/20 bg-white ring-[10px] ring-red-500/10' : 'border-amber-500/20 bg-white ring-[10px] ring-amber-500/10'
+                  }`}
               >
                 {/* Flashing Alert Header */}
-                <div className={`px-10 py-10 flex flex-col md:flex-row md:items-center justify-between gap-6 ${
-                  alert.severity === 'danger' ? 'bg-gradient-to-r from-red-600 to-rose-600 text-white' : 'bg-gradient-to-r from-amber-500 to-amber-600 text-white'
-                }`}>
+                <div className={`px-10 py-10 flex flex-col md:flex-row md:items-center justify-between gap-6 ${alert.severity === 'danger' ? 'bg-gradient-to-r from-red-600 to-rose-600 text-white' : 'bg-gradient-to-r from-amber-500 to-amber-600 text-white'
+                  }`}>
                   <div className="flex items-center gap-8">
                     <span className="text-7xl drop-shadow-2xl p-4 bg-white/20 backdrop-blur-xl border border-white/30 rounded-[2rem] shadow-inner">{alert.icon}</span>
                     <div>
@@ -703,12 +742,11 @@ export default function WeatherPage() {
                   </h4>
                   <div className="grid md:grid-cols-2 gap-6 mb-12">
                     {alert.actions.map((action, j) => (
-                      <motion.div 
+                      <motion.div
                         whileHover={{ scale: 1.02 }}
-                        key={j} 
-                        className={`p-8 rounded-3xl border-2 shadow-md ${
-                          alert.severity === 'danger' ? 'bg-red-50/50 dark:bg-red-900/10 border-red-200 dark:border-red-800' : 'bg-amber-50/50 dark:bg-amber-900/10 border-amber-200 dark:border-amber-800'
-                        }`}
+                        key={j}
+                        className={`p-8 rounded-3xl border-2 shadow-md ${alert.severity === 'danger' ? 'bg-red-50/50 dark:bg-red-900/10 border-red-200 dark:border-red-800' : 'bg-amber-50/50 dark:bg-amber-900/10 border-amber-200 dark:border-amber-800'
+                          }`}
                       >
                         <p className="text-2xl font-black text-gray-900 dark:text-white leading-snug">{action.en}</p>
                         <p className="text-lg text-gray-600 dark:text-gray-300 font-extrabold mt-3 border-t border-black/10 dark:border-white/10 pt-3">{action.hi}</p>
@@ -718,7 +756,7 @@ export default function WeatherPage() {
 
                   {/* ── BROADCAST & PERSONAL SMS ── */}
                   <div className="bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-[2.5rem] p-10 flex flex-col items-start gap-8 shadow-inner">
-                    
+
                     <div className="w-full border-b border-gray-200 dark:border-gray-700 pb-8 flex flex-col md:flex-row items-center justify-between gap-6">
                       <div>
                         <h3 className="text-2xl font-black text-gray-900 dark:text-white flex items-center gap-3">
@@ -728,13 +766,13 @@ export default function WeatherPage() {
                           Mausam ki sthiti dekhte hue, turant apne phone par is alert ki detail SMS bhej lein.
                         </p>
                       </div>
-                      <button 
+                      <button
                         onClick={handlePersonalAlert}
                         disabled={isSendingPersonal}
                         className={`flex-shrink-0 flex items-center justify-center gap-3 px-10 py-5 rounded-2xl font-black text-lg transition-all shadow-[0_15px_30px_rgba(34,197,94,0.3)] ${isSendingPersonal ? 'bg-gray-400 text-white cursor-not-allowed' : 'bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white active:scale-95 hover:scale-105'}`}
                       >
-                       {isSendingPersonal ? <RefreshCw className="animate-spin w-6 h-6" /> : <Send className="w-6 h-6" />}
-                       {isSendingPersonal ? 'Sending SMS...' : `Send Alert to ${mockUser.name} (${mockUser.phone})`}
+                        {isSendingPersonal ? <RefreshCw className="animate-spin w-6 h-6" /> : <Send className="w-6 h-6" />}
+                        {isSendingPersonal ? 'Sending SMS...' : `Send Alert to ${mockUser.name} (${mockUser.phone})`}
                       </button>
                     </div>
 
@@ -747,7 +785,7 @@ export default function WeatherPage() {
                           As a verified user, you can broadcast this emergency weather alert via SMS directly to all registered farmers in {activeCity}.
                         </p>
                       </div>
-                      <button 
+                      <button
                         onClick={handleBroadcastAlert}
                         disabled={isBroadcasting}
                         className={`flex-shrink-0 flex items-center justify-center gap-3 px-10 py-5 rounded-2xl font-black text-lg transition-all shadow-[0_15px_30px_rgba(225,29,72,0.3)] ${isBroadcasting ? 'bg-gray-400 text-white cursor-not-allowed' : 'bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-700 hover:to-rose-800 text-white active:scale-95 hover:scale-105'}`}
@@ -772,7 +810,7 @@ export default function WeatherPage() {
             <div className="relative z-10 flex flex-col md:flex-row items-center gap-12">
               <div className="relative shrink-0">
                 <div className="absolute inset-0 bg-white/20 blur-[40px] rounded-full"></div>
-                <span className="text-[9rem] drop-shadow-2xl relative z-10 block animate-bounce" style={{animationDuration: '3s'}}>{analysis.tomorrowDecision.icon}</span>
+                <span className="text-[9rem] drop-shadow-2xl relative z-10 block animate-bounce" style={{ animationDuration: '3s' }}>{analysis.tomorrowDecision.icon}</span>
               </div>
               <div className="flex-1 text-center md:text-left">
                 <span className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-xl px-5 py-2 rounded-full text-xs font-black uppercase tracking-[0.3em] mb-6 border border-white/40 shadow-inner">
@@ -799,28 +837,27 @@ export default function WeatherPage() {
                 const dayDesc = (day.description || '').toLowerCase();
                 const hasRain = dayDesc.includes('rain') || dayDesc.includes('shower');
                 const isHot = day.tempMax > 38;
-                
+
                 return (
-                  <motion.div 
+                  <motion.div
                     whileHover={{ scale: 1.05, y: -10 }}
-                    key={i} 
-                    className={`rounded-[2.5rem] p-8 border-[3px] text-center transition-all shadow-lg hover:shadow-2xl group relative overflow-hidden bg-white dark:bg-gray-900 ${
-                    hasRain ? 'border-blue-300 shadow-blue-500/30' : isHot ? 'border-orange-300 shadow-orange-500/30' : 'border-gray-100 dark:border-gray-800'
-                  }`}>
+                    key={i}
+                    className={`rounded-[2.5rem] p-8 border-[3px] text-center transition-all shadow-lg hover:shadow-2xl group relative overflow-hidden bg-white dark:bg-gray-900 ${hasRain ? 'border-blue-300 shadow-blue-500/30' : isHot ? 'border-orange-300 shadow-orange-500/30' : 'border-gray-100 dark:border-gray-800'
+                      }`}>
                     {hasRain && <div className="absolute inset-0 bg-gradient-to-b from-blue-100/80 to-transparent opacity-80 dark:from-blue-900/40 z-0"></div>}
                     {isHot && <div className="absolute inset-0 bg-gradient-to-b from-orange-100/80 to-transparent opacity-80 dark:from-orange-900/40 z-0"></div>}
-                    
+
                     <div className="relative z-10">
                       <p className={`text-xl font-black uppercase tracking-widest mb-1 ${hasRain ? 'text-blue-700' : isHot ? 'text-orange-700' : 'text-gray-900 dark:text-white'}`}>{day.dayName}</p>
                       <p className="text-sm text-gray-500 font-extrabold mb-5 bg-gray-100 dark:bg-gray-800 rounded-full py-1 px-3 inline-block">{day.fullDay}</p>
-                      
+
                       {day.icon && <img src={day.icon.replace('2x', '4x')} alt="" className="w-28 h-28 mx-auto mb-4 drop-shadow-[0_10px_20px_rgba(0,0,0,0.2)] group-hover:scale-125 group-hover:-rotate-3 transition-transform duration-500" />}
-                      
+
                       <div className="flex flex-col items-center justify-center gap-0 mb-4">
-                         <p className="text-6xl font-black text-gray-900 dark:text-white tracking-tighter drop-shadow-sm">{day.tempMax}°</p>
-                         <p className="text-xl text-gray-400 font-black -mt-1 bg-gray-50 dark:bg-gray-800 px-3 rounded-full mt-1">low {day.tempMin}°</p>
+                        <p className="text-6xl font-black text-gray-900 dark:text-white tracking-tighter drop-shadow-sm">{day.tempMax}°</p>
+                        <p className="text-xl text-gray-400 font-black -mt-1 bg-gray-50 dark:bg-gray-800 px-3 rounded-full mt-1">low {day.tempMin}°</p>
                       </div>
-                      
+
                       <p className="text-base text-gray-600 dark:text-gray-400 font-black capitalize mt-2 border-t-2 border-gray-50 dark:border-gray-800 pt-4 flex items-center justify-center min-h-[3rem]">{day.description}</p>
                     </div>
                   </motion.div>
@@ -836,12 +873,12 @@ export default function WeatherPage() {
             <div className={`p-8 sm:p-12 rounded-[3.5rem] border-2 shadow-2xl ${analysis.fiveDaySummary.color} relative overflow-hidden group`}>
               <div className="absolute inset-0 bg-white/40 dark:bg-black/20 mix-blend-overlay"></div>
               <div className="absolute -right-20 -top-20 w-64 h-64 bg-current opacity-10 rounded-full blur-[50px] group-hover:scale-150 transition-transform duration-1000"></div>
-              
+
               <div className="relative z-10 flex flex-col md:flex-row items-center md:items-start gap-8">
                 <div className={`p-6 rounded-3xl bg-white dark:bg-gray-900 shadow-xl shrink-0`}>
                   <CalendarClock className={`w-14 h-14 ${analysis.fiveDaySummary.iconText}`} />
                 </div>
-                
+
                 <div className="text-center md:text-left flex-1">
                   <span className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-[0.2em] mb-4 bg-white/50 dark:bg-gray-900/50 ${analysis.fiveDaySummary.iconText}`}>
                     <Sprout className="w-4 h-4" /> 5-Day Farming Advisory
@@ -908,7 +945,7 @@ export default function WeatherPage() {
 
 function StatsCard({ icon, label, value, sub }) {
   return (
-    <motion.div 
+    <motion.div
       whileHover={{ scale: 1.05, backgroundColor: 'rgba(255,255,255,0.15)' }}
       className="bg-white/10 backdrop-blur-3xl rounded-[2rem] p-5 border border-white/20 shadow-[0_10px_30px_rgba(0,0,0,0.1)] flex items-center gap-4 group cursor-default transition-all"
     >
@@ -918,7 +955,7 @@ function StatsCard({ icon, label, value, sub }) {
       <div className="overflow-hidden">
         <p className="text-white/70 text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] mb-1 truncate">{label}</p>
         <p className="text-white font-black text-xl sm:text-2xl flex items-baseline gap-1 drop-shadow-lg leading-tight truncate overflow-hidden">
-          <span className="truncate" dangerouslySetInnerHTML={{ __html: value.replace(' km/h', ' <span class="text-sm">km/h</span>').replace(' km', ' <span class="text-sm">km</span>')}}></span>
+          <span className="truncate" dangerouslySetInnerHTML={{ __html: value.replace(' km/h', ' <span class="text-sm">km/h</span>').replace(' km', ' <span class="text-sm">km</span>') }}></span>
           {sub && <span className="text-sm text-white/60 font-bold ml-1">{sub}</span>}
         </p>
       </div>

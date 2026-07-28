@@ -151,53 +151,53 @@ function UserProfile() {
         <>
           <button
             onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 p-1 pr-3 rounded-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 hover:border-primary-300 dark:hover:border-primary-700 hover:shadow-md transition-all active:scale-95 group"
-      >
-        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary-600 to-primary-500 flex items-center justify-center text-white text-xs font-black shadow-sm group-hover:scale-105 transition-transform">
-          {mockUser.avatar}
-        </div>
-        <div className="hidden sm:block text-left">
-          <p className="text-[10px] font-black text-gray-400 uppercase tracking-wider leading-none mb-0.5">My Profile</p>
-          <div className="flex items-center gap-1">
-            <span className="text-xs font-bold text-gray-700 dark:text-gray-200">{mockUser.name}</span>
-            <ChevronDown className={`w-3 h-3 text-gray-400 dark:text-gray-500 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
-          </div>
-        </div>
-      </button>
-
-      {isOpen && (
-        <>
-          <div className="fixed inset-0 z-40 bg-black/5 dark:bg-black/20" onClick={() => setIsOpen(false)} />
-          <div className="absolute right-0 mt-3 w-72 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-gray-100 dark:border-gray-800 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-300">
-            {/* Header / Identity */}
-            <div className="p-5 bg-gradient-to-br from-primary-50 to-emerald-50/30 dark:from-primary-900/10 dark:to-emerald-900/5 border-b border-gray-100 dark:border-gray-800">
-              <div className="flex items-center gap-4 mb-4">
-                <div className="w-12 h-12 rounded-2xl bg-white dark:bg-gray-800 flex items-center justify-center text-primary-600 dark:text-primary-400 font-black text-lg shadow-sm border border-primary-100 dark:border-primary-900/30">
-                  {mockUser.avatar}
-                </div>
-                <div>
-                  <h4 className="font-black text-gray-900 dark:text-white leading-none">{mockUser.name}</h4>
-                  <p className="text-[11px] text-gray-500 dark:text-gray-400 font-bold mt-1">{mockUser.email}</p>
-                </div>
-              </div>
-
-              {/* AgriCoins Section */}
-              <div className="bg-primary-600 rounded-2xl p-3 text-white shadow-lg shadow-primary-600/20 flex items-center justify-between group cursor-pointer hover:scale-[1.02] transition-transform">
-                <div className="flex items-center gap-2.5">
-                  <span className="text-xl group-hover:rotate-12 transition-transform"><Award className="w-5 h-5" /></span>
-                  <div>
-                    <p className="text-[10px] font-black text-primary-100 uppercase tracking-widest leading-none">AgriCoins</p>
-                    <p className="text-sm font-black mt-0.5">{mockUser.coins.toLocaleString()}</p>
-                  </div>
-                </div>
-                <button className="bg-white/20 hover:bg-white/30 text-[10px] font-black px-3 py-1.5 rounded-lg transition-colors">
-                  REDEEM
-                </button>
+            className="flex items-center gap-2 p-1 pr-3 rounded-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 hover:border-primary-300 dark:hover:border-primary-700 hover:shadow-md transition-all active:scale-95 group"
+          >
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary-600 to-primary-500 flex items-center justify-center text-white text-xs font-black shadow-sm group-hover:scale-105 transition-transform">
+              {mockUser.avatar}
+            </div>
+            <div className="hidden sm:block text-left">
+              <p className="text-[10px] font-black text-gray-400 uppercase tracking-wider leading-none mb-0.5">My Profile</p>
+              <div className="flex items-center gap-1">
+                <span className="text-xs font-bold text-gray-700 dark:text-gray-200">{mockUser.name}</span>
+                <ChevronDown className={`w-3 h-3 text-gray-400 dark:text-gray-500 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
               </div>
             </div>
+          </button>
 
-            {/* Menu Items */}
-            <div className="p-2">
+          {isOpen && (
+            <>
+              <div className="fixed inset-0 z-40 bg-black/5 dark:bg-black/20" onClick={() => setIsOpen(false)} />
+              <div className="absolute right-0 mt-3 w-72 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-gray-100 dark:border-gray-800 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-300">
+                {/* Header / Identity */}
+                <div className="p-5 bg-gradient-to-br from-primary-50 to-emerald-50/30 dark:from-primary-900/10 dark:to-emerald-900/5 border-b border-gray-100 dark:border-gray-800">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-12 h-12 rounded-2xl bg-white dark:bg-gray-800 flex items-center justify-center text-primary-600 dark:text-primary-400 font-black text-lg shadow-sm border border-primary-100 dark:border-primary-900/30">
+                      {mockUser.avatar}
+                    </div>
+                    <div>
+                      <h4 className="font-black text-gray-900 dark:text-white leading-none">{mockUser.name}</h4>
+                      <p className="text-[11px] text-gray-500 dark:text-gray-400 font-bold mt-1">{mockUser.email}</p>
+                    </div>
+                  </div>
+
+                  {/* AgriCoins Section */}
+                  <div className="bg-primary-600 rounded-2xl p-3 text-white shadow-lg shadow-primary-600/20 flex items-center justify-between group cursor-pointer hover:scale-[1.02] transition-transform">
+                    <div className="flex items-center gap-2.5">
+                      <span className="text-xl group-hover:rotate-12 transition-transform"><Award className="w-5 h-5" /></span>
+                      <div>
+                        <p className="text-[10px] font-black text-primary-100 uppercase tracking-widest leading-none">AgriCoins</p>
+                        <p className="text-sm font-black mt-0.5">{mockUser.coins.toLocaleString()}</p>
+                      </div>
+                    </div>
+                    <button className="bg-white/20 hover:bg-white/30 text-[10px] font-black px-3 py-1.5 rounded-lg transition-colors">
+                      REDEEM
+                    </button>
+                  </div>
+                </div>
+
+                {/* Menu Items */}
+                <div className="p-2">
                   <button className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-primary-50 text-gray-600 hover:text-primary-700 transition-colors group">
                     <div className="flex items-center gap-3">
                       <div className="p-2 bg-gray-50 rounded-lg group-hover:bg-primary-100 transition-colors">
@@ -208,7 +208,7 @@ function UserProfile() {
                     <ChevronRight className="w-4 h-4 opacity-40" />
                   </button>
 
-                  <div 
+                  <div
                     onClick={toggleTheme}
                     className="flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-300 transition-colors cursor-pointer group"
                   >
@@ -227,7 +227,7 @@ function UserProfile() {
                     </div>
                   </div>
 
-                  <button 
+                  <button
                     onClick={handleLogout}
                     className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/10 text-red-600 transition-colors group"
                   >
@@ -236,10 +236,10 @@ function UserProfile() {
                     </div>
                     <span className="text-sm font-bold">Logout</span>
                   </button>
-            </div>
-          </div>
-        </>
-      )}
+                </div>
+              </div>
+            </>
+          )}
         </>
       )}
     </div>

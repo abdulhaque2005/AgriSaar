@@ -8,7 +8,7 @@ const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 function generateMockWeatherData(lat, lon) {
   // Generate realistic-looking weather if no API key is present
   const baseTemp = 25 + Math.random() * 10;
-  
+
   const current = {
     main: {
       temp: baseTemp,
@@ -27,7 +27,7 @@ function generateMockWeatherData(lat, lon) {
 
   const list = [];
   const startDt = new Date();
-  
+
   for (let i = 0; i < 40; i++) {
     const dt = new Date(startDt.getTime() + (i * 3 * 60 * 60 * 1000));
     list.push({
@@ -36,9 +36,9 @@ function generateMockWeatherData(lat, lon) {
         temp: baseTemp + (Math.sin(i / 8 * Math.PI) * 4),
         humidity: current.main.humidity
       },
-      weather: [{ 
-        description: current.weather[0].description, 
-        icon: current.weather[0].icon 
+      weather: [{
+        description: current.weather[0].description,
+        icon: current.weather[0].icon
       }],
       wind: current.wind
     });
@@ -47,9 +47,9 @@ function generateMockWeatherData(lat, lon) {
   return { current, forecast: { list } };
 }
 
-async function fetchWeatherData(lat, lon) {
+async function fetchWeatherData(lat, lon, locationName) {
   const apiKey = process.env.OPENWEATHER_API_KEY;
-  if (!apiKey || apiKey === 'your_openweather_api_key_here') {
+  if (!apiKey || apiKey === 'your_openweather_api_key_here' || apiKey === 'none') {
     logger.warn('No OpenWeather API key found. Using simulated weather data.');
     return generateMockWeatherData(lat, lon);
   }
@@ -57,8 +57,13 @@ async function fetchWeatherData(lat, lon) {
   let current = null;
   let forecast = null;
 
+  let queryStr = `lat=${lat}&lon=${lon}`;
+  if (locationName && lat === 23.0225 && lon === 72.5714 && locationName.toLowerCase() !== 'ahmedabad') {
+    queryStr = `q=${encodeURIComponent(locationName)}`;
+  }
+
   try {
-    const url = `${API_ENDPOINTS.weather}/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric&lang=hi`;
+    const url = `${API_ENDPOINTS.weather}/weather?${queryStr}&appid=${apiKey}&units=metric&lang=hi`;
     const res = await fetch(url);
     if (res.ok) {
       current = await res.json();
@@ -70,7 +75,7 @@ async function fetchWeatherData(lat, lon) {
   }
 
   try {
-    const url = `${API_ENDPOINTS.weatherForecast}?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric&cnt=40&lang=hi`;
+    const url = `${API_ENDPOINTS.weatherForecast}?${queryStr}&appid=${apiKey}&units=metric&cnt=40&lang=hi`;
     const res = await fetch(url);
     if (res.ok) {
       forecast = await res.json();
@@ -95,7 +100,7 @@ function getWeatherIcon(iconCode) {
 
 function buildForecastDays(forecastData) {
   if (!forecastData?.list) return [];
-  
+
   const dailyMap = {};
   forecastData.list.forEach(item => {
     const date = item.dt_txt.split(' ')[0];
@@ -132,7 +137,7 @@ function buildForecastDays(forecastData) {
 }
 
 export async function getWeatherByCoords(lat, lon, locationName) {
-  const { current, forecast } = await fetchWeatherData(lat, lon);
+  const { current, forecast } = await fetchWeatherData(lat, lon, locationName);
   const forecastDays = buildForecastDays(forecast);
   const loc = locationName || `${lat},${lon}`;
 
@@ -195,6 +200,6 @@ OUTPUT STYLE: Simple, practical English. Keep under 300 words.`;
 }
 
 export async function getWeatherAdvisory(location) {
-    // keeping retro compatibility for now
-    return getWeatherByCoords(23.0225, 72.5714, location);
+  // keeping retro compatibility for now
+  return getWeatherByCoords(23.0225, 72.5714, location);
 }
