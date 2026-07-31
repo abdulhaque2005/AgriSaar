@@ -117,18 +117,56 @@ export default function FarmerVoiceAssistant() {
   }, []);
 
   // ─── Core TTS ────────────────────────────────────────────────────────────
+  // Chrome bug fix: split text into chunks to prevent 15s timeout
+  const splitIntoChunks = (text, maxLen = 180) => {
+    const sentences = text.match(/[^.!?।]+[.!?।]?\s*/g) || [text];
+    const chunks = [];
+    let current = '';
+    for (const s of sentences) {
+      if ((current + s).length > maxLen && current) {
+        chunks.push(current.trim());
+        current = s;
+      } else {
+        current += s;
+      }
+    }
+    if (current.trim()) chunks.push(current.trim());
+    return chunks;
+  };
+
   const speak = useCallback((text, onDone) => {
     if (isMuted || !synthesisRef.current) { onDone?.(); return; }
     synthesisRef.current.cancel();
     const cleanText = text.replace(/[*_#\[\]()<>]/g, '').trim();
-    const utterance = new SpeechSynthesisUtterance(cleanText);
-    utterance.lang = 'hi-IN';
-    utterance.rate = 0.88;
-    utterance.pitch = 1;
-    utterance.onstart = () => setIsSpeaking(true);
-    utterance.onend = () => { setIsSpeaking(false); onDone?.(); };
-    utterance.onerror = () => { setIsSpeaking(false); onDone?.(); };
-    synthesisRef.current.speak(utterance);
+    const chunks = splitIntoChunks(cleanText);
+
+    // Chrome keepalive: pause/resume every 10s
+    let keepAliveInterval = setInterval(() => {
+      if (synthesisRef.current?.speaking && !synthesisRef.current?.paused) {
+        synthesisRef.current.pause();
+        synthesisRef.current.resume();
+      }
+    }, 10000);
+    const stopKeepAlive = () => { clearInterval(keepAliveInterval); keepAliveInterval = null; };
+
+    let i = 0;
+    const speakNext = () => {
+      if (i >= chunks.length) {
+        stopKeepAlive();
+        setIsSpeaking(false);
+        onDone?.();
+        return;
+      }
+      const utterance = new SpeechSynthesisUtterance(chunks[i]);
+      utterance.lang = 'hi-IN';
+      utterance.rate = 0.88;
+      utterance.pitch = 1;
+      utterance.onstart = () => setIsSpeaking(true);
+      utterance.onend = () => { i++; speakNext(); };
+      utterance.onerror = () => { stopKeepAlive(); setIsSpeaking(false); onDone?.(); };
+      synthesisRef.current.speak(utterance);
+    };
+    speakNext();
   }, [isMuted]);
 
   // ─── Guided Tour: Run a Step ─────────────────────────────────────────────

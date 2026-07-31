@@ -66,29 +66,75 @@ export default function SpeakButton({ text, label = 'Listen', size = 'sm' }) {
   };
 
   const fallbackSpeak = (txt) => {
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-      const clean = txt.replace(/[\u{1F300}-\u{1FAD6}\u{2600}-\u{27BF}#*_\[\]()]/gu, '').replace(/\n+/g, '. ');
-      
-      // Detect page language and TRANSLATE the text
-      const pageLang = getPageLanguage();
-      const translated = translateForSpeech(clean, pageLang);
-      
-      const utter = new SpeechSynthesisUtterance(translated);
-      utter.rate = 0.95;
-      utter.lang = getSpeechLang(pageLang);
+    if (!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
 
-      const voices = window.speechSynthesis.getVoices();
-      let bestVoice = voices.find(v => v.lang.startsWith(pageLang));
-      if (!bestVoice) bestVoice = voices.find(v => v.lang.includes('IN'));
-      if (!bestVoice) bestVoice = voices[0];
+    const clean = txt
+      .replace(/[\u{1F300}-\u{1FAD6}\u{2600}-\u{27BF}#*_\[\]()]/gu, '')
+      .replace(/\n+/g, '. ');
+
+    const pageLang = getPageLanguage();
+    const translated = translateForSpeech(clean, pageLang);
+
+    // Chrome bug fix: split long text into chunks (<200 chars each)
+    // Chrome kills speechSynthesis after ~15s on a single utterance
+    const splitIntoChunks = (text, maxLen = 180) => {
+      const sentences = text.match(/[^.!?।]+[.!?।]?\s*/g) || [text];
+      const chunks = [];
+      let current = '';
+      for (const s of sentences) {
+        if ((current + s).length > maxLen && current) {
+          chunks.push(current.trim());
+          current = s;
+        } else {
+          current += s;
+        }
+      }
+      if (current.trim()) chunks.push(current.trim());
+      return chunks;
+    };
+
+    const chunks = splitIntoChunks(translated);
+    const voices = window.speechSynthesis.getVoices();
+    let bestVoice = voices.find(v => v.lang.startsWith(pageLang));
+    if (!bestVoice) bestVoice = voices.find(v => v.lang.includes('IN'));
+    if (!bestVoice) bestVoice = voices[0];
+    const speechLang = getSpeechLang(pageLang);
+
+    // Chrome keepalive: pause/resume every 10s to prevent timeout
+    let keepAliveInterval = null;
+    const startKeepAlive = () => {
+      keepAliveInterval = setInterval(() => {
+        if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
+          window.speechSynthesis.pause();
+          window.speechSynthesis.resume();
+        }
+      }, 10000);
+    };
+    const stopKeepAlive = () => {
+      if (keepAliveInterval) { clearInterval(keepAliveInterval); keepAliveInterval = null; }
+    };
+
+    let i = 0;
+    const speakNext = () => {
+      if (i >= chunks.length) {
+        stopKeepAlive();
+        setStatus('idle');
+        return;
+      }
+      const utter = new SpeechSynthesisUtterance(chunks[i]);
+      utter.rate = 0.95;
+      utter.lang = speechLang;
       if (bestVoice) utter.voice = bestVoice;
-      
+
       utter.onstart = () => setStatus('playing');
-      utter.onend = () => setStatus('idle');
-      utter.onerror = () => setStatus('idle');
+      utter.onend = () => { i++; speakNext(); };
+      utter.onerror = () => { stopKeepAlive(); setStatus('idle'); };
       window.speechSynthesis.speak(utter);
-    }
+    };
+
+    startKeepAlive();
+    speakNext();
   };
 
   // ─── RENDER ────────────────────────────────────
